@@ -411,9 +411,13 @@ actions:
 ## How data updates
 
 Captures run on the **wall clock**, not on a timer from when Home Assistant
-started. At a ten-minute interval, frames land at :00, :10, :20 and so on,
-five seconds past the minute — so a camera that publishes on the minute has
-finished writing before the fetch.
+started. At a ten-minute interval, frames land at :00, :10, :20 and so on.
+
+The picture is fetched 5 to 29 seconds past the minute, so a camera that
+publishes on the minute has finished writing. Each camera you add gets a
+second in that range and keeps it. The second varies from one installation
+to the next, so people watching the same public webcam don't all fetch it at
+once.
 
 That fixed grid is what lets the card address frames by position and jump
 straight to any moment.

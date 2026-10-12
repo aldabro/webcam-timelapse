@@ -74,10 +74,25 @@ DEFAULT_LIVE_REFRESH: Final = 30  # seconds; 0 == archive-only
 # later relax.
 ALLOWED_CAPTURE_INTERVALS: Final[tuple[int, ...]] = (1, 2, 3, 5, 10, 15, 20, 30, 60)
 
-# Capture fires this many seconds past the minute. Cameras commonly publish
-# on the minute boundary; a few seconds of slack means we read the frame
-# they just wrote rather than racing it.
-CAPTURE_SECOND: Final = 5
+# Capture fires between these seconds past the minute, on a second that is
+# fixed per config entry (coordinator.capture_second_for).
+#
+# The floor is slack: cameras commonly publish on the minute boundary, and
+# a few seconds means we read the frame they just wrote rather than racing
+# it. The ceiling is the last whole second before the middle of the
+# one-minute grid, where frame_store.slot_for starts rounding to the next
+# slot.
+#
+# It is a range because one second for every entry made every install of
+# the same public webcam fetch it together. Home Assistant staggers a
+# time-pattern listener by only 0.05-0.5 s (helpers/event.py,
+# RANDOM_MICROSECOND_MIN / _MAX, read in 2026.10.1). Measured 2026-10-12
+# with 24 entries on the one-minute grid, on the real clock: sharing second
+# 5, all 24 asked between 5.09 and 5.48 s past the minute; on their own
+# seconds they asked between 6.2 and 29.3 s, at most 3 in any one second,
+# and every frame was still filed under its own minute.
+CAPTURE_SECOND_MIN: Final = 5
+CAPTURE_SECOND_MAX: Final = 29
 
 ALLOWED_MAX_WIDTHS: Final[tuple[int, ...]] = (0, 640, 800, 1024, 1280, 1600, 1920)
 
