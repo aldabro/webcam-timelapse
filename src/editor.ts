@@ -59,6 +59,14 @@ const ROW_SCHEMA = [
           number: { min: 1, max: 8760, mode: "box", unit_of_measurement: "h" },
         },
       },
+      // The toggles are schema fields for the same reason the inputs are.
+      // They used to be hand-placed switches wrapped in ha-formfield for
+      // the label, and Home Assistant 2026.11 removes ha-formfield: the
+      // switches would have kept working with nothing written next to
+      // them. A boolean selector is drawn by whichever frontend is
+      // running, so it carries its label on every version.
+      { name: "show_icon", selector: { boolean: {} } },
+      { name: "graph", selector: { boolean: {} } },
     ],
   },
 ] as const;
@@ -280,26 +288,6 @@ export class WebcamTimelapseCardEditor
                 })}
             />
           </label>
-
-          <ha-formfield .label=${this.t("editor.show_icon")}>
-            <ha-switch
-              .checked=${row.show_icon ?? false}
-              @change=${(e: Event) =>
-                this.patchRow(side, index, {
-                  show_icon: (e.target as HTMLInputElement).checked,
-                })}
-            ></ha-switch>
-          </ha-formfield>
-
-          <ha-formfield .label=${this.t("editor.graph")}>
-            <ha-switch
-              .checked=${row.graph ?? false}
-              @change=${(e: Event) =>
-                this.patchRow(side, index, {
-                  graph: (e.target as HTMLInputElement).checked,
-                })}
-            ></ha-switch>
-          </ha-formfield>
         </div>
 
         <div class="ent-actions">
