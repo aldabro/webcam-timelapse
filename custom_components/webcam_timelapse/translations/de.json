@@ -34,6 +34,19 @@
               "frames_path": "Leer lassen, um die Bilder im Konfigurationsordner von Home Assistant zu speichern, wo Backups sie überspringen.",
               "username": "Nur nötig, wenn die Kamera per HTTP-Basisauthentifizierung geschützt ist."
             }
+          },
+          "lighting": {
+            "name": "Licht für die Aufnahme",
+            "data": {
+              "capture_lights": "Einzuschaltende Lichter",
+              "light_settle": "Wartezeit vor der Aufnahme",
+              "lights_night_only": "Nur nachts"
+            },
+            "data_description": {
+              "capture_lights": "Werden kurz vor jedem gespeicherten Bild eingeschaltet und direkt danach wieder ausgeschaltet. Lichter, die bereits an sind, bleiben unverändert.",
+              "light_settle": "Gibt der Kamera Zeit, sich an das Licht anzupassen. Erhöhe den Wert, wenn Bilder zu dunkel werden.",
+              "lights_night_only": "Die Lichter nur zwischen Sonnenuntergang und Sonnenaufgang verwenden, berechnet aus dem Standort deines Zuhauses."
+            }
           }
         }
       },
@@ -58,6 +71,19 @@
               "username": "Benutzer:in",
               "password": "Passwort"
             }
+          },
+          "lighting": {
+            "name": "Licht für die Aufnahme",
+            "data": {
+              "capture_lights": "Einzuschaltende Lichter",
+              "light_settle": "Wartezeit vor der Aufnahme",
+              "lights_night_only": "Nur nachts"
+            },
+            "data_description": {
+              "capture_lights": "Werden kurz vor jedem gespeicherten Bild eingeschaltet und direkt danach wieder ausgeschaltet. Lichter, die bereits an sind, bleiben unverändert.",
+              "light_settle": "Gibt der Kamera Zeit, sich an das Licht anzupassen. Erhöhe den Wert, wenn Bilder zu dunkel werden.",
+              "lights_night_only": "Die Lichter nur zwischen Sonnenuntergang und Sonnenaufgang verwenden, berechnet aus dem Standort deines Zuhauses."
+            }
           }
         }
       },
@@ -77,7 +103,8 @@
       "invalid_scheme": "Es werden nur http:// und https:// unterstützt.",
       "invalid_interval": "Wähle eines der angebotenen Aufnahmeintervalle.",
       "not_an_image": "Diese URL hat eine Seite geliefert, kein Bild. Verwende den direkten Link zur Bilddatei.",
-      "timeout": "Die Kamera hat nicht rechtzeitig geantwortet."
+      "timeout": "Die Kamera hat nicht rechtzeitig geantwortet.",
+      "invalid_light": "Als Licht für die Aufnahme können nur Lichter und Schalter verwendet werden."
     },
     "abort": {
       "already_configured": "Diese Bild-URL ist bereits eingerichtet.",
@@ -110,6 +137,19 @@
               "username": "Benutzer:in",
               "password": "Passwort"
             }
+          },
+          "lighting": {
+            "name": "Licht für die Aufnahme",
+            "data": {
+              "capture_lights": "Einzuschaltende Lichter",
+              "light_settle": "Wartezeit vor der Aufnahme",
+              "lights_night_only": "Nur nachts"
+            },
+            "data_description": {
+              "capture_lights": "Werden kurz vor jedem gespeicherten Bild eingeschaltet und direkt danach wieder ausgeschaltet. Lichter, die bereits an sind, bleiben unverändert.",
+              "light_settle": "Gibt der Kamera Zeit, sich an das Licht anzupassen. Erhöhe den Wert, wenn Bilder zu dunkel werden.",
+              "lights_night_only": "Die Lichter nur zwischen Sonnenuntergang und Sonnenaufgang verwenden, berechnet aus dem Standort deines Zuhauses."
+            }
           }
         }
       }
@@ -121,7 +161,8 @@
       "invalid_scheme": "Es werden nur http:// und https:// unterstützt.",
       "invalid_interval": "Wähle eines der angebotenen Aufnahmeintervalle.",
       "not_an_image": "Diese URL hat eine Seite geliefert, kein Bild. Verwende den direkten Link zur Bilddatei.",
-      "timeout": "Die Kamera hat nicht rechtzeitig geantwortet."
+      "timeout": "Die Kamera hat nicht rechtzeitig geantwortet.",
+      "invalid_light": "Als Licht für die Aufnahme können nur Lichter und Schalter verwendet werden."
     }
   },
   "selector": {

@@ -23,11 +23,13 @@ from homeassistant.const import (
     CONF_USERNAME,
     CONF_VERIFY_SSL,
 )
-from homeassistant.core import HomeAssistant, callback
+from homeassistant.core import HomeAssistant, callback, split_entity_id
 from homeassistant.data_entry_flow import section
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.selector import (
     BooleanSelector,
+    EntitySelector,
+    EntitySelectorConfig,
     NumberSelector,
     NumberSelectorConfig,
     NumberSelectorMode,
@@ -43,13 +45,19 @@ from .capture import request_headers
 from .const import (
     ALLOWED_CAPTURE_INTERVALS,
     ALLOWED_MAX_WIDTHS,
+    CAPTURE_LIGHT_DOMAINS,
     CONF_CAPTURE_INTERVAL,
+    CONF_CAPTURE_LIGHTS,
     CONF_FRAMES_PATH,
+    CONF_LIGHT_SETTLE,
+    CONF_LIGHTS_NIGHT_ONLY,
     CONF_LIVE_REFRESH,
     CONF_MAX_WIDTH,
     CONF_QUALITY,
     CONF_RETENTION_DAYS,
     DEFAULT_CAPTURE_INTERVAL,
+    DEFAULT_LIGHT_SETTLE,
+    DEFAULT_LIGHTS_NIGHT_ONLY,
     DEFAULT_LIVE_REFRESH,
     DEFAULT_MAX_WIDTH,
     DEFAULT_NAME,
@@ -57,9 +65,11 @@ from .const import (
     DEFAULT_RETENTION_DAYS,
     DOMAIN,
     FETCH_TIMEOUT_SECONDS,
+    MAX_LIGHT_SETTLE,
     MAX_LIVE_REFRESH,
     MAX_QUALITY,
     MAX_RETENTION_DAYS,
+    MIN_LIGHT_SETTLE,
     MIN_LIVE_REFRESH,
     MIN_QUALITY,
     MIN_RETENTION_DAYS,
@@ -71,6 +81,8 @@ _LOGGER = logging.getLogger(__name__)
 # Expert options live in a collapsed section rather than behind
 # `show_advanced_options` — that toggle is deprecated as of HA 2026.6.
 _ADVANCED = "advanced"
+_LIGHTING = "lighting"
+_SECTIONS = (_ADVANCED, _LIGHTING)
 
 _ADVANCED_KEYS = (
     CONF_MAX_WIDTH,
@@ -151,9 +163,23 @@ def compute_unique_id(url: str) -> str:
 
 
 def flatten(user_input: dict[str, Any]) -> dict[str, Any]:
-    """Merge the collapsed advanced section back up to the top level."""
+    """Merge the collapsed sections back up to the top level."""
     flat = dict(user_input)
-    flat.update(flat.pop(_ADVANCED, {}) or {})
+    for name in _SECTIONS:
+        flat.update(flat.pop(name, {}) or {})
+    return flat
+
+
+def submitted(user_input: dict[str, Any]) -> dict[str, Any]:
+    """Flatten a submitted form, making an emptied light picker explicit.
+
+    The frontend drops an optional field from the payload once the user
+    clears it. The options flow layers the submission over the stored
+    values, so a missing key would read as "unchanged" and the last light
+    could never be removed. Absent therefore has to mean empty here.
+    """
+    flat = flatten(user_input)
+    flat.setdefault(CONF_CAPTURE_LIGHTS, [])
     return flat
 
 
@@ -252,6 +278,48 @@ def _build_schema(defaults: dict[str, Any], *, include_url: bool = True) -> vol.
     )
     fields[vol.Required(_ADVANCED)] = section(advanced_schema, {"collapsed": True})
 
+    lights: list[str] = list(defaults.get(CONF_CAPTURE_LIGHTS) or [])
+    lighting_schema = vol.Schema(
+        {
+            # `suggested_value`, not `default`: a default is put back by
+            # voluptuous whenever the key is missing, which is exactly what
+            # the frontend sends for a picker the user has just emptied.
+            vol.Optional(
+                CONF_CAPTURE_LIGHTS, description={"suggested_value": lights}
+            ): EntitySelector(
+                # The filter is a plain dict on purpose. HA renamed the
+                # filter's TypedDict in 2026 (it gained a `device` key), so
+                # naming either class pins this file to one side of that
+                # rename; the literal satisfies both.
+                EntitySelectorConfig(
+                    filter={"domain": list(CAPTURE_LIGHT_DOMAINS)},
+                    multiple=True,
+                )
+            ),
+            vol.Required(
+                CONF_LIGHT_SETTLE,
+                default=defaults.get(CONF_LIGHT_SETTLE, DEFAULT_LIGHT_SETTLE),
+            ): NumberSelector(
+                NumberSelectorConfig(
+                    min=MIN_LIGHT_SETTLE,
+                    max=MAX_LIGHT_SETTLE,
+                    step=0.5,
+                    unit_of_measurement="s",
+                    mode=NumberSelectorMode.BOX,
+                )
+            ),
+            vol.Required(
+                CONF_LIGHTS_NIGHT_ONLY,
+                default=defaults.get(CONF_LIGHTS_NIGHT_ONLY, DEFAULT_LIGHTS_NIGHT_ONLY),
+            ): BooleanSelector(),
+        }
+    )
+    # Open when the feature is in use, so the lights a camera is switching
+    # are visible without knowing which section to expand.
+    fields[vol.Required(_LIGHTING)] = section(
+        lighting_schema, {"collapsed": not lights}
+    )
+
     return vol.Schema(fields)
 
 
@@ -266,6 +334,11 @@ def _build_entry_data(flat: dict[str, Any]) -> dict[str, Any]:
         CONF_QUALITY: int(flat.get(CONF_QUALITY, DEFAULT_QUALITY)),
         CONF_LIVE_REFRESH: int(flat.get(CONF_LIVE_REFRESH, DEFAULT_LIVE_REFRESH)),
         CONF_VERIFY_SSL: bool(flat.get(CONF_VERIFY_SSL, True)),
+        CONF_CAPTURE_LIGHTS: list(flat.get(CONF_CAPTURE_LIGHTS) or []),
+        CONF_LIGHT_SETTLE: float(flat.get(CONF_LIGHT_SETTLE, DEFAULT_LIGHT_SETTLE)),
+        CONF_LIGHTS_NIGHT_ONLY: bool(
+            flat.get(CONF_LIGHTS_NIGHT_ONLY, DEFAULT_LIGHTS_NIGHT_ONLY)
+        ),
     }
     # Optional strings are omitted entirely when blank rather than stored
     # as "", so `config.get(...)` truthiness checks downstream stay simple.
@@ -288,6 +361,17 @@ async def _validate(
 
     if int(flat[CONF_CAPTURE_INTERVAL]) not in ALLOWED_CAPTURE_INTERVALS:
         errors[CONF_CAPTURE_INTERVAL] = "invalid_interval"
+        return {}, errors
+
+    # The picker only offers lights and switches, but its filter is a
+    # frontend hint: the selector accepts any entity id that reaches it
+    # through the API. The capture path calls `<domain>.turn_on`, so this
+    # is the one place that keeps it to domains where that means "light".
+    if any(
+        split_entity_id(entity_id)[0] not in CAPTURE_LIGHT_DOMAINS
+        for entity_id in flat.get(CONF_CAPTURE_LIGHTS) or []
+    ):
+        errors["base"] = "invalid_light"
         return {}, errors
 
     probe_error = await async_probe_url(
@@ -328,7 +412,7 @@ class WebcamTimelapseConfigFlow(ConfigFlow, domain=DOMAIN):
         defaults: dict[str, Any] = {}
 
         if user_input is not None:
-            defaults = flatten(user_input)
+            defaults = submitted(user_input)
             data, errors = await _validate(self.hass, defaults)
             if not errors:
                 await self.async_set_unique_id(compute_unique_id(data[CONF_URL]))
@@ -354,7 +438,7 @@ class WebcamTimelapseConfigFlow(ConfigFlow, domain=DOMAIN):
         defaults = _defaults_from(entry)
 
         if user_input is not None:
-            defaults = flatten(user_input)
+            defaults = submitted(user_input)
             data, errors = await _validate(self.hass, defaults)
             if not errors:
                 await self.async_set_unique_id(compute_unique_id(data[CONF_URL]))
@@ -440,7 +524,7 @@ class WebcamTimelapseOptionsFlow(OptionsFlow):
         defaults = {**self.config_entry.data, **self.config_entry.options}
 
         if user_input is not None:
-            merged = {**defaults, **flatten(user_input)}
+            merged = {**defaults, **submitted(user_input)}
             data, errors = await _validate(self.hass, merged)
             if not errors:
                 return self.async_create_entry(data=data)

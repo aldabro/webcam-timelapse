@@ -23,11 +23,15 @@ from custom_components.webcam_timelapse.config_flow import (
     async_probe_url,
     compute_unique_id,
     flatten,
+    submitted,
     validate_url,
 )
 from custom_components.webcam_timelapse.const import (
     CONF_CAPTURE_INTERVAL,
+    CONF_CAPTURE_LIGHTS,
     CONF_FRAMES_PATH,
+    CONF_LIGHT_SETTLE,
+    CONF_LIGHTS_NIGHT_ONLY,
     CONF_LIVE_REFRESH,
     CONF_MAX_WIDTH,
     CONF_QUALITY,
@@ -75,7 +79,7 @@ def _session(response: _Response | BaseException) -> MagicMock:
 
 
 def user_input(**overrides: Any) -> dict[str, Any]:
-    """Form input in the shape HA delivers it — advanced fields nested."""
+    """Form input in the shape HA delivers it — section fields nested."""
     advanced = {
         CONF_MAX_WIDTH: "1024",
         CONF_QUALITY: 78,
@@ -86,12 +90,17 @@ def user_input(**overrides: Any) -> dict[str, Any]:
         CONF_PASSWORD: "",
     }
     advanced.update(overrides.pop("advanced", {}))
+    # No CONF_CAPTURE_LIGHTS by default: that is what the frontend sends
+    # for an empty picker, so it is the shape most submissions have.
+    lighting = {CONF_LIGHT_SETTLE: 3, CONF_LIGHTS_NIGHT_ONLY: False}
+    lighting.update(overrides.pop("lighting", {}))
     return {
         CONF_NAME: "Kleine Erlauf",
         CONF_URL: URL,
         CONF_CAPTURE_INTERVAL: "10",
         CONF_RETENTION_DAYS: 14,
         "advanced": advanced,
+        "lighting": lighting,
         **overrides,
     }
 
@@ -128,6 +137,22 @@ def test_flatten_lifts_the_advanced_section() -> None:
     assert flatten({"a": 1, "advanced": {"b": 2}}) == {"a": 1, "b": 2}
     assert flatten({"a": 1, "advanced": None}) == {"a": 1}
     assert flatten({"a": 1}) == {"a": 1}
+
+
+def test_flatten_lifts_every_section() -> None:
+    assert flatten({"a": 1, "advanced": {"b": 2}, "lighting": {"c": 3}}) == {
+        "a": 1,
+        "b": 2,
+        "c": 3,
+    }
+
+
+def test_submitted_reads_a_missing_light_picker_as_empty() -> None:
+    """The frontend omits a cleared optional field instead of sending []."""
+    assert submitted({"lighting": {CONF_LIGHT_SETTLE: 3}})[CONF_CAPTURE_LIGHTS] == []
+    assert submitted({"lighting": {CONF_CAPTURE_LIGHTS: ["light.a"]}})[
+        CONF_CAPTURE_LIGHTS
+    ] == ["light.a"]
 
 
 # --- user step ------------------------------------------------------------
@@ -242,6 +267,62 @@ async def test_credentials_are_stored_when_supplied(
     assert result["data"][CONF_PASSWORD] == "hunter2"
 
 
+async def test_user_flow_stores_the_capture_lights(
+    hass: HomeAssistant, mock_probe: AsyncMock
+) -> None:
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN, context={"source": SOURCE_USER}
+    )
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        user_input(
+            lighting={
+                CONF_CAPTURE_LIGHTS: ["light.grow", "switch.lamp_plug"],
+                CONF_LIGHT_SETTLE: 4.5,
+                CONF_LIGHTS_NIGHT_ONLY: True,
+            }
+        ),
+    )
+
+    assert result["type"] is FlowResultType.CREATE_ENTRY
+    assert result["data"][CONF_CAPTURE_LIGHTS] == ["light.grow", "switch.lamp_plug"]
+    assert result["data"][CONF_LIGHT_SETTLE] == 4.5
+    assert result["data"][CONF_LIGHTS_NIGHT_ONLY] is True
+
+
+async def test_user_flow_without_lights_stores_the_defaults(
+    hass: HomeAssistant, mock_probe: AsyncMock
+) -> None:
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN, context={"source": SOURCE_USER}
+    )
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], user_input()
+    )
+
+    assert result["data"][CONF_CAPTURE_LIGHTS] == []
+    assert result["data"][CONF_LIGHT_SETTLE] == 3
+    assert result["data"][CONF_LIGHTS_NIGHT_ONLY] is False
+
+
+@pytest.mark.parametrize("domain", ["sensor", "camera", "fan"])
+async def test_light_picker_rejects_other_domains(
+    hass: HomeAssistant, mock_probe: AsyncMock, domain: str
+) -> None:
+    """The capture path only knows how to switch lights and switches."""
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN, context={"source": SOURCE_USER}
+    )
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        user_input(lighting={CONF_CAPTURE_LIGHTS: ["light.ok", f"{domain}.thing"]}),
+    )
+
+    assert result["type"] is FlowResultType.FORM
+    assert result["errors"] == {"base": "invalid_light"}
+    mock_probe.assert_not_called()
+
+
 # --- reconfigure ----------------------------------------------------------
 
 
@@ -302,6 +383,46 @@ async def test_options_flow_keeps_the_url(
     assert result["type"] is FlowResultType.CREATE_ENTRY
     assert result["data"][CONF_RETENTION_DAYS] == 30
     assert result["data"][CONF_URL] == URL
+
+
+async def test_options_flow_can_remove_the_last_light(
+    hass: HomeAssistant, mock_probe: AsyncMock, mock_fetch: AsyncMock
+) -> None:
+    """Emptying the picker has to stick, not fall back to the stored list."""
+    entry = make_entry(**{CONF_URL: URL, CONF_CAPTURE_LIGHTS: ["light.grow"]})
+    entry.add_to_hass(hass)
+
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+    form = user_input()  # no CONF_CAPTURE_LIGHTS: the picker was emptied
+    form.pop(CONF_URL)
+    result = await hass.config_entries.options.async_configure(result["flow_id"], form)
+    await hass.async_block_till_done()
+
+    assert result["type"] is FlowResultType.CREATE_ENTRY
+    assert result["data"][CONF_CAPTURE_LIGHTS] == []
+
+
+async def test_options_form_opens_the_lighting_section_when_in_use(
+    hass: HomeAssistant, mock_probe: AsyncMock
+) -> None:
+    def lighting_collapsed(schema: vol.Schema) -> bool:
+        for key, value in schema.schema.items():
+            if key == "lighting":
+                return bool(value.options["collapsed"])
+        raise AssertionError("no lighting section")
+
+    unused = make_entry(**{CONF_URL: URL})
+    unused.add_to_hass(hass)
+    result = await hass.config_entries.options.async_init(unused.entry_id)
+    assert lighting_collapsed(result["data_schema"]) is True
+
+    in_use = make_entry(
+        entry_id="01TESTENTRYID0000000000001",
+        **{CONF_URL: URL + "?2", CONF_CAPTURE_LIGHTS: ["light.grow"]},
+    )
+    in_use.add_to_hass(hass)
+    result = await hass.config_entries.options.async_init(in_use.entry_id)
+    assert lighting_collapsed(result["data_schema"]) is False
 
 
 async def test_options_flow_surfaces_probe_errors(
