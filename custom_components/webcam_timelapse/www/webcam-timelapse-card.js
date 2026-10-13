@@ -1,5 +1,5 @@
 // Webcam Timelapse Card — bundled by Rollup. Edit sources in src/, then `npm run build`.
-function t(t,e,i,n){var s,o=arguments.length,a=o<3?e:null===n?n=Object.getOwnPropertyDescriptor(e,i):n;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(t,e,i,n);else for(var r=t.length-1;r>=0;r--)(s=t[r])&&(a=(o<3?s(a):o>3?s(e,i,a):s(e,i))||a);return o>3&&a&&Object.defineProperty(e,i,a),a}"function"==typeof SuppressedError&&SuppressedError;const e=globalThis,i=e.ShadowRoot&&(void 0===e.ShadyCSS||e.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,n=Symbol(),s=new WeakMap;let o=class{constructor(t,e,i){if(this._$cssResult$=!0,i!==n)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e}get styleSheet(){let t=this.o;const e=this.t;if(i&&void 0===t){const i=void 0!==e&&1===e.length;i&&(t=s.get(e)),void 0===t&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),i&&s.set(e,t))}return t}toString(){return this.cssText}};const a=i?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const i of t.cssRules)e+=i.cssText;return(t=>new o("string"==typeof t?t:t+"",void 0,n))(e)})(t):t,{is:r,defineProperty:h,getOwnPropertyDescriptor:l,getOwnPropertyNames:c,getOwnPropertySymbols:d,getPrototypeOf:u}=Object,p=globalThis,g=p.trustedTypes,f=g?g.emptyScript:"",m=p.reactiveElementPolyfillSupport,b=(t,e)=>t,y={toAttribute(t,e){switch(e){case Boolean:t=t?f:null;break;case Object:case Array:t=null==t?t:JSON.stringify(t)}return t},fromAttribute(t,e){let i=t;switch(e){case Boolean:i=null!==t;break;case Number:i=null===t?null:Number(t);break;case Object:case Array:try{i=JSON.parse(t)}catch(t){i=null}}return i}},w=(t,e)=>!r(t,e),v={attribute:!0,type:String,converter:y,reflect:!1,useDefault:!1,hasChanged:w};Symbol.metadata??=Symbol("metadata"),p.litPropertyMetadata??=new WeakMap;let x=class extends HTMLElement{static addInitializer(t){this._$Ei(),(this.l??=[]).push(t)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(t,e=v){if(e.state&&(e.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(t)&&((e=Object.create(e)).wrapped=!0),this.elementProperties.set(t,e),!e.noAccessor){const i=Symbol(),n=this.getPropertyDescriptor(t,i,e);void 0!==n&&h(this.prototype,t,n)}}static getPropertyDescriptor(t,e,i){const{get:n,set:s}=l(this.prototype,t)??{get(){return this[e]},set(t){this[e]=t}};return{get:n,set(e){const o=n?.call(this);s?.call(this,e),this.requestUpdate(t,o,i)},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)??v}static _$Ei(){if(this.hasOwnProperty(b("elementProperties")))return;const t=u(this);t.finalize(),void 0!==t.l&&(this.l=[...t.l]),this.elementProperties=new Map(t.elementProperties)}static finalize(){if(this.hasOwnProperty(b("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(b("properties"))){const t=this.properties,e=[...c(t),...d(t)];for(const i of e)this.createProperty(i,t[i])}const t=this[Symbol.metadata];if(null!==t){const e=litPropertyMetadata.get(t);if(void 0!==e)for(const[t,i]of e)this.elementProperties.set(t,i)}this._$Eh=new Map;for(const[t,e]of this.elementProperties){const i=this._$Eu(t,e);void 0!==i&&this._$Eh.set(i,t)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(t){const e=[];if(Array.isArray(t)){const i=new Set(t.flat(1/0).reverse());for(const t of i)e.unshift(a(t))}else void 0!==t&&e.push(a(t));return e}static _$Eu(t,e){const i=e.attribute;return!1===i?void 0:"string"==typeof i?i:"string"==typeof t?t.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(t=>this.enableUpdating=t),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(t=>t(this))}addController(t){(this._$EO??=new Set).add(t),void 0!==this.renderRoot&&this.isConnected&&t.hostConnected?.()}removeController(t){this._$EO?.delete(t)}_$E_(){const t=new Map,e=this.constructor.elementProperties;for(const i of e.keys())this.hasOwnProperty(i)&&(t.set(i,this[i]),delete this[i]);t.size>0&&(this._$Ep=t)}createRenderRoot(){const t=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return((t,n)=>{if(i)t.adoptedStyleSheets=n.map(t=>t instanceof CSSStyleSheet?t:t.styleSheet);else for(const i of n){const n=document.createElement("style"),s=e.litNonce;void 0!==s&&n.setAttribute("nonce",s),n.textContent=i.cssText,t.appendChild(n)}})(t,this.constructor.elementStyles),t}connectedCallback(){this.renderRoot??=this.createRenderRoot(),this.enableUpdating(!0),this._$EO?.forEach(t=>t.hostConnected?.())}enableUpdating(t){}disconnectedCallback(){this._$EO?.forEach(t=>t.hostDisconnected?.())}attributeChangedCallback(t,e,i){this._$AK(t,i)}_$ET(t,e){const i=this.constructor.elementProperties.get(t),n=this.constructor._$Eu(t,i);if(void 0!==n&&!0===i.reflect){const s=(void 0!==i.converter?.toAttribute?i.converter:y).toAttribute(e,i.type);this._$Em=t,null==s?this.removeAttribute(n):this.setAttribute(n,s),this._$Em=null}}_$AK(t,e){const i=this.constructor,n=i._$Eh.get(t);if(void 0!==n&&this._$Em!==n){const t=i.getPropertyOptions(n),s="function"==typeof t.converter?{fromAttribute:t.converter}:void 0!==t.converter?.fromAttribute?t.converter:y;this._$Em=n;const o=s.fromAttribute(e,t.type);this[n]=o??this._$Ej?.get(n)??o,this._$Em=null}}requestUpdate(t,e,i,n=!1,s){if(void 0!==t){const o=this.constructor;if(!1===n&&(s=this[t]),i??=o.getPropertyOptions(t),!((i.hasChanged??w)(s,e)||i.useDefault&&i.reflect&&s===this._$Ej?.get(t)&&!this.hasAttribute(o._$Eu(t,i))))return;this.C(t,e,i)}!1===this.isUpdatePending&&(this._$ES=this._$EP())}C(t,e,{useDefault:i,reflect:n,wrapped:s},o){i&&!(this._$Ej??=new Map).has(t)&&(this._$Ej.set(t,o??e??this[t]),!0!==s||void 0!==o)||(this._$AL.has(t)||(this.hasUpdated||i||(e=void 0),this._$AL.set(t,e)),!0===n&&this._$Em!==t&&(this._$Eq??=new Set).add(t))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(t){Promise.reject(t)}const t=this.scheduleUpdate();return null!=t&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??=this.createRenderRoot(),this._$Ep){for(const[t,e]of this._$Ep)this[t]=e;this._$Ep=void 0}const t=this.constructor.elementProperties;if(t.size>0)for(const[e,i]of t){const{wrapped:t}=i,n=this[e];!0!==t||this._$AL.has(e)||void 0===n||this.C(e,void 0,i,n)}}let t=!1;const e=this._$AL;try{t=this.shouldUpdate(e),t?(this.willUpdate(e),this._$EO?.forEach(t=>t.hostUpdate?.()),this.update(e)):this._$EM()}catch(e){throw t=!1,this._$EM(),e}t&&this._$AE(e)}willUpdate(t){}_$AE(t){this._$EO?.forEach(t=>t.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(t){return!0}update(t){this._$Eq&&=this._$Eq.forEach(t=>this._$ET(t,this[t])),this._$EM()}updated(t){}firstUpdated(t){}};x.elementStyles=[],x.shadowRootOptions={mode:"open"},x[b("elementProperties")]=new Map,x[b("finalized")]=new Map,m?.({ReactiveElement:x}),(p.reactiveElementVersions??=[]).push("2.1.2");const $=globalThis,_=t=>t,k=$.trustedTypes,A=k?k.createPolicy("lit-html",{createHTML:t=>t}):void 0,S="$lit$",M=`lit$${Math.random().toFixed(9).slice(2)}$`,E="?"+M,T=`<${E}>`,C=document,P=()=>C.createComment(""),z=t=>null===t||"object"!=typeof t&&"function"!=typeof t,R=Array.isArray,O="[ \t\n\f\r]",N=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,L=/-->/g,D=/>/g,H=RegExp(`>|${O}(?:([^\\s"'>=/]+)(${O}*=${O}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),F=/'/g,I=/"/g,U=/^(?:script|style|textarea|title)$/i,W=t=>(e,...i)=>({_$litType$:t,strings:e,values:i}),j=W(1),B=W(2),q=Symbol.for("lit-noChange"),G=Symbol.for("lit-nothing"),V=new WeakMap,Z=C.createTreeWalker(C,129);function K(t,e){if(!R(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==A?A.createHTML(e):e}const Y=(t,e)=>{const i=t.length-1,n=[];let s,o=2===e?"<svg>":3===e?"<math>":"",a=N;for(let e=0;e<i;e++){const i=t[e];let r,h,l=-1,c=0;for(;c<i.length&&(a.lastIndex=c,h=a.exec(i),null!==h);)c=a.lastIndex,a===N?"!--"===h[1]?a=L:void 0!==h[1]?a=D:void 0!==h[2]?(U.test(h[2])&&(s=RegExp("</"+h[2],"g")),a=H):void 0!==h[3]&&(a=H):a===H?">"===h[0]?(a=s??N,l=-1):void 0===h[1]?l=-2:(l=a.lastIndex-h[2].length,r=h[1],a=void 0===h[3]?H:'"'===h[3]?I:F):a===I||a===F?a=H:a===L||a===D?a=N:(a=H,s=void 0);const d=a===H&&t[e+1].startsWith("/>")?" ":"";o+=a===N?i+T:l>=0?(n.push(r),i.slice(0,l)+S+i.slice(l)+M+d):i+M+(-2===l?e:d)}return[K(t,o+(t[i]||"<?>")+(2===e?"</svg>":3===e?"</math>":"")),n]};class J{constructor({strings:t,_$litType$:e},i){let n;this.parts=[];let s=0,o=0;const a=t.length-1,r=this.parts,[h,l]=Y(t,e);if(this.el=J.createElement(h,i),Z.currentNode=this.el.content,2===e||3===e){const t=this.el.content.firstChild;t.replaceWith(...t.childNodes)}for(;null!==(n=Z.nextNode())&&r.length<a;){if(1===n.nodeType){if(n.hasAttributes())for(const t of n.getAttributeNames())if(t.endsWith(S)){const e=l[o++],i=n.getAttribute(t).split(M),a=/([.?@])?(.*)/.exec(e);r.push({type:1,index:s,name:a[2],strings:i,ctor:"."===a[1]?it:"?"===a[1]?nt:"@"===a[1]?st:et}),n.removeAttribute(t)}else t.startsWith(M)&&(r.push({type:6,index:s}),n.removeAttribute(t));if(U.test(n.tagName)){const t=n.textContent.split(M),e=t.length-1;if(e>0){n.textContent=k?k.emptyScript:"";for(let i=0;i<e;i++)n.append(t[i],P()),Z.nextNode(),r.push({type:2,index:++s});n.append(t[e],P())}}}else if(8===n.nodeType)if(n.data===E)r.push({type:2,index:s});else{let t=-1;for(;-1!==(t=n.data.indexOf(M,t+1));)r.push({type:7,index:s}),t+=M.length-1}s++}}static createElement(t,e){const i=C.createElement("template");return i.innerHTML=t,i}}function X(t,e,i=t,n){if(e===q)return e;let s=void 0!==n?i._$Co?.[n]:i._$Cl;const o=z(e)?void 0:e._$litDirective$;return s?.constructor!==o&&(s?._$AO?.(!1),void 0===o?s=void 0:(s=new o(t),s._$AT(t,i,n)),void 0!==n?(i._$Co??=[])[n]=s:i._$Cl=s),void 0!==s&&(e=X(t,s._$AS(t,e.values),s,n)),e}class Q{constructor(t,e){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=e}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){const{el:{content:e},parts:i}=this._$AD,n=(t?.creationScope??C).importNode(e,!0);Z.currentNode=n;let s=Z.nextNode(),o=0,a=0,r=i[0];for(;void 0!==r;){if(o===r.index){let e;2===r.type?e=new tt(s,s.nextSibling,this,t):1===r.type?e=new r.ctor(s,r.name,r.strings,this,t):6===r.type&&(e=new ot(s,this,t)),this._$AV.push(e),r=i[++a]}o!==r?.index&&(s=Z.nextNode(),o++)}return Z.currentNode=C,n}p(t){let e=0;for(const i of this._$AV)void 0!==i&&(void 0!==i.strings?(i._$AI(t,i,e),e+=i.strings.length-2):i._$AI(t[e])),e++}}class tt{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(t,e,i,n){this.type=2,this._$AH=G,this._$AN=void 0,this._$AA=t,this._$AB=e,this._$AM=i,this.options=n,this._$Cv=n?.isConnected??!0}get parentNode(){let t=this._$AA.parentNode;const e=this._$AM;return void 0!==e&&11===t?.nodeType&&(t=e.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,e=this){t=X(this,t,e),z(t)?t===G||null==t||""===t?(this._$AH!==G&&this._$AR(),this._$AH=G):t!==this._$AH&&t!==q&&this._(t):void 0!==t._$litType$?this.$(t):void 0!==t.nodeType?this.T(t):(t=>R(t)||"function"==typeof t?.[Symbol.iterator])(t)?this.k(t):this._(t)}O(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}T(t){this._$AH!==t&&(this._$AR(),this._$AH=this.O(t))}_(t){this._$AH!==G&&z(this._$AH)?this._$AA.nextSibling.data=t:this.T(C.createTextNode(t)),this._$AH=t}$(t){const{values:e,_$litType$:i}=t,n="number"==typeof i?this._$AC(t):(void 0===i.el&&(i.el=J.createElement(K(i.h,i.h[0]),this.options)),i);if(this._$AH?._$AD===n)this._$AH.p(e);else{const t=new Q(n,this),i=t.u(this.options);t.p(e),this.T(i),this._$AH=t}}_$AC(t){let e=V.get(t.strings);return void 0===e&&V.set(t.strings,e=new J(t)),e}k(t){R(this._$AH)||(this._$AH=[],this._$AR());const e=this._$AH;let i,n=0;for(const s of t)n===e.length?e.push(i=new tt(this.O(P()),this.O(P()),this,this.options)):i=e[n],i._$AI(s),n++;n<e.length&&(this._$AR(i&&i._$AB.nextSibling,n),e.length=n)}_$AR(t=this._$AA.nextSibling,e){for(this._$AP?.(!1,!0,e);t!==this._$AB;){const e=_(t).nextSibling;_(t).remove(),t=e}}setConnected(t){void 0===this._$AM&&(this._$Cv=t,this._$AP?.(t))}}class et{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(t,e,i,n,s){this.type=1,this._$AH=G,this._$AN=void 0,this.element=t,this.name=e,this._$AM=n,this.options=s,i.length>2||""!==i[0]||""!==i[1]?(this._$AH=Array(i.length-1).fill(new String),this.strings=i):this._$AH=G}_$AI(t,e=this,i,n){const s=this.strings;let o=!1;if(void 0===s)t=X(this,t,e,0),o=!z(t)||t!==this._$AH&&t!==q,o&&(this._$AH=t);else{const n=t;let a,r;for(t=s[0],a=0;a<s.length-1;a++)r=X(this,n[i+a],e,a),r===q&&(r=this._$AH[a]),o||=!z(r)||r!==this._$AH[a],r===G?t=G:t!==G&&(t+=(r??"")+s[a+1]),this._$AH[a]=r}o&&!n&&this.j(t)}j(t){t===G?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,t??"")}}class it extends et{constructor(){super(...arguments),this.type=3}j(t){this.element[this.name]=t===G?void 0:t}}class nt extends et{constructor(){super(...arguments),this.type=4}j(t){this.element.toggleAttribute(this.name,!!t&&t!==G)}}class st extends et{constructor(t,e,i,n,s){super(t,e,i,n,s),this.type=5}_$AI(t,e=this){if((t=X(this,t,e,0)??G)===q)return;const i=this._$AH,n=t===G&&i!==G||t.capture!==i.capture||t.once!==i.once||t.passive!==i.passive,s=t!==G&&(i===G||n);n&&this.element.removeEventListener(this.name,this,i),s&&this.element.addEventListener(this.name,this,t),this._$AH=t}handleEvent(t){"function"==typeof this._$AH?this._$AH.call(this.options?.host??this.element,t):this._$AH.handleEvent(t)}}class ot{constructor(t,e,i){this.element=t,this.type=6,this._$AN=void 0,this._$AM=e,this.options=i}get _$AU(){return this._$AM._$AU}_$AI(t){X(this,t)}}const at=$.litHtmlPolyfillSupport;at?.(J,tt),($.litHtmlVersions??=[]).push("3.3.3");const rt=globalThis;class ht extends x{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){const t=super.createRenderRoot();return this.renderOptions.renderBefore??=t.firstChild,t}update(t){const e=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=((t,e,i)=>{const n=i?.renderBefore??e;let s=n._$litPart$;if(void 0===s){const t=i?.renderBefore??null;n._$litPart$=s=new tt(e.insertBefore(P(),t),t,void 0,i??{})}return s._$AI(t),s})(e,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return q}}ht._$litElement$=!0,ht.finalized=!0,rt.litElementHydrateSupport?.({LitElement:ht});const lt=rt.litElementPolyfillSupport;lt?.({LitElement:ht}),(rt.litElementVersions??=[]).push("4.2.2");const ct=t=>(e,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(t,e)}):customElements.define(t,e)},dt={attribute:!0,type:String,converter:y,reflect:!1,hasChanged:w},ut=(t=dt,e,i)=>{const{kind:n,metadata:s}=i;let o=globalThis.litPropertyMetadata.get(s);if(void 0===o&&globalThis.litPropertyMetadata.set(s,o=new Map),"setter"===n&&((t=Object.create(t)).wrapped=!0),o.set(i.name,t),"accessor"===n){const{name:n}=i;return{set(i){const s=e.get.call(this);e.set.call(this,i),this.requestUpdate(n,s,t,!0,i)},init(e){return void 0!==e&&this.C(n,void 0,t,e),e}}}if("setter"===n){const{name:n}=i;return function(i){const s=this[n];e.call(this,i),this.requestUpdate(n,s,t,!0,i)}}throw Error("Unsupported decorator location: "+n)};function pt(t){return(e,i)=>"object"==typeof i?ut(t,e,i):((t,e,i)=>{const n=e.hasOwnProperty(i);return e.constructor.createProperty(i,t),n?Object.getOwnPropertyDescriptor(e,i):void 0})(t,e,i)}function gt(t){return pt({...t,state:!0,attribute:!1})}function ft(t,e){return(e,i,n)=>((t,e,i)=>(i.configurable=!0,i.enumerable=!0,Reflect.decorate&&"object"!=typeof e&&Object.defineProperty(t,e,i),i))(e,i,{get(){return(e=>e.renderRoot?.querySelector(t)??null)(this)}})}const mt=((t,...e)=>{const i=1===t.length?t[0]:e.reduce((e,i,n)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(i)+t[n+1],t[0]);return new o(i,t,n)})`
+function e(e,t,i,n){var s,o=arguments.length,r=o<3?t:null===n?n=Object.getOwnPropertyDescriptor(t,i):n;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(e,t,i,n);else for(var a=e.length-1;a>=0;a--)(s=e[a])&&(r=(o<3?s(r):o>3?s(t,i,r):s(t,i))||r);return o>3&&r&&Object.defineProperty(t,i,r),r}"function"==typeof SuppressedError&&SuppressedError;const t=globalThis,i=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,n=Symbol(),s=new WeakMap;let o=class{constructor(e,t,i){if(this._$cssResult$=!0,i!==n)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=e,this.t=t}get styleSheet(){let e=this.o;const t=this.t;if(i&&void 0===e){const i=void 0!==t&&1===t.length;i&&(e=s.get(t)),void 0===e&&((this.o=e=new CSSStyleSheet).replaceSync(this.cssText),i&&s.set(t,e))}return e}toString(){return this.cssText}};const r=i?e=>e:e=>e instanceof CSSStyleSheet?(e=>{let t="";for(const i of e.cssRules)t+=i.cssText;return(e=>new o("string"==typeof e?e:e+"",void 0,n))(t)})(e):e,{is:a,defineProperty:h,getOwnPropertyDescriptor:l,getOwnPropertyNames:d,getOwnPropertySymbols:c,getPrototypeOf:p}=Object,u=globalThis,m=u.trustedTypes,g=m?m.emptyScript:"",f=u.reactiveElementPolyfillSupport,b=(e,t)=>e,x={toAttribute(e,t){switch(t){case Boolean:e=e?g:null;break;case Object:case Array:e=null==e?e:JSON.stringify(e)}return e},fromAttribute(e,t){let i=e;switch(t){case Boolean:i=null!==e;break;case Number:i=null===e?null:Number(e);break;case Object:case Array:try{i=JSON.parse(e)}catch(e){i=null}}return i}},y=(e,t)=>!a(e,t),w={attribute:!0,type:String,converter:x,reflect:!1,useDefault:!1,hasChanged:y};Symbol.metadata??=Symbol("metadata"),u.litPropertyMetadata??=new WeakMap;let v=class extends HTMLElement{static addInitializer(e){this._$Ei(),(this.l??=[]).push(e)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(e,t=w){if(t.state&&(t.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(e)&&((t=Object.create(t)).wrapped=!0),this.elementProperties.set(e,t),!t.noAccessor){const i=Symbol(),n=this.getPropertyDescriptor(e,i,t);void 0!==n&&h(this.prototype,e,n)}}static getPropertyDescriptor(e,t,i){const{get:n,set:s}=l(this.prototype,e)??{get(){return this[t]},set(e){this[t]=e}};return{get:n,set(t){const o=n?.call(this);s?.call(this,t),this.requestUpdate(e,o,i)},configurable:!0,enumerable:!0}}static getPropertyOptions(e){return this.elementProperties.get(e)??w}static _$Ei(){if(this.hasOwnProperty(b("elementProperties")))return;const e=p(this);e.finalize(),void 0!==e.l&&(this.l=[...e.l]),this.elementProperties=new Map(e.elementProperties)}static finalize(){if(this.hasOwnProperty(b("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(b("properties"))){const e=this.properties,t=[...d(e),...c(e)];for(const i of t)this.createProperty(i,e[i])}const e=this[Symbol.metadata];if(null!==e){const t=litPropertyMetadata.get(e);if(void 0!==t)for(const[e,i]of t)this.elementProperties.set(e,i)}this._$Eh=new Map;for(const[e,t]of this.elementProperties){const i=this._$Eu(e,t);void 0!==i&&this._$Eh.set(i,e)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(e){const t=[];if(Array.isArray(e)){const i=new Set(e.flat(1/0).reverse());for(const e of i)t.unshift(r(e))}else void 0!==e&&t.push(r(e));return t}static _$Eu(e,t){const i=t.attribute;return!1===i?void 0:"string"==typeof i?i:"string"==typeof e?e.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(e=>this.enableUpdating=e),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(e=>e(this))}addController(e){(this._$EO??=new Set).add(e),void 0!==this.renderRoot&&this.isConnected&&e.hostConnected?.()}removeController(e){this._$EO?.delete(e)}_$E_(){const e=new Map,t=this.constructor.elementProperties;for(const i of t.keys())this.hasOwnProperty(i)&&(e.set(i,this[i]),delete this[i]);e.size>0&&(this._$Ep=e)}createRenderRoot(){const e=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return((e,n)=>{if(i)e.adoptedStyleSheets=n.map(e=>e instanceof CSSStyleSheet?e:e.styleSheet);else for(const i of n){const n=document.createElement("style"),s=t.litNonce;void 0!==s&&n.setAttribute("nonce",s),n.textContent=i.cssText,e.appendChild(n)}})(e,this.constructor.elementStyles),e}connectedCallback(){this.renderRoot??=this.createRenderRoot(),this.enableUpdating(!0),this._$EO?.forEach(e=>e.hostConnected?.())}enableUpdating(e){}disconnectedCallback(){this._$EO?.forEach(e=>e.hostDisconnected?.())}attributeChangedCallback(e,t,i){this._$AK(e,i)}_$ET(e,t){const i=this.constructor.elementProperties.get(e),n=this.constructor._$Eu(e,i);if(void 0!==n&&!0===i.reflect){const s=(void 0!==i.converter?.toAttribute?i.converter:x).toAttribute(t,i.type);this._$Em=e,null==s?this.removeAttribute(n):this.setAttribute(n,s),this._$Em=null}}_$AK(e,t){const i=this.constructor,n=i._$Eh.get(e);if(void 0!==n&&this._$Em!==n){const e=i.getPropertyOptions(n),s="function"==typeof e.converter?{fromAttribute:e.converter}:void 0!==e.converter?.fromAttribute?e.converter:x;this._$Em=n;const o=s.fromAttribute(t,e.type);this[n]=o??this._$Ej?.get(n)??o,this._$Em=null}}requestUpdate(e,t,i,n=!1,s){if(void 0!==e){const o=this.constructor;if(!1===n&&(s=this[e]),i??=o.getPropertyOptions(e),!((i.hasChanged??y)(s,t)||i.useDefault&&i.reflect&&s===this._$Ej?.get(e)&&!this.hasAttribute(o._$Eu(e,i))))return;this.C(e,t,i)}!1===this.isUpdatePending&&(this._$ES=this._$EP())}C(e,t,{useDefault:i,reflect:n,wrapped:s},o){i&&!(this._$Ej??=new Map).has(e)&&(this._$Ej.set(e,o??t??this[e]),!0!==s||void 0!==o)||(this._$AL.has(e)||(this.hasUpdated||i||(t=void 0),this._$AL.set(e,t)),!0===n&&this._$Em!==e&&(this._$Eq??=new Set).add(e))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(e){Promise.reject(e)}const e=this.scheduleUpdate();return null!=e&&await e,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??=this.createRenderRoot(),this._$Ep){for(const[e,t]of this._$Ep)this[e]=t;this._$Ep=void 0}const e=this.constructor.elementProperties;if(e.size>0)for(const[t,i]of e){const{wrapped:e}=i,n=this[t];!0!==e||this._$AL.has(t)||void 0===n||this.C(t,void 0,i,n)}}let e=!1;const t=this._$AL;try{e=this.shouldUpdate(t),e?(this.willUpdate(t),this._$EO?.forEach(e=>e.hostUpdate?.()),this.update(t)):this._$EM()}catch(t){throw e=!1,this._$EM(),t}e&&this._$AE(t)}willUpdate(e){}_$AE(e){this._$EO?.forEach(e=>e.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(e)),this.updated(e)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(e){return!0}update(e){this._$Eq&&=this._$Eq.forEach(e=>this._$ET(e,this[e])),this._$EM()}updated(e){}firstUpdated(e){}};v.elementStyles=[],v.shadowRootOptions={mode:"open"},v[b("elementProperties")]=new Map,v[b("finalized")]=new Map,f?.({ReactiveElement:v}),(u.reactiveElementVersions??=[]).push("2.1.2");const _=globalThis,$=e=>e,k=_.trustedTypes,S=k?k.createPolicy("lit-html",{createHTML:e=>e}):void 0,E="$lit$",A=`lit$${Math.random().toFixed(9).slice(2)}$`,M="?"+A,T=`<${M}>`,C=document,P=()=>C.createComment(""),z=e=>null===e||"object"!=typeof e&&"function"!=typeof e,R=Array.isArray,O="[ \t\n\f\r]",D=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,F=/-->/g,N=/>/g,H=RegExp(`>|${O}(?:([^\\s"'>=/]+)(${O}*=${O}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),U=/'/g,L=/"/g,B=/^(?:script|style|textarea|title)$/i,I=e=>(t,...i)=>({_$litType$:e,strings:t,values:i}),W=I(1),j=I(2),V=Symbol.for("lit-noChange"),q=Symbol.for("lit-nothing"),Z=new WeakMap,G=C.createTreeWalker(C,129);function K(e,t){if(!R(e)||!e.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==S?S.createHTML(t):t}const Y=(e,t)=>{const i=e.length-1,n=[];let s,o=2===t?"<svg>":3===t?"<math>":"",r=D;for(let t=0;t<i;t++){const i=e[t];let a,h,l=-1,d=0;for(;d<i.length&&(r.lastIndex=d,h=r.exec(i),null!==h);)d=r.lastIndex,r===D?"!--"===h[1]?r=F:void 0!==h[1]?r=N:void 0!==h[2]?(B.test(h[2])&&(s=RegExp("</"+h[2],"g")),r=H):void 0!==h[3]&&(r=H):r===H?">"===h[0]?(r=s??D,l=-1):void 0===h[1]?l=-2:(l=r.lastIndex-h[2].length,a=h[1],r=void 0===h[3]?H:'"'===h[3]?L:U):r===L||r===U?r=H:r===F||r===N?r=D:(r=H,s=void 0);const c=r===H&&e[t+1].startsWith("/>")?" ":"";o+=r===D?i+T:l>=0?(n.push(a),i.slice(0,l)+E+i.slice(l)+A+c):i+A+(-2===l?t:c)}return[K(e,o+(e[i]||"<?>")+(2===t?"</svg>":3===t?"</math>":"")),n]};class J{constructor({strings:e,_$litType$:t},i){let n;this.parts=[];let s=0,o=0;const r=e.length-1,a=this.parts,[h,l]=Y(e,t);if(this.el=J.createElement(h,i),G.currentNode=this.el.content,2===t||3===t){const e=this.el.content.firstChild;e.replaceWith(...e.childNodes)}for(;null!==(n=G.nextNode())&&a.length<r;){if(1===n.nodeType){if(n.hasAttributes())for(const e of n.getAttributeNames())if(e.endsWith(E)){const t=l[o++],i=n.getAttribute(e).split(A),r=/([.?@])?(.*)/.exec(t);a.push({type:1,index:s,name:r[2],strings:i,ctor:"."===r[1]?ie:"?"===r[1]?ne:"@"===r[1]?se:te}),n.removeAttribute(e)}else e.startsWith(A)&&(a.push({type:6,index:s}),n.removeAttribute(e));if(B.test(n.tagName)){const e=n.textContent.split(A),t=e.length-1;if(t>0){n.textContent=k?k.emptyScript:"";for(let i=0;i<t;i++)n.append(e[i],P()),G.nextNode(),a.push({type:2,index:++s});n.append(e[t],P())}}}else if(8===n.nodeType)if(n.data===M)a.push({type:2,index:s});else{let e=-1;for(;-1!==(e=n.data.indexOf(A,e+1));)a.push({type:7,index:s}),e+=A.length-1}s++}}static createElement(e,t){const i=C.createElement("template");return i.innerHTML=e,i}}function X(e,t,i=e,n){if(t===V)return t;let s=void 0!==n?i._$Co?.[n]:i._$Cl;const o=z(t)?void 0:t._$litDirective$;return s?.constructor!==o&&(s?._$AO?.(!1),void 0===o?s=void 0:(s=new o(e),s._$AT(e,i,n)),void 0!==n?(i._$Co??=[])[n]=s:i._$Cl=s),void 0!==s&&(t=X(e,s._$AS(e,t.values),s,n)),t}class Q{constructor(e,t){this._$AV=[],this._$AN=void 0,this._$AD=e,this._$AM=t}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(e){const{el:{content:t},parts:i}=this._$AD,n=(e?.creationScope??C).importNode(t,!0);G.currentNode=n;let s=G.nextNode(),o=0,r=0,a=i[0];for(;void 0!==a;){if(o===a.index){let t;2===a.type?t=new ee(s,s.nextSibling,this,e):1===a.type?t=new a.ctor(s,a.name,a.strings,this,e):6===a.type&&(t=new oe(s,this,e)),this._$AV.push(t),a=i[++r]}o!==a?.index&&(s=G.nextNode(),o++)}return G.currentNode=C,n}p(e){let t=0;for(const i of this._$AV)void 0!==i&&(void 0!==i.strings?(i._$AI(e,i,t),t+=i.strings.length-2):i._$AI(e[t])),t++}}class ee{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(e,t,i,n){this.type=2,this._$AH=q,this._$AN=void 0,this._$AA=e,this._$AB=t,this._$AM=i,this.options=n,this._$Cv=n?.isConnected??!0}get parentNode(){let e=this._$AA.parentNode;const t=this._$AM;return void 0!==t&&11===e?.nodeType&&(e=t.parentNode),e}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(e,t=this){e=X(this,e,t),z(e)?e===q||null==e||""===e?(this._$AH!==q&&this._$AR(),this._$AH=q):e!==this._$AH&&e!==V&&this._(e):void 0!==e._$litType$?this.$(e):void 0!==e.nodeType?this.T(e):(e=>R(e)||"function"==typeof e?.[Symbol.iterator])(e)?this.k(e):this._(e)}O(e){return this._$AA.parentNode.insertBefore(e,this._$AB)}T(e){this._$AH!==e&&(this._$AR(),this._$AH=this.O(e))}_(e){this._$AH!==q&&z(this._$AH)?this._$AA.nextSibling.data=e:this.T(C.createTextNode(e)),this._$AH=e}$(e){const{values:t,_$litType$:i}=e,n="number"==typeof i?this._$AC(e):(void 0===i.el&&(i.el=J.createElement(K(i.h,i.h[0]),this.options)),i);if(this._$AH?._$AD===n)this._$AH.p(t);else{const e=new Q(n,this),i=e.u(this.options);e.p(t),this.T(i),this._$AH=e}}_$AC(e){let t=Z.get(e.strings);return void 0===t&&Z.set(e.strings,t=new J(e)),t}k(e){R(this._$AH)||(this._$AH=[],this._$AR());const t=this._$AH;let i,n=0;for(const s of e)n===t.length?t.push(i=new ee(this.O(P()),this.O(P()),this,this.options)):i=t[n],i._$AI(s),n++;n<t.length&&(this._$AR(i&&i._$AB.nextSibling,n),t.length=n)}_$AR(e=this._$AA.nextSibling,t){for(this._$AP?.(!1,!0,t);e!==this._$AB;){const t=$(e).nextSibling;$(e).remove(),e=t}}setConnected(e){void 0===this._$AM&&(this._$Cv=e,this._$AP?.(e))}}class te{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(e,t,i,n,s){this.type=1,this._$AH=q,this._$AN=void 0,this.element=e,this.name=t,this._$AM=n,this.options=s,i.length>2||""!==i[0]||""!==i[1]?(this._$AH=Array(i.length-1).fill(new String),this.strings=i):this._$AH=q}_$AI(e,t=this,i,n){const s=this.strings;let o=!1;if(void 0===s)e=X(this,e,t,0),o=!z(e)||e!==this._$AH&&e!==V,o&&(this._$AH=e);else{const n=e;let r,a;for(e=s[0],r=0;r<s.length-1;r++)a=X(this,n[i+r],t,r),a===V&&(a=this._$AH[r]),o||=!z(a)||a!==this._$AH[r],a===q?e=q:e!==q&&(e+=(a??"")+s[r+1]),this._$AH[r]=a}o&&!n&&this.j(e)}j(e){e===q?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,e??"")}}class ie extends te{constructor(){super(...arguments),this.type=3}j(e){this.element[this.name]=e===q?void 0:e}}class ne extends te{constructor(){super(...arguments),this.type=4}j(e){this.element.toggleAttribute(this.name,!!e&&e!==q)}}class se extends te{constructor(e,t,i,n,s){super(e,t,i,n,s),this.type=5}_$AI(e,t=this){if((e=X(this,e,t,0)??q)===V)return;const i=this._$AH,n=e===q&&i!==q||e.capture!==i.capture||e.once!==i.once||e.passive!==i.passive,s=e!==q&&(i===q||n);n&&this.element.removeEventListener(this.name,this,i),s&&this.element.addEventListener(this.name,this,e),this._$AH=e}handleEvent(e){"function"==typeof this._$AH?this._$AH.call(this.options?.host??this.element,e):this._$AH.handleEvent(e)}}class oe{constructor(e,t,i){this.element=e,this.type=6,this._$AN=void 0,this._$AM=t,this.options=i}get _$AU(){return this._$AM._$AU}_$AI(e){X(this,e)}}const re=_.litHtmlPolyfillSupport;re?.(J,ee),(_.litHtmlVersions??=[]).push("3.3.3");const ae=globalThis;class he extends v{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){const e=super.createRenderRoot();return this.renderOptions.renderBefore??=e.firstChild,e}update(e){const t=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(e),this._$Do=((e,t,i)=>{const n=i?.renderBefore??t;let s=n._$litPart$;if(void 0===s){const e=i?.renderBefore??null;n._$litPart$=s=new ee(t.insertBefore(P(),e),e,void 0,i??{})}return s._$AI(e),s})(t,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return V}}he._$litElement$=!0,he.finalized=!0,ae.litElementHydrateSupport?.({LitElement:he});const le=ae.litElementPolyfillSupport;le?.({LitElement:he}),(ae.litElementVersions??=[]).push("4.2.2");const de=e=>(t,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(e,t)}):customElements.define(e,t)},ce={attribute:!0,type:String,converter:x,reflect:!1,hasChanged:y},pe=(e=ce,t,i)=>{const{kind:n,metadata:s}=i;let o=globalThis.litPropertyMetadata.get(s);if(void 0===o&&globalThis.litPropertyMetadata.set(s,o=new Map),"setter"===n&&((e=Object.create(e)).wrapped=!0),o.set(i.name,e),"accessor"===n){const{name:n}=i;return{set(i){const s=t.get.call(this);t.set.call(this,i),this.requestUpdate(n,s,e,!0,i)},init(t){return void 0!==t&&this.C(n,void 0,e,t),t}}}if("setter"===n){const{name:n}=i;return function(i){const s=this[n];t.call(this,i),this.requestUpdate(n,s,e,!0,i)}}throw Error("Unsupported decorator location: "+n)};function ue(e){return(t,i)=>"object"==typeof i?pe(e,t,i):((e,t,i)=>{const n=t.hasOwnProperty(i);return t.constructor.createProperty(i,e),n?Object.getOwnPropertyDescriptor(t,i):void 0})(e,t,i)}function me(e){return ue({...e,state:!0,attribute:!1})}function ge(e,t){return(t,i,n)=>((e,t,i)=>(i.configurable=!0,i.enumerable=!0,Reflect.decorate&&"object"!=typeof t&&Object.defineProperty(e,t,i),i))(t,i,{get(){return(t=>t.renderRoot?.querySelector(e)??null)(this)}})}const fe=((e,...t)=>{const i=1===e.length?e[0]:t.reduce((t,i,n)=>t+(e=>{if(!0===e._$cssResult$)return e.cssText;if("number"==typeof e)return e;throw Error("Value passed to 'css' function must be a 'css' function result: "+e+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(i)+e[n+1],e[0]);return new o(i,e,n)})`
   :host {
     --wtl-accent: var(--primary-color, #03a9f4);
     --wtl-surface: var(--card-background-color, #fff);
@@ -480,6 +480,24 @@ function t(t,e,i,n){var s,o=arguments.length,a=o<3?e:null===n?n=Object.getOwnPro
     opacity: 0.07;
   }
 
+  /* The stretch of the timeline an export would cover. The same idiom
+     as the night bands — a tinted span behind the bar, placed by DOM
+     order rather than z-index — but in the accent colour and far
+     stronger: night is context, this is a selection the user made and
+     has to be able to see while dragging the playhead to its other end. */
+  .export-band {
+    position: absolute;
+    top: 50%;
+    height: 20px;
+    /* A one-frame selection still has to be findable on the bar. */
+    min-width: 3px;
+    transform: translateY(-50%);
+    border-radius: 3px;
+    background: var(--wtl-accent);
+    opacity: 0.25;
+    pointer-events: none;
+  }
+
   .marks {
     position: absolute;
     inset: 0;
@@ -626,6 +644,199 @@ function t(t,e,i,n){var s,o=arguments.length,a=o<3?e:null===n?n=Object.getOwnPro
     bottom: 0;
     font-weight: 500;
     color: var(--wtl-text);
+  }
+
+  /* --- video export ------------------------------------------------ */
+
+  /* Under the timeline, in normal flow. Deliberately not a button on the
+     control pill: the pill's width is what the narrow-layout breakpoints
+     above are derived from, and export is a once-in-a-while action that
+     does not belong among the transport controls anyway.
+
+     Every control here is a native element. Home Assistant's own
+     (ha-button, ha-switch, ha-select) are loaded lazily by whichever
+     core panel needs them first, so in a card they may or may not be
+     registered — and an unregistered custom element renders as nothing
+     at all, with no error. */
+  .export {
+    margin: 0 12px 10px;
+    font-size: var(--ha-font-size-s, 12px);
+  }
+
+  .export button,
+  .export-download {
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .export button:focus-visible,
+  .export-download:focus-visible,
+  .export-check input:focus-visible {
+    outline: 2px solid var(--wtl-accent);
+    outline-offset: 2px;
+  }
+
+  /* Quiet until wanted, like the fold control on the readings. */
+  .export-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 28px;
+    padding: 4px 8px;
+    margin-left: -8px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--wtl-muted);
+    --mdc-icon-size: 16px;
+  }
+
+  .export-toggle:hover,
+  .export-toggle[aria-expanded="true"] {
+    color: var(--wtl-text);
+  }
+
+  .export-panel {
+    display: grid;
+    gap: 12px;
+    margin-top: 4px;
+    padding: 12px;
+    border: 1px solid var(--wtl-divider);
+    border-radius: 8px;
+    color: var(--wtl-text);
+  }
+
+  /* From and To side by side while there is room, stacked when not. */
+  .export-ends {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 10px 16px;
+  }
+
+  .export-end {
+    display: grid;
+    gap: 4px;
+    justify-items: start;
+  }
+
+  .export-label {
+    color: var(--wtl-muted);
+  }
+
+  /* Digits must not shift width as the range is moved. */
+  .export-stamp {
+    font-size: var(--ha-font-size-m, 14px);
+    font-weight: var(--ha-font-weight-medium, 500);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .export-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 8px;
+  }
+
+  .export-chip {
+    min-height: 28px;
+    padding: 4px 10px;
+    border: 1px solid var(--wtl-divider);
+    border-radius: 999px;
+    background: none;
+    color: inherit;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .export-chip:hover {
+    border-color: var(--wtl-muted);
+  }
+
+  /* The chosen frame rate. Border and tint, not colour alone, so it
+     still reads as selected in forced-colours and to anyone who cannot
+     tell the accent from the divider. */
+  .export-chip[aria-pressed="true"] {
+    border-color: var(--wtl-accent);
+    border-width: 2px;
+    padding: 3px 9px;
+    font-weight: var(--ha-font-weight-medium, 500);
+  }
+
+  .export-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 28px;
+    cursor: pointer;
+  }
+
+  .export-check input {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    accent-color: var(--wtl-accent);
+  }
+
+  .export-summary {
+    color: var(--wtl-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .export-go,
+  .export-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 36px;
+    padding: 6px 18px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--wtl-accent);
+    color: var(--text-primary-color, #fff);
+    font-weight: var(--ha-font-weight-medium, 500);
+    text-decoration: none;
+    --mdc-icon-size: 18px;
+  }
+
+  /* While an export runs the form is locked, and has to look it:
+     a control that ignores a press without saying why reads as a
+     broken card. */
+  .export-go:disabled,
+  .export-chip:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+
+  .export-chip:disabled:hover {
+    border-color: var(--wtl-divider);
+  }
+
+  .export-status {
+    display: grid;
+    gap: 8px;
+    justify-items: start;
+  }
+
+  .export-status .detail {
+    color: var(--wtl-muted);
+    overflow-wrap: anywhere;
+  }
+
+  .export-error {
+    color: var(--wtl-gap);
+  }
+
+  .export-progress {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--wtl-divider);
+    overflow: hidden;
+  }
+
+  .export-progress span {
+    display: block;
+    height: 100%;
+    background: var(--wtl-accent);
   }
 
   /* --- editor ------------------------------------------------------ */
@@ -807,25 +1018,27 @@ function t(t,e,i,n){var s,o=arguments.length,a=o<3?e:null===n?n=Object.getOwnPro
 
   @media (forced-colors: active) {
     .fill,
-    .gap-run {
+    .gap-run,
+    .export-band,
+    .export-progress span {
       forced-color-adjust: none;
     }
   }
-`;var bt={no_frames:"No frames archived yet.",first_soon:"The first one appears at the next capture.",frame_failed:"This frame could not be loaded.",index_failed:"Could not load the timeline."},yt={live:"LIVE",gap:"NO IMAGE"},wt={play:"Play",pause:"Pause",previous:"Previous frame",next:"Next frame",speed:"Playback speed {v}x",now:"Jump to now"},vt={label:"Timeline position"},xt={range:"Range {v}",flat:"No change"},$t={no_camera:"You need to pick a camera in the card configuration."},_t="This card was updated to {v}. Reload to pick up the new version.",kt="Reload",At={camera_entity:"Camera",title:"Title",show_dayticks:"Show day markers",show_graph:"Show graphs",show_sun:"Mark night",playback:"Playback",autoplay:"Play automatically",speed:"Speed",graph_hours:"Graph window",overlay_right:"Overlay readings (right)",overlay_right_hint:"Values shown over the image are read at the moment you scrub to, not the current ones.",overlay_left:"Overlay readings (left)",overlay_left_hint:"A second block on the other side of the picture. Leave it empty for one block on the right.",add_entity:"Add entity",entity:"Entity",name:"Label",unit:"Unit",decimals:"Decimals",color:"Colour",graph:"Graph",move_up:"Move up",move_down:"Move down",remove:"Remove",helper:{camera_entity:"Only cameras created by this integration have an archive to scrub.",graph_hours:"How much history the sparkline shows around the playhead.",autoplay:"Ignored when your system asks for reduced motion.",deflicker:"Evens out cloud-driven brightness jumps during playback. 0 turns it off.",overlay_title:"Shown above the readings. Leave empty for no heading.",overlay_title_left:"Shown above the readings. Leave empty for no heading.",show_icon:"Uses the entity's own icon from Home Assistant.",show_sun:"Shades the hours between sunset and sunrise on the graphs and the scrubber, using your Home Assistant location. Hidden when the bands get too fine to read."},deflicker:"Smooth brightness",show_icon:"Show icon",overlay_title:"Heading",overlay_title_left:"Heading"},St={show_camera:"Show camera details",show_entity:"Show details for {v}",hide_readings:"Hide readings",show_readings:"Show readings"},Mt={empty:bt,badge:yt,controls:wt,track:vt,spark:xt,error:$t,version_update:_t,version_reload:kt,editor:At,actions:St},Et={no_frames:"Noch keine Bilder gespeichert.",first_soon:"Das erste erscheint bei der nächsten Aufnahme.",frame_failed:"Dieses Bild konnte nicht geladen werden.",index_failed:"Die Zeitleiste konnte nicht geladen werden."},Tt={live:"LIVE",gap:"KEIN BILD"},Ct={play:"Abspielen",pause:"Pause",previous:"Vorheriges Bild",next:"Nächstes Bild",speed:"Wiedergabegeschwindigkeit {v}x",now:"Zur Gegenwart springen"},Pt={label:"Position auf der Zeitleiste"},zt={range:"Spanne {v}",flat:"Unverändert"},Rt={no_camera:"Bitte wähle in der Kartenkonfiguration eine Kamera aus."},Ot="Diese Karte wurde auf {v} aktualisiert. Lade neu, um die neue Version zu verwenden.",Nt="Neu laden",Lt={camera_entity:"Kamera",title:"Titel",show_dayticks:"Tagesmarkierungen anzeigen",show_graph:"Diagramme anzeigen",show_sun:"Nacht markieren",playback:"Wiedergabe",autoplay:"Automatisch abspielen",speed:"Geschwindigkeit",graph_hours:"Diagramm-Zeitraum",overlay_right:"Eingeblendete Messwerte (rechts)",overlay_right_hint:"Die Werte über dem Bild gehören zu dem Zeitpunkt, zu dem du scrollst – nicht zur Gegenwart.",overlay_left:"Eingeblendete Messwerte (links)",overlay_left_hint:"Ein zweiter Block auf der anderen Seite des Bildes. Leer lassen, dann bleibt es bei einem Block rechts.",add_entity:"Entität hinzufügen",entity:"Entität",name:"Bezeichnung",unit:"Einheit",decimals:"Nachkommastellen",color:"Farbe",graph:"Diagramm",move_up:"Nach oben",move_down:"Nach unten",remove:"Entfernen",helper:{camera_entity:"Nur Kameras dieser Integration haben ein Archiv zum Durchblättern.",graph_hours:"Wie viel Verlauf die Sparkline rund um die Position zeigt.",autoplay:"Wird ignoriert, wenn dein System reduzierte Bewegung anfordert.",deflicker:"Gleicht wolkenbedingte Helligkeitssprünge bei der Wiedergabe aus. 0 schaltet es ab.",overlay_title:"Wird über den Messwerten angezeigt. Leer lassen für keine Überschrift.",overlay_title_left:"Wird über den Messwerten angezeigt. Leer lassen für keine Überschrift.",show_icon:"Verwendet das Symbol der Entität aus Home Assistant.",show_sun:"Hinterlegt die Stunden zwischen Sonnenuntergang und Sonnenaufgang in den Diagrammen und in der Zeitleiste, basierend auf deinem Home-Assistant-Standort. Wird ausgeblendet, sobald die Streifen zu fein werden."},deflicker:"Helligkeit glätten",show_icon:"Symbol anzeigen",overlay_title:"Überschrift",overlay_title_left:"Überschrift"},Dt={show_camera:"Kameradetails anzeigen",show_entity:"Details für {v} anzeigen",hide_readings:"Messwerte ausblenden",show_readings:"Messwerte einblenden"},Ht={empty:Et,badge:Tt,controls:Ct,track:Pt,spark:zt,error:Rt,version_update:Ot,version_reload:Nt,editor:Lt,actions:Dt};const Ft={en:Object.freeze({__proto__:null,actions:St,badge:yt,controls:wt,default:Mt,editor:At,empty:bt,error:$t,spark:xt,track:vt,version_reload:kt,version_update:_t}),de:Object.freeze({__proto__:null,actions:Dt,badge:Tt,controls:Ct,default:Ht,editor:Lt,empty:Et,error:Rt,spark:zt,track:Pt,version_reload:Nt,version_update:Ot})};function It(t,e){const i=t.split(".").reduce((t,e)=>{if(t&&"object"==typeof t&&e in t)return t[e]},e);return"string"==typeof i?i:void 0}function Ut(t,e=void 0,i="",n=""){const s=(e??"en").toLowerCase().split(/[-_]/)[0]??"en",o=Ft.en??{};let a=It(t,Ft[s]??Ft.en??{});return void 0===a&&(a=It(t,o)),void 0===a&&(a=t),""!==i&&""!==n&&(a=a.replace(i,n)),a}var Wt;const jt=[1,2,4,8,16,32,64],Bt=[{name:"overlay_title",selector:{text:{}}}],qt=[{name:"overlay_title_left",selector:{text:{}}}],Gt=[{type:"grid",schema:[{name:"name",selector:{text:{}}},{name:"unit",selector:{text:{}}},{name:"decimals",selector:{number:{min:0,max:4,mode:"box"}}},{name:"graph_hours",selector:{number:{min:1,max:8760,mode:"box",unit_of_measurement:"h"}}}]}];let Vt=class extends ht{constructor(){super(...arguments),this.computeLabel=t=>this.t(`editor.${t.name}`),this.computeHelper=t=>{const e=this.t(`editor.helper.${t.name}`);return e.startsWith("editor.")?void 0:e}}static{Wt=this}static{this.styles=mt}setConfig(t){this.config=t}get uiLanguage(){return this.hass?.locale?.language??this.hass?.language??"en"}t(t){return Ut(t,this.uiLanguage)}get schema(){return[{name:"camera_entity",required:!0,selector:{entity:{filter:{domain:"camera",integration:"webcam_timelapse"}}}},{name:"title",selector:{text:{}}},{type:"grid",schema:[{name:"show_dayticks",selector:{boolean:{}}},{name:"show_graph",selector:{boolean:{}}},{name:"show_sun",selector:{boolean:{}}}]},{type:"expandable",name:"playback",icon:"mdi:play-speed",flatten:!0,schema:[{name:"autoplay",selector:{boolean:{}}},{name:"speed",selector:{select:{mode:"dropdown",options:jt.map(t=>({value:t,label:`${t}x`}))}}},{name:"deflicker",selector:{number:{min:0,max:100,step:5,mode:"slider"}}},{name:"graph_hours",selector:{number:{min:1,max:336,mode:"slider",unit_of_measurement:"h"}}}]}]}onFormChange(t){t.stopPropagation(),this.emit({...this.config,...t.detail.value})}emit(t){this.dispatchEvent(new CustomEvent("config-changed",{detail:{config:t},bubbles:!0,composed:!0}))}static{this.ENTITY_KEY={right:"entities",left:"entities_left"}}rows(t){return this.config?.[Wt.ENTITY_KEY[t]]??[]}updateRows(t,e){this.emit({...this.config,[Wt.ENTITY_KEY[t]]:e})}addRow(t){this.updateRows(t,[...this.rows(t),{entity:""}])}removeRow(t,e){this.updateRows(t,this.rows(t).filter((t,i)=>i!==e))}moveRow(t,e,i){const n=[...this.rows(t)],s=e+i;s<0||s>=n.length||([n[e],n[s]]=[n[s],n[e]],this.updateRows(t,n))}patchRow(t,e,i){const n=this.rows(t).map((t,n)=>n===e?{...t,...i}:t);this.updateRows(t,n)}renderRow(t,e,i){const n=e.name||e.entity||this.t("editor.entity");return j`
+`;var be={no_frames:"No frames archived yet.",first_soon:"The first one appears at the next capture.",frame_failed:"This frame could not be loaded.",index_failed:"Could not load the timeline."},xe={live:"LIVE",gap:"NO IMAGE"},ye={play:"Play",pause:"Pause",previous:"Previous frame",next:"Next frame",speed:"Playback speed {v}x",now:"Jump to now"},we={label:"Timeline position"},ve={range:"Range {v}",flat:"No change"},_e={no_camera:"You need to pick a camera in the card configuration."},$e="This card was updated to {v}. Reload to pick up the new version.",ke="Reload",Se={camera_entity:"Camera",title:"Title",show_dayticks:"Show day markers",show_graph:"Show graphs",show_sun:"Mark night",playback:"Playback",autoplay:"Play automatically",speed:"Speed",graph_hours:"Graph window",overlay_right:"Overlay readings (right)",overlay_right_hint:"Values shown over the image are read at the moment you scrub to, not the current ones.",overlay_left:"Overlay readings (left)",overlay_left_hint:"A second block on the other side of the picture. Leave it empty for one block on the right.",add_entity:"Add entity",entity:"Entity",name:"Label",unit:"Unit",decimals:"Decimals",color:"Colour",graph:"Graph",move_up:"Move up",move_down:"Move down",remove:"Remove",helper:{camera_entity:"Only cameras created by this integration have an archive to scrub.",graph_hours:"How much history the sparkline shows around the playhead.",autoplay:"Ignored when your system asks for reduced motion.",deflicker:"Evens out cloud-driven brightness jumps during playback. 0 turns it off.",overlay_title:"Shown above the readings. Leave empty for no heading.",overlay_title_left:"Shown above the readings. Leave empty for no heading.",show_icon:"Uses the entity's own icon from Home Assistant.",show_sun:"Shades the hours between sunset and sunrise on the graphs and the scrubber, using your Home Assistant location. Hidden when the bands get too fine to read.",show_export:"Shows an export button under the timeline. The video is rendered by Home Assistant and saved to the media folder."},deflicker:"Smooth brightness",show_icon:"Show icon",overlay_title:"Heading",overlay_title_left:"Heading",show_export:"Offer video export"},Ee={show_camera:"Show camera details",show_entity:"Show details for {v}",hide_readings:"Hide readings",show_readings:"Show readings"},Ae={empty:be,badge:xe,controls:ye,track:we,spark:ve,error:_e,version_update:$e,version_reload:ke,editor:Se,actions:Ee,export:{open:"Export video",close:"Close export",from:"From",to:"To",start_here:"Start at this frame",end_here:"End at this frame",preset_hours:"Last {v} h",preset_days:"Last {v} d",preset_all:"Everything",fps:"Frames per second",timestamp:"Date and time",readings:"Sensor readings",summary:"{frames} frames, {length} of video",summary_empty:"No frames in this range.",start:"Export",cancel:"Cancel",preparing:"Preparing…",running:"Encoding frame {done} of {total}",done:"Video ready",saved:"Saved in Media as {v}",download:"Download",cancelled:"Export cancelled.",band:"Range selected for export",error:{export_running:"An export is already running for this camera.",export_no_frames:"There are no frames in that range.",export_bad_range:"The end of the range is before its start.",export_cancelled:"Export cancelled.",export_low_disk:"There is not enough free space in the media folder.",export_ffmpeg_missing:"ffmpeg was not found on this Home Assistant, so the video could not be encoded.",export_ffmpeg_failed:"ffmpeg could not encode the video. The Home Assistant log has the details.",export_failed:"The export failed. The Home Assistant log has the details.",entry_not_loaded:"This camera is not loaded right now. Try again once it has started.",unknown:"The export could not be started."}}},Me={no_frames:"Noch keine Bilder gespeichert.",first_soon:"Das erste erscheint bei der nächsten Aufnahme.",frame_failed:"Dieses Bild konnte nicht geladen werden.",index_failed:"Die Zeitleiste konnte nicht geladen werden."},Te={live:"LIVE",gap:"KEIN BILD"},Ce={play:"Abspielen",pause:"Pause",previous:"Vorheriges Bild",next:"Nächstes Bild",speed:"Wiedergabegeschwindigkeit {v}x",now:"Zur Gegenwart springen"},Pe={label:"Position auf der Zeitleiste"},ze={range:"Spanne {v}",flat:"Unverändert"},Re={no_camera:"Bitte wähle in der Kartenkonfiguration eine Kamera aus."},Oe="Diese Karte wurde auf {v} aktualisiert. Lade neu, um die neue Version zu verwenden.",De="Neu laden",Fe={camera_entity:"Kamera",title:"Titel",show_dayticks:"Tagesmarkierungen anzeigen",show_graph:"Diagramme anzeigen",show_sun:"Nacht markieren",playback:"Wiedergabe",autoplay:"Automatisch abspielen",speed:"Geschwindigkeit",graph_hours:"Diagramm-Zeitraum",overlay_right:"Eingeblendete Messwerte (rechts)",overlay_right_hint:"Die Werte über dem Bild gehören zu dem Zeitpunkt, zu dem du scrollst – nicht zur Gegenwart.",overlay_left:"Eingeblendete Messwerte (links)",overlay_left_hint:"Ein zweiter Block auf der anderen Seite des Bildes. Leer lassen, dann bleibt es bei einem Block rechts.",add_entity:"Entität hinzufügen",entity:"Entität",name:"Bezeichnung",unit:"Einheit",decimals:"Nachkommastellen",color:"Farbe",graph:"Diagramm",move_up:"Nach oben",move_down:"Nach unten",remove:"Entfernen",helper:{camera_entity:"Nur Kameras dieser Integration haben ein Archiv zum Durchblättern.",graph_hours:"Wie viel Verlauf die Sparkline rund um die Position zeigt.",autoplay:"Wird ignoriert, wenn dein System reduzierte Bewegung anfordert.",deflicker:"Gleicht wolkenbedingte Helligkeitssprünge bei der Wiedergabe aus. 0 schaltet es ab.",overlay_title:"Wird über den Messwerten angezeigt. Leer lassen für keine Überschrift.",overlay_title_left:"Wird über den Messwerten angezeigt. Leer lassen für keine Überschrift.",show_icon:"Verwendet das Symbol der Entität aus Home Assistant.",show_sun:"Hinterlegt die Stunden zwischen Sonnenuntergang und Sonnenaufgang in den Diagrammen und in der Zeitleiste, basierend auf deinem Home-Assistant-Standort. Wird ausgeblendet, sobald die Streifen zu fein werden.",show_export:"Zeigt unter der Zeitleiste eine Export-Schaltfläche. Das Video wird von Home Assistant gerendert und im Medienordner gespeichert."},deflicker:"Helligkeit glätten",show_icon:"Symbol anzeigen",overlay_title:"Überschrift",overlay_title_left:"Überschrift",show_export:"Videoexport anbieten"},Ne={show_camera:"Kameradetails anzeigen",show_entity:"Details für {v} anzeigen",hide_readings:"Messwerte ausblenden",show_readings:"Messwerte einblenden"},He={empty:Me,badge:Te,controls:Ce,track:Pe,spark:ze,error:Re,version_update:Oe,version_reload:De,editor:Fe,actions:Ne,export:{open:"Video exportieren",close:"Export schließen",from:"Von",to:"Bis",start_here:"Bei diesem Bild beginnen",end_here:"Bei diesem Bild enden",preset_hours:"Letzte {v} h",preset_days:"Letzte {v} T",preset_all:"Alles",fps:"Bilder pro Sekunde",timestamp:"Datum und Uhrzeit",readings:"Sensorwerte",summary:"{frames} Bilder, {length} Video",summary_empty:"Keine Bilder in diesem Zeitraum.",start:"Exportieren",cancel:"Abbrechen",preparing:"Wird vorbereitet…",running:"Bild {done} von {total} wird kodiert",done:"Video fertig",saved:"In Medien gespeichert als {v}",download:"Herunterladen",cancelled:"Export abgebrochen.",band:"Für den Export gewählter Zeitraum",error:{export_running:"Für diese Kamera läuft bereits ein Export.",export_no_frames:"In diesem Zeitraum gibt es keine Bilder.",export_bad_range:"Das Ende des Zeitraums liegt vor seinem Anfang.",export_cancelled:"Export abgebrochen.",export_low_disk:"Im Medienordner ist nicht genug Speicherplatz frei.",export_ffmpeg_missing:"ffmpeg wurde auf diesem Home Assistant nicht gefunden, daher konnte das Video nicht kodiert werden.",export_ffmpeg_failed:"ffmpeg konnte das Video nicht kodieren. Details stehen im Home-Assistant-Protokoll.",export_failed:"Der Export ist fehlgeschlagen. Details stehen im Home-Assistant-Protokoll.",entry_not_loaded:"Diese Kamera ist gerade nicht geladen. Versuche es erneut, sobald sie gestartet ist.",unknown:"Der Export konnte nicht gestartet werden."}}};const Ue={en:Object.freeze({__proto__:null,actions:Ee,badge:xe,controls:ye,default:Ae,editor:Se,empty:be,error:_e,export:{open:"Export video",close:"Close export",from:"From",to:"To",start_here:"Start at this frame",end_here:"End at this frame",preset_hours:"Last {v} h",preset_days:"Last {v} d",preset_all:"Everything",fps:"Frames per second",timestamp:"Date and time",readings:"Sensor readings",summary:"{frames} frames, {length} of video",summary_empty:"No frames in this range.",start:"Export",cancel:"Cancel",preparing:"Preparing…",running:"Encoding frame {done} of {total}",done:"Video ready",saved:"Saved in Media as {v}",download:"Download",cancelled:"Export cancelled.",band:"Range selected for export",error:{export_running:"An export is already running for this camera.",export_no_frames:"There are no frames in that range.",export_bad_range:"The end of the range is before its start.",export_cancelled:"Export cancelled.",export_low_disk:"There is not enough free space in the media folder.",export_ffmpeg_missing:"ffmpeg was not found on this Home Assistant, so the video could not be encoded.",export_ffmpeg_failed:"ffmpeg could not encode the video. The Home Assistant log has the details.",export_failed:"The export failed. The Home Assistant log has the details.",entry_not_loaded:"This camera is not loaded right now. Try again once it has started.",unknown:"The export could not be started."}},spark:ve,track:we,version_reload:ke,version_update:$e}),de:Object.freeze({__proto__:null,actions:Ne,badge:Te,controls:Ce,default:He,editor:Fe,empty:Me,error:Re,export:{open:"Video exportieren",close:"Export schließen",from:"Von",to:"Bis",start_here:"Bei diesem Bild beginnen",end_here:"Bei diesem Bild enden",preset_hours:"Letzte {v} h",preset_days:"Letzte {v} T",preset_all:"Alles",fps:"Bilder pro Sekunde",timestamp:"Datum und Uhrzeit",readings:"Sensorwerte",summary:"{frames} Bilder, {length} Video",summary_empty:"Keine Bilder in diesem Zeitraum.",start:"Exportieren",cancel:"Abbrechen",preparing:"Wird vorbereitet…",running:"Bild {done} von {total} wird kodiert",done:"Video fertig",saved:"In Medien gespeichert als {v}",download:"Herunterladen",cancelled:"Export abgebrochen.",band:"Für den Export gewählter Zeitraum",error:{export_running:"Für diese Kamera läuft bereits ein Export.",export_no_frames:"In diesem Zeitraum gibt es keine Bilder.",export_bad_range:"Das Ende des Zeitraums liegt vor seinem Anfang.",export_cancelled:"Export abgebrochen.",export_low_disk:"Im Medienordner ist nicht genug Speicherplatz frei.",export_ffmpeg_missing:"ffmpeg wurde auf diesem Home Assistant nicht gefunden, daher konnte das Video nicht kodiert werden.",export_ffmpeg_failed:"ffmpeg konnte das Video nicht kodieren. Details stehen im Home-Assistant-Protokoll.",export_failed:"Der Export ist fehlgeschlagen. Details stehen im Home-Assistant-Protokoll.",entry_not_loaded:"Diese Kamera ist gerade nicht geladen. Versuche es erneut, sobald sie gestartet ist.",unknown:"Der Export konnte nicht gestartet werden."}},spark:ze,track:Pe,version_reload:De,version_update:Oe})};function Le(e,t){const i=e.split(".").reduce((e,t)=>{if(e&&"object"==typeof e&&t in e)return e[t]},t);return"string"==typeof i?i:void 0}function Be(e,t=void 0,i="",n=""){const s=(t??"en").toLowerCase().split(/[-_]/)[0]??"en",o=Ue.en??{};let r=Le(e,Ue[s]??Ue.en??{});return void 0===r&&(r=Le(e,o)),void 0===r&&(r=e),""!==i&&""!==n&&(r=r.replace(i,n)),r}var Ie;const We=[1,2,4,8,16,32,64],je=[{name:"overlay_title",selector:{text:{}}}],Ve=[{name:"overlay_title_left",selector:{text:{}}}],qe=[{type:"grid",schema:[{name:"name",selector:{text:{}}},{name:"unit",selector:{text:{}}},{name:"decimals",selector:{number:{min:0,max:4,mode:"box"}}},{name:"graph_hours",selector:{number:{min:1,max:8760,mode:"box",unit_of_measurement:"h"}}}]}];let Ze=class extends he{constructor(){super(...arguments),this.computeLabel=e=>this.t(`editor.${e.name}`),this.computeHelper=e=>{const t=this.t(`editor.helper.${e.name}`);return t.startsWith("editor.")?void 0:t}}static{Ie=this}static{this.styles=fe}setConfig(e){this.config=e}get uiLanguage(){return this.hass?.locale?.language??this.hass?.language??"en"}t(e){return Be(e,this.uiLanguage)}get schema(){return[{name:"camera_entity",required:!0,selector:{entity:{filter:{domain:"camera",integration:"webcam_timelapse"}}}},{name:"title",selector:{text:{}}},{type:"grid",schema:[{name:"show_dayticks",selector:{boolean:{}}},{name:"show_graph",selector:{boolean:{}}},{name:"show_sun",selector:{boolean:{}}},{name:"show_export",selector:{boolean:{}}}]},{type:"expandable",name:"playback",icon:"mdi:play-speed",flatten:!0,schema:[{name:"autoplay",selector:{boolean:{}}},{name:"speed",selector:{select:{mode:"dropdown",options:We.map(e=>({value:e,label:`${e}x`}))}}},{name:"deflicker",selector:{number:{min:0,max:100,step:5,mode:"slider"}}},{name:"graph_hours",selector:{number:{min:1,max:336,mode:"slider",unit_of_measurement:"h"}}}]}]}onFormChange(e){e.stopPropagation(),this.emit({...this.config,...e.detail.value})}emit(e){this.dispatchEvent(new CustomEvent("config-changed",{detail:{config:e},bubbles:!0,composed:!0}))}static{this.ENTITY_KEY={right:"entities",left:"entities_left"}}rows(e){return this.config?.[Ie.ENTITY_KEY[e]]??[]}updateRows(e,t){this.emit({...this.config,[Ie.ENTITY_KEY[e]]:t})}addRow(e){this.updateRows(e,[...this.rows(e),{entity:""}])}removeRow(e,t){this.updateRows(e,this.rows(e).filter((e,i)=>i!==t))}moveRow(e,t,i){const n=[...this.rows(e)],s=t+i;s<0||s>=n.length||([n[t],n[s]]=[n[s],n[t]],this.updateRows(e,n))}patchRow(e,t,i){const n=this.rows(e).map((e,n)=>n===t?{...e,...i}:e);this.updateRows(e,n)}renderRow(e,t,i){const n=t.name||t.entity||this.t("editor.entity");return W`
       <div class="ent-row" role="group" aria-label=${n}>
         <ha-entity-picker
           .hass=${this.hass}
-          .value=${e.entity}
+          .value=${t.entity}
           allow-custom-entity
-          @value-changed=${e=>{e.stopPropagation(),this.patchRow(t,i,{entity:e.detail.value})}}
+          @value-changed=${t=>{t.stopPropagation(),this.patchRow(e,i,{entity:t.detail.value})}}
         ></ha-entity-picker>
 
         <ha-form
           .hass=${this.hass}
-          .data=${e}
-          .schema=${Gt}
+          .data=${t}
+          .schema=${qe}
           .computeLabel=${this.computeLabel}
-          @value-changed=${e=>{e.stopPropagation(),this.patchRow(t,i,e.detail.value)}}
+          @value-changed=${t=>{t.stopPropagation(),this.patchRow(e,i,t.detail.value)}}
         ></ha-form>
 
         <div class="ent-controls">
@@ -837,23 +1050,23 @@ function t(t,e,i,n){var s,o=arguments.length,a=o<3?e:null===n?n=Object.getOwnPro
             <span>${this.t("editor.color")}</span>
             <input
               type="color"
-              .value=${e.color??"#3d7ea6"}
-              @input=${e=>this.patchRow(t,i,{color:e.target.value})}
-              @change=${e=>this.patchRow(t,i,{color:e.target.value})}
+              .value=${t.color??"#3d7ea6"}
+              @input=${t=>this.patchRow(e,i,{color:t.target.value})}
+              @change=${t=>this.patchRow(e,i,{color:t.target.value})}
             />
           </label>
 
           <ha-formfield .label=${this.t("editor.show_icon")}>
             <ha-switch
-              .checked=${e.show_icon??!1}
-              @change=${e=>this.patchRow(t,i,{show_icon:e.target.checked})}
+              .checked=${t.show_icon??!1}
+              @change=${t=>this.patchRow(e,i,{show_icon:t.target.checked})}
             ></ha-switch>
           </ha-formfield>
 
           <ha-formfield .label=${this.t("editor.graph")}>
             <ha-switch
-              .checked=${e.graph??!1}
-              @change=${e=>this.patchRow(t,i,{graph:e.target.checked})}
+              .checked=${t.graph??!1}
+              @change=${t=>this.patchRow(e,i,{graph:t.target.checked})}
             ></ha-switch>
           </ha-formfield>
         </div>
@@ -862,26 +1075,26 @@ function t(t,e,i,n){var s,o=arguments.length,a=o<3?e:null===n?n=Object.getOwnPro
           <ha-icon-button
             .label=${this.t("editor.move_up")}
             .disabled=${0===i}
-            @click=${()=>this.moveRow(t,i,-1)}
+            @click=${()=>this.moveRow(e,i,-1)}
           >
             <ha-icon icon="mdi:arrow-up"></ha-icon>
           </ha-icon-button>
           <ha-icon-button
             .label=${this.t("editor.move_down")}
-            .disabled=${i===this.rows(t).length-1}
-            @click=${()=>this.moveRow(t,i,1)}
+            .disabled=${i===this.rows(e).length-1}
+            @click=${()=>this.moveRow(e,i,1)}
           >
             <ha-icon icon="mdi:arrow-down"></ha-icon>
           </ha-icon-button>
           <ha-icon-button
             .label=${this.t("editor.remove")}
-            @click=${()=>this.removeRow(t,i)}
+            @click=${()=>this.removeRow(e,i)}
           >
             <ha-icon icon="mdi:delete-outline"></ha-icon>
           </ha-icon-button>
         </div>
       </div>
-    `}render(){return this.hass&&this.config?j`
+    `}render(){return this.hass&&this.config?W`
       <ha-form
         .hass=${this.hass}
         .data=${this.config}
@@ -891,9 +1104,9 @@ function t(t,e,i,n){var s,o=arguments.length,a=o<3?e:null===n?n=Object.getOwnPro
         @value-changed=${this.onFormChange}
       ></ha-form>
 
-      ${this.renderSection("right",Bt)}
-      ${this.renderSection("left",qt)}
-    `:j`${G}`}renderSection(t,e){const i=this.t("editor.overlay_"+t),n=this.t("editor.overlay_"+t+"_hint");return j`
+      ${this.renderSection("right",je)}
+      ${this.renderSection("left",Ve)}
+    `:W`${q}`}renderSection(e,t){const i=this.t("editor.overlay_"+e),n=this.t("editor.overlay_"+e+"_hint");return W`
       <div class="ent-section">
         <h4>${i}</h4>
         <p class="ent-hint">${n}</p>
@@ -902,31 +1115,31 @@ function t(t,e,i,n){var s,o=arguments.length,a=o<3?e:null===n?n=Object.getOwnPro
           <ha-form
             .hass=${this.hass}
             .data=${this.config}
-            .schema=${e}
+            .schema=${t}
             .computeLabel=${this.computeLabel}
             .computeHelper=${this.computeHelper}
             @value-changed=${this.onFormChange}
           ></ha-form>
         </div>
 
-        ${this.rows(t).map((e,i)=>this.renderRow(t,e,i))}
-        <ha-button @click=${()=>this.addRow(t)}>
+        ${this.rows(e).map((t,i)=>this.renderRow(e,t,i))}
+        <ha-button @click=${()=>this.addRow(e)}>
           <ha-icon icon="mdi:plus" slot="icon"></ha-icon>
           ${this.t("editor.add_entity")}
         </ha-button>
       </div>
-    `}};t([pt({attribute:!1})],Vt.prototype,"hass",void 0),t([gt()],Vt.prototype,"config",void 0),Vt=Wt=t([ct("webcam-timelapse-card-editor")],Vt);class Zt{constructor(t){this.task=t,this.running=!1,this.queued=!1,this.waiters=[]}request(){return new Promise(t=>{this.waiters.push(t),this.running?this.queued=!0:this.drain()})}get busy(){return this.running}async drain(){this.running=!0;try{do{this.queued=!1;const t=this.waiters;this.waiters=[];try{await this.task()}catch{}for(const e of t)e()}while(this.queued)}finally{this.running=!1}}}const Kt="webcam-timelapse-card",Yt={radius:6,maxGain:1.5};function Jt(t,e=.15){if(0===t.length)return 0;const i=[...t].sort((t,e)=>t-e),n=Math.floor(i.length*e),s=i.length-2*n>=3?i.slice(n,i.length-n):i;return s.reduce((t,e)=>t+e,0)/s.length}function Xt(t){const e=t?.trim();return e||void 0}function Qt(t){const e=[],i=t?.entities_left??[];i.length>0&&e.push({side:"left",title:Xt(t?.overlay_title_left),entities:i});const n=t?.entities??[];return n.length>0&&e.push({side:"right",title:Xt(t?.overlay_title),entities:n}),e}const te={base:"",ext:".webp",step:600,t0:null,count:0,gaps:[],retention_days:0,online:!0,newest_slot:null};function ee(t,e){return null===t.t0||e<0||e>=t.count?null:t.t0+e*t.step}function ie(t,e){const i=ee(t,e);return null===i?null:`${t.base}${i}${t.ext}`}function ne(t,e,i=1){for(let n=e;n>=0&&n<t.length;n+=i)if(t[n])return n;return null}function se(t){return null!==t.t0&&t.count>0}class oe{constructor(t){this.size=t,this.cursor=0,this.slots=new Array(t).fill(null)}prefetch(t){const e=new Image;e.decoding="async",e.fetchPriority="low",e.src=t,this.slots[this.cursor]=e,this.cursor=(this.cursor+1)%this.size}clear(){this.slots.fill(null),this.cursor=0}}function ae(t){return Math.min(Math.max(Math.round(4*t),4),16)}const re=1e3/33;function he(t,e,i){const n=ne(t,e+Math.max(1,i));if(null!==n)return n;const s=ne(t,t.length-1,-1);return null!==s&&s>e?s:null}function le(t){return t.currentSrc!==t.requested?"pending":t.complete?t.naturalWidth>0?"ready":"failed":"pending"}const ce=new Map;function de(t,e){const i=`${t}|${JSON.stringify(e)}`;let n=ce.get(i);return void 0===n&&(n=new Intl.DateTimeFormat(t,e),ce.set(i,n)),n}function ue(t,e){return de("en-CA",{timeZone:e,year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date(1e3*t))}function pe(t,e){const i=de("en-GB",{timeZone:e,hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:!1}).formatToParts(new Date(1e3*t));let n=0,s=0,o=0;for(const t of i)"hour"===t.type?n=Number(t.value):"minute"===t.type?s=Number(t.value):"second"===t.type&&(o=Number(t.value));return 24===n&&(n=0),3600*n+60*s+o}function ge(t,e,i,n){const s={timeZone:e,day:"2-digit",month:"2-digit"};return"long"===n&&(s.weekday="long"),"short"===n&&(s.weekday="short"),de(i,s).format(new Date(1e3*t))}function fe(t,e,i,n){if(null===t.t0||0===t.count)return[];const s=function(t){return t>=560?"long":t>=380?"short":"date"}(n),o="long"===s?110:"short"===s?78:58,a=[];let r=ue(t.t0,e);for(let i=1;i<t.count;i++){const n=ee(t,i);if(null===n)continue;const s=ue(n,e);s!==r&&(a.push({position:i,slot:n,date:s}),r=s)}const h=function(t,e,i){const n=Math.max(1,Math.floor(e/i));return Math.max(1,Math.ceil(t/n))}(a.length,n,o),l=Math.max(1,t.count-1);return a.map((t,n)=>{const o=t.date.endsWith("-01"),a=o||n%h===0;return{position:t.position,left:t.position/l*100,label:a?ge(t.slot,e,i,s):"",isMonthStart:o}})}const me=[600,900,1800,3600,7200,10800,21600,43200];function be(t,e,i,n){if(null===t.t0||0===t.count)return[];const s=t.t0,o=Math.max(1,t.count-1),a=s+o*t.step,r=function(t,e,i){if(t<=0)return null;const n=t/Math.max(2,Math.floor(i/9));for(const t of me)if(t>=n&&t>=e)return t;return null}(a-s,t.step,n);if(null===r)return[];const h=r/(a-s)*n,l=Math.max(1,Math.ceil(46/h)),c=Math.min(43200,r*l),d=[],u=pe(s,e)%r;let p=0===u?s:s+(r-u),g=-1/0;for(let h=0;p<=a&&h<4096;h++){const a=pe(p,e),h=a%r;if(0===h){const r=Math.round((p-s)/t.step),h=r/o*100,l=h/100*n;let u="";a%c===0&&l-g>=46&&(u=we(p,e,i),g=l),d.push({position:r,left:h,label:u})}p+=r-h}return d}function ye(t,e,i){return de(i,{timeZone:e,weekday:"short",day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}).format(new Date(1e3*t))}function we(t,e,i){return de(i,{timeZone:e,hour:"2-digit",minute:"2-digit"}).format(new Date(1e3*t))}const ve=new Set(["unknown","unavailable","none",""]),xe=new Map,$e=new Map;function _e(t){if("number"==typeof t.lu)return Math.round(1e3*t.lu);const e=t.lu??t.last_updated??t.last_changed;return e?new Date(e).getTime():0}function ke(t,e){const i=t.a??t.attributes,n=i?.[e];if("string"!=typeof n&&"number"!=typeof n)return null;const s=new Date(n).getTime();return Number.isFinite(s)&&s>0?s:null}function Ae(t){if(!Number.isFinite(t)||t<=0)return 0;const e=t*(1+1e-9),i=Math.pow(10,Math.floor(Math.log10(e))),n=e/i;return(n>=5?5:n>=2?2:1)*i}const Se=new WeakMap;function Me(t,e=54e5){if(t.length<3)return e;const i=[];for(let e=1;e<t.length;e++)i.push(t[e].at-t[e-1].at);i.sort((t,e)=>t-e);const n=i[i.length>>1]??e;return Math.max(2*n,e)}function Ee(){try{window.caches?.keys?.().then(t=>{t.forEach(t=>window.caches?.delete?.(t))})}catch{}window.location.reload()}function Te(t,e){if(!t)return G;const i=e("version_update").replace("{v}",t),n=e("version_reload");return j`
+    `}};e([ue({attribute:!1})],Ze.prototype,"hass",void 0),e([me()],Ze.prototype,"config",void 0),Ze=Ie=e([de("webcam-timelapse-card-editor")],Ze);class Ge{constructor(e){this.task=e,this.running=!1,this.queued=!1,this.waiters=[]}request(){return new Promise(e=>{this.waiters.push(e),this.running?this.queued=!0:this.drain()})}get busy(){return this.running}async drain(){this.running=!0;try{do{this.queued=!1;const e=this.waiters;this.waiters=[];try{await this.task()}catch{}for(const t of e)t()}while(this.queued)}finally{this.running=!1}}}const Ke="webcam-timelapse-card",Ye={radius:6,maxGain:1.5};function Je(e,t=.15){if(0===e.length)return 0;const i=[...e].sort((e,t)=>e-t),n=Math.floor(i.length*t),s=i.length-2*n>=3?i.slice(n,i.length-n):i;return s.reduce((e,t)=>e+t,0)/s.length}const Xe={base:"",ext:".webp",step:600,t0:null,count:0,gaps:[],retention_days:0,online:!0,newest_slot:null};function Qe(e,t){return null===e.t0||t<0||t>=e.count?null:e.t0+t*e.step}function et(e,t){const i=Qe(e,t);return null===i?null:`${e.base}${i}${e.ext}`}function tt(e,t,i=1){for(let n=t;n>=0&&n<e.length;n+=i)if(e[n])return n;return null}function it(e){return null!==e.t0&&e.count>0}class nt{constructor(e){this.size=e,this.cursor=0,this.slots=new Array(e).fill(null)}prefetch(e){const t=new Image;t.decoding="async",t.fetchPriority="low",t.src=e,this.slots[this.cursor]=t,this.cursor=(this.cursor+1)%this.size}clear(){this.slots.fill(null),this.cursor=0}}function st(e){return Math.min(Math.max(Math.round(4*e),4),16)}const ot=1e3/33;function rt(e,t,i){const n=tt(e,t+Math.max(1,i));if(null!==n)return n;const s=tt(e,e.length-1,-1);return null!==s&&s>t?s:null}function at(e){return e.currentSrc!==e.requested?"pending":e.complete?e.naturalWidth>0?"ready":"failed":"pending"}function ht(e){const t=e?.trim();return t||void 0}function lt(e){const t=[],i=e?.entities_left??[];i.length>0&&t.push({side:"left",title:ht(e?.overlay_title_left),entities:i});const n=e?.entities??[];return n.length>0&&t.push({side:"right",title:ht(e?.overlay_title),entities:n}),t}function dt(e){return lt(e).flatMap(e=>e.entities)}const ct=[12,24,30,60],pt=[24,72,168];function ut(e){return null===e.t0||0===e.count?null:{start:0,end:e.count-1}}function mt(e,t){const i=Math.max(0,t-1),n=e=>Math.min(Math.max(Math.round(e),0),i),s=n(e.start),o=n(e.end);return s<=o?{start:s,end:o}:{start:o,end:s}}function gt(e){if(!Number.isFinite(e)||e<=0)return"0 s";if(e<60)return e<10?`${(Math.round(10*e)/10).toString()} s`:`${Math.round(e)} s`;const t=Math.round(e),i=e=>String(e).padStart(2,"0"),n=Math.floor(t/60);return n<60?`${n}:${i(t%60)} min`:`${Math.floor(n/60)}:${i(n%60)}:${i(t%60)} h`}function ft(e){const t=/^rgba?\(\s*(\d+)[\s,]+(\d+)[\s,]+(\d+)/.exec(e.trim());return t?`#${t.slice(1,4).map(e=>Math.min(255,Number(e)).toString(16).padStart(2,"0")).join("")}`:e}function bt(e,t){if(0===dt(e).length)return null;const i=e=>(e??[]).map(e=>e.color?{...e,color:ft(t(e.color))}:e);return{entities:i(e.entities),entities_left:i(e.entities_left),overlay_title:e.overlay_title??"",overlay_title_left:e.overlay_title_left??"",graph_hours:e.graph_hours??24,show_graph:!1!==e.show_graph,show_sun:!0===e.show_sun,accent_color:ft(t("var(--wtl-accent)"))}}function xt(e,t,i,n,s,o){const r=function(e,t){const i=Qe(e,t.start),n=Qe(e,t.end);return null===i||null===n?null:{start:i,end:n}}(t,i);return null===r?null:{entity_id:e.camera_entity,start:r.start,end:r.end,fps:n.fps,deflicker:Math.min(100,Math.max(0,Math.round(e.deflicker??0))),timestamp:n.timestamp,overlay:n.readings?bt(e,o):null,language:s}}const yt=new Map;function wt(e,t){const i=`${e}|${JSON.stringify(t)}`;let n=yt.get(i);return void 0===n&&(n=new Intl.DateTimeFormat(e,t),yt.set(i,n)),n}function vt(e,t){return wt("en-CA",{timeZone:t,year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date(1e3*e))}function _t(e,t){const i=wt("en-GB",{timeZone:t,hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:!1}).formatToParts(new Date(1e3*e));let n=0,s=0,o=0;for(const e of i)"hour"===e.type?n=Number(e.value):"minute"===e.type?s=Number(e.value):"second"===e.type&&(o=Number(e.value));return 24===n&&(n=0),3600*n+60*s+o}function $t(e,t,i,n){const s={timeZone:t,day:"2-digit",month:"2-digit"};return"long"===n&&(s.weekday="long"),"short"===n&&(s.weekday="short"),wt(i,s).format(new Date(1e3*e))}function kt(e,t,i,n){if(null===e.t0||0===e.count)return[];const s=function(e){return e>=560?"long":e>=380?"short":"date"}(n),o="long"===s?110:"short"===s?78:58,r=[];let a=vt(e.t0,t);for(let i=1;i<e.count;i++){const n=Qe(e,i);if(null===n)continue;const s=vt(n,t);s!==a&&(r.push({position:i,slot:n,date:s}),a=s)}const h=function(e,t,i){const n=Math.max(1,Math.floor(t/i));return Math.max(1,Math.ceil(e/n))}(r.length,n,o),l=Math.max(1,e.count-1);return r.map((e,n)=>{const o=e.date.endsWith("-01"),r=o||n%h===0;return{position:e.position,left:e.position/l*100,label:r?$t(e.slot,t,i,s):"",isMonthStart:o}})}const St=[600,900,1800,3600,7200,10800,21600,43200];function Et(e,t,i,n){if(null===e.t0||0===e.count)return[];const s=e.t0,o=Math.max(1,e.count-1),r=s+o*e.step,a=function(e,t,i){if(e<=0)return null;const n=e/Math.max(2,Math.floor(i/9));for(const e of St)if(e>=n&&e>=t)return e;return null}(r-s,e.step,n);if(null===a)return[];const h=a/(r-s)*n,l=Math.max(1,Math.ceil(46/h)),d=Math.min(43200,a*l),c=[],p=_t(s,t)%a;let u=0===p?s:s+(a-p),m=-1/0;for(let h=0;u<=r&&h<4096;h++){const r=_t(u,t),h=r%a;if(0===h){const a=Math.round((u-s)/e.step),h=a/o*100,l=h/100*n;let p="";r%d===0&&l-m>=46&&(p=Mt(u,t,i),m=l),c.push({position:a,left:h,label:p})}u+=a-h}return c}function At(e,t,i){return wt(i,{timeZone:t,weekday:"short",day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}).format(new Date(1e3*e))}function Mt(e,t,i){return wt(i,{timeZone:t,hour:"2-digit",minute:"2-digit"}).format(new Date(1e3*e))}const Tt=new Set(["unknown","unavailable","none",""]),Ct=new Map,Pt=new Map;function zt(e){if("number"==typeof e.lu)return Math.round(1e3*e.lu);const t=e.lu??e.last_updated??e.last_changed;return t?new Date(t).getTime():0}function Rt(e,t){const i=e.a??e.attributes,n=i?.[t];if("string"!=typeof n&&"number"!=typeof n)return null;const s=new Date(n).getTime();return Number.isFinite(s)&&s>0?s:null}function Ot(e){if(!Number.isFinite(e)||e<=0)return 0;const t=e*(1+1e-9),i=Math.pow(10,Math.floor(Math.log10(t))),n=t/i;return(n>=5?5:n>=2?2:1)*i}const Dt=new WeakMap;function Ft(e,t=54e5){if(e.length<3)return t;const i=[];for(let t=1;t<e.length;t++)i.push(e[t].at-e[t-1].at);i.sort((e,t)=>e-t);const n=i[i.length>>1]??t;return Math.max(2*n,t)}function Nt(){try{window.caches?.keys?.().then(e=>{e.forEach(e=>window.caches?.delete?.(e))})}catch{}window.location.reload()}function Ht(e,t){if(!e)return q;const i=t("version_update").replace("{v}",e),n=t("version_reload");return W`
     <div class="banner" role="alert" aria-live="assertive">
       <span>${i}</span>
       <button
         type="button"
         aria-label=${n}
-        @click=${Ee}
+        @click=${Nt}
       >
         ${n}
       </button>
     </div>
-  `}function Ce(t){const{points:e,at:i,hours:n,color:s,label:o,quantum:a=0,nights:r=[]}=t;if(0===e.length)return null;const h=36e5*n/2,l=i-h,c=i+h,d=c-l||1;let u=1/0,p=-1/0;for(const t of e)t.value<u&&(u=t.value),t.value>p&&(p=t.value);const g=p-u,f=(u+p)/2,m=Math.max(4*a,1e-9*Math.abs(f)),b=Math.max(g,m)||1;let y=f-b/2,w=f+b/2;if(g>0){const t=function(t){if(!Number.isFinite(t)||t<=0)return 1;const e=Math.pow(10,Math.floor(Math.log10(t))),i=t/e;return(i>5?10:i>2?5:i>1?2:1)*e}(b/4);y=Math.floor(y/t)*t,w=Math.ceil(w/t)*t,w>y||(y=f-b/2,w=f+b/2)}const v=w-y||1,x=t=>3+(t-l)/d*234,$=t=>41-(t-y)/v*38,_=[];e.forEach((t,e)=>{const i=x(t.at),n=$(t.value);0===e?_.push(`M ${i.toFixed(1)} ${n.toFixed(1)}`):_.push(`H ${i.toFixed(1)}`,`V ${n.toFixed(1)}`)});const k=e[e.length-1];_.push(`H ${x(c).toFixed(1)}`);const A=r.map(t=>({left:3+234*t.left,width:234*t.width})),S=x(i);let M=k;for(let t=e.length-1;t>=0;t--)if(e[t].at<=i){M=e[t];break}return B`
+  `}function Ut(e){const{points:t,at:i,hours:n,color:s,label:o,quantum:r=0,nights:a=[]}=e;if(0===t.length)return null;const h=36e5*n/2,l=i-h,d=i+h,c=d-l||1;let p=1/0,u=-1/0;for(const e of t)e.value<p&&(p=e.value),e.value>u&&(u=e.value);const m=u-p,g=(p+u)/2,f=Math.max(4*r,1e-9*Math.abs(g)),b=Math.max(m,f)||1;let x=g-b/2,y=g+b/2;if(m>0){const e=function(e){if(!Number.isFinite(e)||e<=0)return 1;const t=Math.pow(10,Math.floor(Math.log10(e))),i=e/t;return(i>5?10:i>2?5:i>1?2:1)*t}(b/4);x=Math.floor(x/e)*e,y=Math.ceil(y/e)*e,y>x||(x=g-b/2,y=g+b/2)}const w=y-x||1,v=e=>3+(e-l)/c*234,_=e=>41-(e-x)/w*38,$=[];t.forEach((e,t)=>{const i=v(e.at),n=_(e.value);0===t?$.push(`M ${i.toFixed(1)} ${n.toFixed(1)}`):$.push(`H ${i.toFixed(1)}`,`V ${n.toFixed(1)}`)});const k=t[t.length-1];$.push(`H ${v(d).toFixed(1)}`);const S=a.map(e=>({left:3+234*e.left,width:234*e.width})),E=v(i);let A=k;for(let e=t.length-1;e>=0;e--)if(t[e].at<=i){A=t[e];break}return j`
     <svg
       class="spark"
       viewBox="0 0 ${240} ${44}"
@@ -934,15 +1147,15 @@ function t(t,e,i,n){var s,o=arguments.length,a=o<3?e:null===n?n=Object.getOwnPro
       role="img"
       aria-label=${o}
     >
-      ${A.map(t=>B`<rect
+      ${S.map(e=>j`<rect
           class="spark-night"
-          x=${t.left.toFixed(1)}
+          x=${e.left.toFixed(1)}
           y="0"
-          width=${t.width.toFixed(1)}
+          width=${e.width.toFixed(1)}
           height=${44}
         />`)}
       <path
-        d=${_.join(" ")}
+        d=${$.join(" ")}
         fill="none"
         stroke=${s}
         stroke-width="1.5"
@@ -950,9 +1163,9 @@ function t(t,e,i,n){var s,o=arguments.length,a=o<3?e:null===n?n=Object.getOwnPro
         vector-effect="non-scaling-stroke"
       />
       <line
-        x1=${S.toFixed(1)}
+        x1=${E.toFixed(1)}
         y1="0"
-        x2=${S.toFixed(1)}
+        x2=${E.toFixed(1)}
         y2=${44}
         stroke="currentColor"
         stroke-width="1"
@@ -960,32 +1173,33 @@ function t(t,e,i,n){var s,o=arguments.length,a=o<3?e:null===n?n=Object.getOwnPro
         vector-effect="non-scaling-stroke"
       />
       <path
-        d="M ${S.toFixed(1)} ${$(M.value).toFixed(1)} L ${S.toFixed(1)} ${$(M.value).toFixed(1)}"
+        d="M ${E.toFixed(1)} ${_(A.value).toFixed(1)} L ${E.toFixed(1)} ${_(A.value).toFixed(1)}"
         stroke=${s}
         stroke-width="5"
         stroke-linecap="round"
         vector-effect="non-scaling-stroke"
       />
     </svg>
-  `}const Pe=864e5,ze=2440587.5,Re=2451545,Oe=Math.PI/180;function Ne(t,e,i){const n=2451545.0009-i/360+t,s=Le(n),o=(357.5291+.98560028*(n-Re))%360,a=(o+(1.9148*Math.sin(o*Oe)+.02*Math.sin(2*o*Oe)+3e-4*Math.sin(3*o*Oe))+180+102.9372)%360,r=n+.0053*Math.sin(o*Oe)-.0069*Math.sin(2*a*Oe),h=Math.sin(a*Oe)*Math.sin(23.4397*Oe),l=Math.cos(Math.asin(h)),c=(Math.sin(-.833*Oe)-Math.sin(e*Oe)*h)/(Math.cos(e*Oe)*l);if(!Number.isFinite(c)||Math.abs(c)>1)return{noon:s,rise:null,set:null,polarNight:c>1};const d=Math.acos(c)/Oe;return{noon:s,rise:Le(r-d/360),set:Le(r+d/360),polarNight:!1}}function Le(t){return(t-ze)*Pe}function De(t,e){return Math.round(t/Pe+ze-Re-9e-4+e/360)}function He(t,e,i,n){if(!Number.isFinite(t)||!Number.isFinite(e)||e<=t||!Number.isFinite(i)||!Number.isFinite(n)||Math.abs(i)>90)return[];const s=De(t,n)-1,o=De(e,n)+1;if(o-s>800)return[];const a=[];for(let t=s;t<=o;t++){const e=Ne(t,i,n);if(null===e.set){e.polarNight&&Ue(a,e.noon-432e5,e.noon+432e5);continue}const s=Ne(t+1,i,n);Ue(a,e.set,s.rise??s.noon-432e5)}return function(t,e,i){const n=[];for(const s of t){const t=Math.max(s.from,e),o=Math.min(s.to,i);o>t&&n.push({from:t,to:o})}return n}(a,t,e)}const Fe=4/234;function Ie(t,e,i,n){const s=e-t;if(!(s>0))return[];const o=He(t,e,i,n).map(e=>({left:(e.from-t)/s,width:(e.to-e.from)/s}));return o.reduce((t,e)=>Math.max(t,e.width),0)>=Fe?o:[]}function Ue(t,e,i){if(i<=e)return;const n=t[t.length-1];n&&e<=n.to?n.to=Math.max(n.to,i):t.push({from:e,to:i})}function We(){return"undefined"!=typeof window&&"function"==typeof window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches}const je=[1,2,4,8,16,32,64];let Be=class extends ht{constructor(){super(...arguments),this.index=te,this.position=0,this.playing=!1,this.speed=1,this.trackWidth=600,this.versionMismatch=null,this.history=new Map,this.folded=new Set,this.present=new Uint8Array(0),this.ring=new oe(ae(1)),this.prefetchedThrough=-1,this.useLayerA=!0,this.frameGeneration=0,this.swaps=new Zt(()=>this.performSwap()),this.gains=new Float32Array(0),this.versionChecked=!1,this.autoplayPending=!0,this.playCounter=0,this.lastScrubAt=0,this.visible=!0,this.onScreen=!0,this.onVisibilityChange=()=>{this.visible="visible"===document.visibilityState,this.reconcilePlayback(),this.visible&&this.refreshIndex()}}static{this.styles=mt}setConfig(t){if(!t?.camera_entity)throw new Error(Ut("error.no_camera",this.hass?.locale?.language));this.config={autoplay:!1,speed:32,show_dayticks:!0,show_graph:!0,show_sun:!1,graph_hours:24,deflicker:50,...t,entities:(t.entities??[]).filter(t=>t?.entity),entities_left:(t.entities_left??[]).filter(t=>t?.entity)},this.speed=je.includes(this.config.speed)?this.config.speed:32,this.ring=new oe(ae(this.speed))}static getConfigElement(){return document.createElement("webcam-timelapse-card-editor")}static getStubConfig(t){return{camera_entity:Object.keys(t.states).find(e=>e.startsWith("camera.")&&"webcam_timelapse"===t.entities?.[e]?.platform)??""}}getCardSize(){return 8}getGridOptions(){return{columns:"full",rows:"auto",min_columns:6,min_rows:6}}connectedCallback(){super.connectedCallback(),document.addEventListener("visibilitychange",this.onVisibilityChange),this.intersectionObserver=new IntersectionObserver(t=>{this.onScreen=t.some(t=>t.isIntersecting),this.reconcilePlayback()}),this.intersectionObserver.observe(this),this.resizeObserver=new ResizeObserver(t=>{const e=t[0]?.contentRect.width;e&&(this.trackWidth=e-24)}),this.resizeObserver.observe(this)}disconnectedCallback(){super.disconnectedCallback(),document.removeEventListener("visibilitychange",this.onVisibilityChange),this.intersectionObserver?.disconnect(),this.resizeObserver?.disconnect(),this.stopPlayback(),this.indexTimer&&window.clearTimeout(this.indexTimer),this.scrubSettle&&window.clearTimeout(this.scrubSettle),this.ring.clear()}willUpdate(t){t.has("hass")&&this.hass&&this.index===te&&(this.refreshIndex(),this.refreshHistory()),t.has("hass")&&this.hass&&!this.versionChecked&&(this.versionChecked=!0,async function(t,e,i){if(!t?.callWS)return null;try{const n=await t.callWS({type:e});if(n?.version&&n.version!==i)return n.version}catch{}return null}(this.hass,"webcam_timelapse/card_version","0.6.1").then(t=>{this.versionMismatch=t}))}reconcilePlayback(){this.playing&&this.visible&&this.onScreen?this.startPlayback():this.stopPlayback()}async refreshIndex(){if(this.hass?.callWS&&this.config){try{const t=await this.hass.callWS({type:"webcam_timelapse/index",entity_id:this.config.camera_entity}),e=this.position>=this.index.count-1;this.index=t,this.present=function(t){const e=new Uint8Array(t.count).fill(1);for(const[i,n]of t.gaps){const s=Math.max(0,i),o=Math.min(t.count,i+n);for(let t=s;t<o;t++)e[t]=0}return e}(t),(e||this.position>=t.count)&&(this.position=Math.max(0,t.count-1)),await this.updateComplete,this.startAutoplayIfRequested()||this.swapInFrame(),this.refreshLuma(),this.indexError=void 0}catch(t){this.indexError=t instanceof Error?t.message:"Could not load the timeline."}this.scheduleIndexRefresh()}}async refreshLuma(){const t=function(t){const e=Math.min(Math.max(t,0),100);return 0===e?0:Math.max(1,Math.round(e/100*12))}(this.config?.deflicker??0);if(this.hass?.callWS&&0!==t&&this.config){try{const e=await this.hass.callWS({type:"webcam_timelapse/luma",entity_id:this.config.camera_entity});this.gains=function(t,e=Yt){const i=new Float32Array(t.length).fill(1),{radius:n,maxGain:s}=e;if(n<1||0===t.length)return i;const o=1/s;for(let e=0;e<t.length;e++){const a=t[e];if(null==a||a<8)continue;const r=Math.max(0,e-n),h=Math.min(t.length-1,e+n),l=[];for(let e=r;e<=h;e++){const i=t[e];null!=i&&i>=8&&l.push(i)}if(l.length<3)continue;const c=Jt(l);i[e]=Math.min(Math.max(c/a,o),s)}return i}(e.luma,{...Yt,radius:t})}catch{this.gains=new Float32Array(0)}this.requestUpdate()}else this.gains=new Float32Array(0)}async refreshHistory(){const t=Qt(this.config).flatMap(t=>t.entities);if(!this.hass||0===t.length)return;const e={};for(const i of t)i.time_attribute&&(e[i.entity]=i.time_attribute);const i=Math.max(this.config?.graph_hours??24,...t.map(t=>t.graph_hours??0));this.history=await async function(t,e,i){const n=t?.callWS?.bind(t);if(!n||0===e.length)return new Map;const s=i.timeAttributes??{},o=`${e.slice().sort().join(",")}|${i.days}`,a=$e.get(o);if(a)return a;const r=new Date,h=new Date(r.getTime()-864e5*i.days),l=Object.keys(s).length>0,c=(async()=>{try{const t=await n({type:"history/history_during_period",start_time:h.toISOString(),end_time:r.toISOString(),entity_ids:e,minimal_response:!l,no_attributes:!l,significant_changes_only:!0}),i=new Map;for(const n of e){const e=s[n],o=(t?.[n]??[]).map(t=>{const i=String(t.s??t.state??"").trim(),n=ve.has(i.toLowerCase())?Number.NaN:parseFloat(i);return{at:(e?ke(t,e):null)??_e(t),value:n}}).filter(t=>Number.isFinite(t.value)&&t.at>0).sort((t,e)=>t.at-e.at);i.set(n,o),xe.set(n,o)}return i}catch{return new Map(e.map(t=>[t,xe.get(t)??[]]))}finally{$e.delete(o)}})();return $e.set(o,c),c}(this.hass,t.map(t=>t.entity),{days:(this.index.retention_days||14)+1+Math.ceil(i/48),timeAttributes:e})}scheduleIndexRefresh(){this.indexTimer&&window.clearTimeout(this.indexTimer);const t=1e3*this.index.step+15e3*Math.random();this.indexTimer=window.setTimeout(()=>{this.refreshIndex()},t)}get cadence(){return function(t){const e=2*Math.max(t,0);if(e<=0)return{stride:1,frameDelay:500};const i=Math.max(1,Math.round(e/re));return{stride:i,frameDelay:Math.max(1e3*i/e,33)}}(this.speed)}get frameDelay(){return this.cadence.frameDelay}get fadeDuration(){return t=this.speed,e=this.frameDelay,(i={playing:this.playing,reducedMotion:We()}).reducedMotion?0:i.playing?t>4?0:Math.min(120,Math.round(e/2)):120;var t,e,i}async runPlayback(t){let e=!1;for(;this.playToken===t&&this.playing;){if(e){const t=he(this.present,this.position,this.cadence.stride);if(null===t){this.playing=!1;break}this.position=t}e=!0;const i=performance.now();if(await this.swapInFrame(),this.prefetchAhead(),this.playToken!==t)return;const n=this.frameDelay-(performance.now()-i);n>0&&await new Promise(t=>window.setTimeout(t,n))}}startPlayback(){if(void 0!==this.playToken)return;const t=++this.playCounter;this.playToken=t,this.runPlayback(t).finally(()=>{this.playToken===t&&(this.playToken=void 0)})}stopPlayback(){this.playToken=void 0}startAutoplayIfRequested(){return!(!this.autoplayPending||!se(this.index))&&(this.autoplayPending=!1,!(!(t={configured:!0===this.config?.autoplay,reducedMotion:We(),alreadyPlaying:this.playing}).configured||t.reducedMotion||t.alreadyPlaying)&&(this.togglePlay(),!0));var t}togglePlay(){if(!this.playing&&this.atLive){const t=ne(this.present,0);null!==t&&(this.position=t)}this.playing=!this.playing,this.reconcilePlayback()}cycleSpeed(){const t=je[(je.indexOf(this.speed)+1)%je.length];this.speed=t??1,this.ring=new oe(ae(this.speed)),this.prefetchedThrough=-1}goTo(t){this.position=Math.min(Math.max(t,0),Math.max(0,this.index.count-1)),this.swapInFrame(),this.prefetchAhead()}swapInFrame(){return this.swaps.request()}async performSwap(){const t=this.position,e=this.frameSources(t);if(0===e.length)return;const i=++this.frameGeneration,n=this.useLayerA?this.layerB:this.layerA;if(!n)return;let s=!1;for(const o of e){const e=new URL(o,document.baseURI).href;n.src=o;try{await n.decode()}catch{}let a=le({currentSrc:n.currentSrc,requested:e,complete:n.complete,naturalWidth:n.naturalWidth});if("pending"!==a||this.playing||(await this.awaitLoad(n),a=le({currentSrc:n.currentSrc,requested:e,complete:n.complete,naturalWidth:n.naturalWidth})),"failed"!==a){if("pending"!==a){if(i!==this.frameGeneration)return;return this.revealFrame(n,this.useLayerA?this.layerA:this.layerB),this.useLayerA=!this.useLayerA,this.loadedPosition=t,this.frameError=void 0,void this.requestUpdate()}s=!0}}i===this.frameGeneration&&(this.playing||s||(this.frameError=e[0],this.requestUpdate()))}awaitLoad(t){return new Promise(e=>{let i;const n=()=>{void 0!==i&&window.clearTimeout(i),t.removeEventListener("load",n),t.removeEventListener("error",n),e()};t.addEventListener("load",n),t.addEventListener("error",n),i=window.setTimeout(n,1500)})}revealFrame(t,e){const i=this.fadeDuration;if(e&&(e.style.transition="none",e.style.opacity="1",e.style.zIndex="1"),t.style.zIndex="2",0===i)return t.style.transition="none",void(t.style.opacity="1");t.style.transition="none",t.style.opacity="0",t.offsetWidth,t.style.transition=`opacity ${i}ms linear`,t.style.opacity="1"}frameSources(t){const e=[],i=function(t){if(!t)return;const e=t.trim();return e.startsWith("/")||e.startsWith("https://")?e:void 0}(this.hass?.states[this.config.camera_entity]?.attributes.entity_picture);t>=this.index.count-1&&i&&e.push(i);const n=ie(this.index,t);return n&&e.push(n),e}prefetchAhead(){const t=function(t,e,i,n,s){const o=Math.max(1,n);let a=s>e+i*o?e:Math.max(s,e);const r=[];for(let n=1;n<=i;n++){const i=e+n*o;if(i<=a)continue;const s=ne(t,i);if(null===s)break;s>a&&(r.push(s),a=s)}return r}(this.present,this.position,ae(this.speed),this.cadence.stride,this.prefetchedThrough);for(const e of t){const t=ie(this.index,e);t&&this.ring.prefetch(t),this.prefetchedThrough=e}}onScrub(t){const e=Number(t.target.value);this.position=e,this.pendingPosition=e;const i=performance.now();i-this.lastScrubAt>=80&&(this.lastScrubAt=i,this.loadPendingPosition()),this.scrubSettle&&window.clearTimeout(this.scrubSettle),this.scrubSettle=window.setTimeout(()=>{this.scrubSettle=void 0,this.loadPendingPosition()},80)}loadPendingPosition(){const t=this.pendingPosition;void 0!==t&&t!==this.loadedPosition&&this.goTo(t)}onScrubCommit(t){this.scrubSettle&&window.clearTimeout(this.scrubSettle),this.scrubSettle=void 0,this.pendingPosition=Number(t.target.value),this.loadPendingPosition()}jumpToNow(){this.playing=!1,this.stopPlayback(),this.goTo(this.index.count-1)}stepBy(t){const e=ne(this.present,this.position+t,t);null!==e&&this.goTo(e)}get timeZone(){return this.hass?.config?.time_zone??Intl.DateTimeFormat().resolvedOptions().timeZone}get language(){return this.hass?.locale?.language??this.hass?.language??"en"}t(t,e){return void 0===e?Ut(t,this.language):Ut(t,this.language,"{v}",e)}get atLive(){return this.position>=this.index.count-1}get onGap(){return this.present.length>0&&!this.present[this.position]}render(){if(!this.config||!this.hass)return j`<ha-card></ha-card>`;const t=null===this.index.t0?null:this.index.t0+this.position*this.index.step;return j`
-      <ha-card .header=${this.config.title??G}>
-        ${Te(this.versionMismatch,t=>this.t(t))}
-        ${this.renderStage(t)}
-        ${se(this.index)?this.renderTimeline(t):G}
+  `}const Lt=864e5,Bt=2440587.5,It=2451545,Wt=Math.PI/180;function jt(e,t,i){const n=2451545.0009-i/360+e,s=Vt(n),o=(357.5291+.98560028*(n-It))%360,r=(o+(1.9148*Math.sin(o*Wt)+.02*Math.sin(2*o*Wt)+3e-4*Math.sin(3*o*Wt))+180+102.9372)%360,a=n+.0053*Math.sin(o*Wt)-.0069*Math.sin(2*r*Wt),h=Math.sin(r*Wt)*Math.sin(23.4397*Wt),l=Math.cos(Math.asin(h)),d=(Math.sin(-.833*Wt)-Math.sin(t*Wt)*h)/(Math.cos(t*Wt)*l);if(!Number.isFinite(d)||Math.abs(d)>1)return{noon:s,rise:null,set:null,polarNight:d>1};const c=Math.acos(d)/Wt;return{noon:s,rise:Vt(a-c/360),set:Vt(a+c/360),polarNight:!1}}function Vt(e){return(e-Bt)*Lt}function qt(e,t){return Math.round(e/Lt+Bt-It-9e-4+t/360)}function Zt(e,t,i,n){if(!Number.isFinite(e)||!Number.isFinite(t)||t<=e||!Number.isFinite(i)||!Number.isFinite(n)||Math.abs(i)>90)return[];const s=qt(e,n)-1,o=qt(t,n)+1;if(o-s>800)return[];const r=[];for(let e=s;e<=o;e++){const t=jt(e,i,n);if(null===t.set){t.polarNight&&Yt(r,t.noon-432e5,t.noon+432e5);continue}const s=jt(e+1,i,n);Yt(r,t.set,s.rise??s.noon-432e5)}return function(e,t,i){const n=[];for(const s of e){const e=Math.max(s.from,t),o=Math.min(s.to,i);o>e&&n.push({from:e,to:o})}return n}(r,e,t)}const Gt=4/234;function Kt(e,t,i,n){const s=t-e;if(!(s>0))return[];const o=Zt(e,t,i,n).map(t=>({left:(t.from-e)/s,width:(t.to-t.from)/s}));return o.reduce((e,t)=>Math.max(e,t.width),0)>=Gt?o:[]}function Yt(e,t,i){if(i<=t)return;const n=e[e.length-1];n&&t<=n.to?n.to=Math.max(n.to,i):e.push({from:t,to:i})}function Jt(){return"undefined"!=typeof window&&"function"==typeof window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches}const Xt=[1,2,4,8,16,32,64];let Qt=class extends he{constructor(){super(...arguments),this.index=Xe,this.position=0,this.playing=!1,this.speed=1,this.trackWidth=600,this.versionMismatch=null,this.history=new Map,this.folded=new Set,this.exportOpen=!1,this.exportRange=null,this.exportFps=24,this.exportStamp=!0,this.exportReadings=!0,this.exportStatus=null,this.exportSubscription=0,this.present=new Uint8Array(0),this.ring=new nt(st(1)),this.prefetchedThrough=-1,this.useLayerA=!0,this.frameGeneration=0,this.swaps=new Ge(()=>this.performSwap()),this.gains=new Float32Array(0),this.versionChecked=!1,this.autoplayPending=!0,this.playCounter=0,this.lastScrubAt=0,this.visible=!0,this.onScreen=!0,this.onVisibilityChange=()=>{this.visible="visible"===document.visibilityState,this.reconcilePlayback(),this.visible&&this.refreshIndex()},this.resolveColor=e=>{const t=document.createElement("span");t.style.display="none",t.style.color=e,this.renderRoot.appendChild(t);const i=getComputedStyle(t).color;return t.remove(),i||e}}static{this.styles=fe}setConfig(e){if(!e?.camera_entity)throw new Error(Be("error.no_camera",this.hass?.locale?.language));this.config={autoplay:!1,speed:32,show_dayticks:!0,show_graph:!0,show_sun:!1,graph_hours:24,deflicker:50,show_export:!0,...e,entities:(e.entities??[]).filter(e=>e?.entity),entities_left:(e.entities_left??[]).filter(e=>e?.entity)},this.speed=Xt.includes(this.config.speed)?this.config.speed:32,this.ring=new nt(st(this.speed))}static getConfigElement(){return document.createElement("webcam-timelapse-card-editor")}static getStubConfig(e){return{camera_entity:Object.keys(e.states).find(t=>t.startsWith("camera.")&&"webcam_timelapse"===e.entities?.[t]?.platform)??""}}getCardSize(){return 8}getGridOptions(){return{columns:"full",rows:"auto",min_columns:6,min_rows:6}}connectedCallback(){super.connectedCallback(),document.addEventListener("visibilitychange",this.onVisibilityChange),this.intersectionObserver=new IntersectionObserver(e=>{this.onScreen=e.some(e=>e.isIntersecting),this.reconcilePlayback()}),this.intersectionObserver.observe(this),this.resizeObserver=new ResizeObserver(e=>{const t=e[0]?.contentRect.width;t&&(this.trackWidth=t-24)}),this.resizeObserver.observe(this),this.exportOpen&&this.subscribeExport()}disconnectedCallback(){super.disconnectedCallback(),document.removeEventListener("visibilitychange",this.onVisibilityChange),this.intersectionObserver?.disconnect(),this.resizeObserver?.disconnect(),this.stopPlayback(),this.indexTimer&&window.clearTimeout(this.indexTimer),this.scrubSettle&&window.clearTimeout(this.scrubSettle),this.ring.clear(),this.unsubscribeExport()}willUpdate(e){e.has("hass")&&this.hass&&this.index===Xe&&(this.refreshIndex(),this.refreshHistory()),e.has("hass")&&this.hass&&!this.versionChecked&&(this.versionChecked=!0,async function(e,t,i){if(!e?.callWS)return null;try{const n=await e.callWS({type:t});if(n?.version&&n.version!==i)return n.version}catch{}return null}(this.hass,"webcam_timelapse/card_version","0.6.1").then(e=>{this.versionMismatch=e}))}reconcilePlayback(){this.playing&&this.visible&&this.onScreen?this.startPlayback():this.stopPlayback()}async refreshIndex(){if(this.hass?.callWS&&this.config){try{const e=await this.hass.callWS({type:"webcam_timelapse/index",entity_id:this.config.camera_entity}),t=this.position>=this.index.count-1;this.index=e,this.present=function(e){const t=new Uint8Array(e.count).fill(1);for(const[i,n]of e.gaps){const s=Math.max(0,i),o=Math.min(e.count,i+n);for(let e=s;e<o;e++)t[e]=0}return t}(e),(t||this.position>=e.count)&&(this.position=Math.max(0,e.count-1)),await this.updateComplete,this.startAutoplayIfRequested()||this.swapInFrame(),this.refreshLuma(),this.indexError=void 0}catch(e){this.indexError=e instanceof Error?e.message:"Could not load the timeline."}this.scheduleIndexRefresh()}}async refreshLuma(){const e=function(e){const t=Math.min(Math.max(e,0),100);return 0===t?0:Math.max(1,Math.round(t/100*12))}(this.config?.deflicker??0);if(this.hass?.callWS&&0!==e&&this.config){try{const t=await this.hass.callWS({type:"webcam_timelapse/luma",entity_id:this.config.camera_entity});this.gains=function(e,t=Ye){const i=new Float32Array(e.length).fill(1),{radius:n,maxGain:s}=t;if(n<1||0===e.length)return i;const o=1/s;for(let t=0;t<e.length;t++){const r=e[t];if(null==r||r<8)continue;const a=Math.max(0,t-n),h=Math.min(e.length-1,t+n),l=[];for(let t=a;t<=h;t++){const i=e[t];null!=i&&i>=8&&l.push(i)}if(l.length<3)continue;const d=Je(l);i[t]=Math.min(Math.max(d/r,o),s)}return i}(t.luma,{...Ye,radius:e})}catch{this.gains=new Float32Array(0)}this.requestUpdate()}else this.gains=new Float32Array(0)}async refreshHistory(){const e=dt(this.config);if(!this.hass||0===e.length)return;const t={};for(const i of e)i.time_attribute&&(t[i.entity]=i.time_attribute);const i=Math.max(this.config?.graph_hours??24,...e.map(e=>e.graph_hours??0));this.history=await async function(e,t,i){const n=e?.callWS?.bind(e);if(!n||0===t.length)return new Map;const s=i.timeAttributes??{},o=`${t.slice().sort().join(",")}|${i.days}`,r=Pt.get(o);if(r)return r;const a=new Date,h=new Date(a.getTime()-864e5*i.days),l=Object.keys(s).length>0,d=(async()=>{try{const e=await n({type:"history/history_during_period",start_time:h.toISOString(),end_time:a.toISOString(),entity_ids:t,minimal_response:!l,no_attributes:!l,significant_changes_only:!0}),i=new Map;for(const n of t){const t=s[n],o=(e?.[n]??[]).map(e=>{const i=String(e.s??e.state??"").trim(),n=Tt.has(i.toLowerCase())?Number.NaN:parseFloat(i);return{at:(t?Rt(e,t):null)??zt(e),value:n}}).filter(e=>Number.isFinite(e.value)&&e.at>0).sort((e,t)=>e.at-t.at);i.set(n,o),Ct.set(n,o)}return i}catch{return new Map(t.map(e=>[e,Ct.get(e)??[]]))}finally{Pt.delete(o)}})();return Pt.set(o,d),d}(this.hass,e.map(e=>e.entity),{days:(this.index.retention_days||14)+1+Math.ceil(i/48),timeAttributes:t})}scheduleIndexRefresh(){this.indexTimer&&window.clearTimeout(this.indexTimer);const e=1e3*this.index.step+15e3*Math.random();this.indexTimer=window.setTimeout(()=>{this.refreshIndex()},e)}get cadence(){return function(e){const t=2*Math.max(e,0);if(t<=0)return{stride:1,frameDelay:500};const i=Math.max(1,Math.round(t/ot));return{stride:i,frameDelay:Math.max(1e3*i/t,33)}}(this.speed)}get frameDelay(){return this.cadence.frameDelay}get fadeDuration(){return e=this.speed,t=this.frameDelay,(i={playing:this.playing,reducedMotion:Jt()}).reducedMotion?0:i.playing?e>4?0:Math.min(120,Math.round(t/2)):120;var e,t,i}async runPlayback(e){let t=!1;for(;this.playToken===e&&this.playing;){if(t){const e=rt(this.present,this.position,this.cadence.stride);if(null===e){this.playing=!1;break}this.position=e}t=!0;const i=performance.now();if(await this.swapInFrame(),this.prefetchAhead(),this.playToken!==e)return;const n=this.frameDelay-(performance.now()-i);n>0&&await new Promise(e=>window.setTimeout(e,n))}}startPlayback(){if(void 0!==this.playToken)return;const e=++this.playCounter;this.playToken=e,this.runPlayback(e).finally(()=>{this.playToken===e&&(this.playToken=void 0)})}stopPlayback(){this.playToken=void 0}startAutoplayIfRequested(){return!(!this.autoplayPending||!it(this.index))&&(this.autoplayPending=!1,!(!(e={configured:!0===this.config?.autoplay,reducedMotion:Jt(),alreadyPlaying:this.playing}).configured||e.reducedMotion||e.alreadyPlaying)&&(this.togglePlay(),!0));var e}togglePlay(){if(!this.playing&&this.atLive){const e=tt(this.present,0);null!==e&&(this.position=e)}this.playing=!this.playing,this.reconcilePlayback()}cycleSpeed(){const e=Xt[(Xt.indexOf(this.speed)+1)%Xt.length];this.speed=e??1,this.ring=new nt(st(this.speed)),this.prefetchedThrough=-1}goTo(e){this.position=Math.min(Math.max(e,0),Math.max(0,this.index.count-1)),this.swapInFrame(),this.prefetchAhead()}swapInFrame(){return this.swaps.request()}async performSwap(){const e=this.position,t=this.frameSources(e);if(0===t.length)return;const i=++this.frameGeneration,n=this.useLayerA?this.layerB:this.layerA;if(!n)return;let s=!1;for(const o of t){const t=new URL(o,document.baseURI).href;n.src=o;try{await n.decode()}catch{}let r=at({currentSrc:n.currentSrc,requested:t,complete:n.complete,naturalWidth:n.naturalWidth});if("pending"!==r||this.playing||(await this.awaitLoad(n),r=at({currentSrc:n.currentSrc,requested:t,complete:n.complete,naturalWidth:n.naturalWidth})),"failed"!==r){if("pending"!==r){if(i!==this.frameGeneration)return;return this.revealFrame(n,this.useLayerA?this.layerA:this.layerB),this.useLayerA=!this.useLayerA,this.loadedPosition=e,this.frameError=void 0,void this.requestUpdate()}s=!0}}i===this.frameGeneration&&(this.playing||s||(this.frameError=t[0],this.requestUpdate()))}awaitLoad(e){return new Promise(t=>{let i;const n=()=>{void 0!==i&&window.clearTimeout(i),e.removeEventListener("load",n),e.removeEventListener("error",n),t()};e.addEventListener("load",n),e.addEventListener("error",n),i=window.setTimeout(n,1500)})}revealFrame(e,t){const i=this.fadeDuration;if(t&&(t.style.transition="none",t.style.opacity="1",t.style.zIndex="1"),e.style.zIndex="2",0===i)return e.style.transition="none",void(e.style.opacity="1");e.style.transition="none",e.style.opacity="0",e.offsetWidth,e.style.transition=`opacity ${i}ms linear`,e.style.opacity="1"}frameSources(e){const t=[],i=function(e){if(!e)return;const t=e.trim();return t.startsWith("/")||t.startsWith("https://")?t:void 0}(this.hass?.states[this.config.camera_entity]?.attributes.entity_picture);e>=this.index.count-1&&i&&t.push(i);const n=et(this.index,e);return n&&t.push(n),t}prefetchAhead(){const e=function(e,t,i,n,s){const o=Math.max(1,n);let r=s>t+i*o?t:Math.max(s,t);const a=[];for(let n=1;n<=i;n++){const i=t+n*o;if(i<=r)continue;const s=tt(e,i);if(null===s)break;s>r&&(a.push(s),r=s)}return a}(this.present,this.position,st(this.speed),this.cadence.stride,this.prefetchedThrough);for(const t of e){const e=et(this.index,t);e&&this.ring.prefetch(e),this.prefetchedThrough=t}}onScrub(e){const t=Number(e.target.value);this.position=t,this.pendingPosition=t;const i=performance.now();i-this.lastScrubAt>=80&&(this.lastScrubAt=i,this.loadPendingPosition()),this.scrubSettle&&window.clearTimeout(this.scrubSettle),this.scrubSettle=window.setTimeout(()=>{this.scrubSettle=void 0,this.loadPendingPosition()},80)}loadPendingPosition(){const e=this.pendingPosition;void 0!==e&&e!==this.loadedPosition&&this.goTo(e)}onScrubCommit(e){this.scrubSettle&&window.clearTimeout(this.scrubSettle),this.scrubSettle=void 0,this.pendingPosition=Number(e.target.value),this.loadPendingPosition()}jumpToNow(){this.playing=!1,this.stopPlayback(),this.goTo(this.index.count-1)}stepBy(e){const t=tt(this.present,this.position+e,e);null!==t&&this.goTo(t)}get exportSelection(){const e=ut(this.index);return null===e?null:null===this.exportRange?e:mt(this.exportRange,this.index.count)}get exportRunning(){return"running"===this.exportStatus?.state}toggleExport(){this.exportOpen=!this.exportOpen,this.exportError=void 0,this.exportOpen?this.subscribeExport():this.unsubscribeExport()}async subscribeExport(){this.unsubscribeExport();const e=this.hass?.connection;if(!e||!this.config)return;const t=++this.exportSubscription;try{const i=await e.subscribeMessage(e=>{t===this.exportSubscription&&this.onExportStatus(e)},{type:"webcam_timelapse/export/subscribe",entity_id:this.config.camera_entity});if(t!==this.exportSubscription)return void i();this.exportUnsubscribe=i}catch(e){t===this.exportSubscription&&(this.exportError=this.exportErrorKey(e))}}unsubscribeExport(){this.exportSubscription++;const e=this.exportUnsubscribe;this.exportUnsubscribe=void 0,e&&Promise.resolve(e()).catch(()=>{})}onExportStatus(e){if(this.exportStatus=e,"done"!==e.state||!e.result)return this.exportUrl=void 0,void(this.exportUrlFor=void 0);this.resolveExportUrl(e.result.media_content_id)}async resolveExportUrl(e){if(this.exportUrlFor!==e&&this.hass?.callWS){this.exportUrlFor=e,this.exportUrl=void 0;try{const t=await this.hass.callWS({type:"media_source/resolve_media",media_content_id:e});if(this.exportUrlFor!==e)return;this.exportUrl=this.hass.hassUrl?.(t.url)??t.url}catch{}}}exportErrorKey(e){return("object"==typeof e&&null!==e&&"code"in e?String(e.code):"")||"unknown"}async startExport(){const e=this.exportSelection;if(!this.hass?.callWS||!this.config||null===e)return;const t=xt(this.config,this.index,e,{fps:this.exportFps,timestamp:this.exportStamp,readings:this.exportReadings},this.language,this.resolveColor);if(null!==t){this.exportError=void 0;try{this.exportStatus=await this.hass.callWS({type:"webcam_timelapse/export/start",...t})}catch(e){this.exportError=this.exportErrorKey(e)}}}async cancelExport(){if(this.hass?.callWS&&this.config)try{await this.hass.callWS({type:"webcam_timelapse/export/cancel",entity_id:this.config.camera_entity})}catch(e){this.exportError=this.exportErrorKey(e)}}markExportStart(){const e=this.exportSelection;e&&(this.exportRange=function(e,t,i){const n=mt({start:t,end:t},i).start;return{start:n,end:Math.max(e.end,n)}}(e,this.position,this.index.count))}markExportEnd(){const e=this.exportSelection;e&&(this.exportRange=function(e,t,i){const n=mt({start:t,end:t},i).end;return{start:Math.min(e.start,n),end:n}}(e,this.position,this.index.count))}presetExport(e){this.exportRange=null===e?null:function(e,t){const i=ut(e);if(null===i)return null;const n=Math.round(3600*t/e.step);return{start:Math.max(0,i.end-n),end:i.end}}(this.index,e)}exportErrorText(e,t){const i=this.t(`export.error.${e}`);return i.startsWith("export.error.")?t||this.t("export.error.unknown"):i}get timeZone(){return this.hass?.config?.time_zone??Intl.DateTimeFormat().resolvedOptions().timeZone}get language(){return this.hass?.locale?.language??this.hass?.language??"en"}t(e,t){return void 0===t?Be(e,this.language):Be(e,this.language,"{v}",t)}get atLive(){return this.position>=this.index.count-1}get onGap(){return this.present.length>0&&!this.present[this.position]}render(){if(!this.config||!this.hass)return W`<ha-card></ha-card>`;const e=null===this.index.t0?null:this.index.t0+this.position*this.index.step;return W`
+      <ha-card .header=${this.config.title??q}>
+        ${Ht(this.versionMismatch,e=>this.t(e))}
+        ${this.renderStage(e)}
+        ${it(this.index)?this.renderTimeline(e):q}
+        ${it(this.index)&&!1!==this.config.show_export?this.renderExport():q}
       </ha-card>
-    `}renderStage(t){if(!se(this.index))return j`
+    `}renderStage(e){if(!it(this.index))return W`
         <div class="stage">
           <div class="empty">
-            ${this.indexError?j`
+            ${this.indexError?W`
                   <div>${this.t("empty.index_failed")}</div>
                   <div class="detail">${this.indexError}</div>
-                `:j`
+                `:W`
                   <div>${this.t("empty.no_frames")}</div>
                   <div>${this.t("empty.first_soon")}</div>
                 `}
           </div>
         </div>
-      `;const e=this.gains[this.position]??1,i=[];1!==e&&i.push(`brightness(${e.toFixed(3)})`),this.onGap&&i.push("grayscale(0.5)","brightness(0.5)");const n=i.length>0?i.join(" "):"none";return j`
+      `;const t=this.gains[this.position]??1,i=[];1!==t&&i.push(`brightness(${t.toFixed(3)})`),this.onGap&&i.push("grayscale(0.5)","brightness(0.5)");const n=i.length>0?i.join(" "):"none";return W`
       <div
         class="stage"
         style="--wtl-frame-filter:${n}"
@@ -996,69 +1210,69 @@ function t(t,e,i,n){var s,o=arguments.length,a=o<3?e:null===n?n=Object.getOwnPro
           role="button"
           tabindex="0"
           aria-label=${this.t("actions.show_camera")}
-          @keydown=${t=>this.onActivateKey(t,this.config.camera_entity)}
+          @keydown=${e=>this.onActivateKey(e,this.config.camera_entity)}
         >
           <img class="layer a" alt="" decoding="async" fetchpriority="high" />
           <img class="layer b" alt="" decoding="async" fetchpriority="high" />
         </div>
-        ${this.frameError?j`<div class="empty">
+        ${this.frameError?W`<div class="empty">
               <div>${this.t("empty.frame_failed")}</div>
               <div class="detail">${this.frameError}</div>
-            </div>`:G}
-        ${null!==t?j`<div class="stamp">
-              <time datetime=${new Date(1e3*t).toISOString()}>
-                ${ye(t,this.timeZone,this.language)}
+            </div>`:q}
+        ${null!==e?W`<div class="stamp">
+              <time datetime=${new Date(1e3*e).toISOString()}>
+                ${At(e,this.timeZone,this.language)}
               </time>
-            </div>`:G}
-        ${null!==t?this.renderReadouts(t):G}
-        ${this.onGap?j`<div class="badge gap">${this.t("badge.gap")}</div>`:this.atLive?j`<div class="badge live">${this.t("badge.live")}</div>`:G}
+            </div>`:q}
+        ${null!==e?this.renderReadouts(e):q}
+        ${this.onGap?W`<div class="badge gap">${this.t("badge.gap")}</div>`:this.atLive?W`<div class="badge live">${this.t("badge.live")}</div>`:q}
         ${this.renderControls()}
       </div>
-    `}renderReadouts(t){const e=Qt(this.config);return 0===e.length?G:j`<div class="readouts ${e.length>1?"pair":""}">
-      ${e.map(e=>this.renderReadout(t,e))}
-    </div>`}renderReadout(t,e){const i="readout "+("left"===e.side?"left":"");if(this.folded.has(e.side))return j`<div class="${i} folded">
-        ${this.renderFoldToggle(e.side,!0)}
-      </div>`;const n=e.entities,s=1e3*t,o=n.map(t=>{const e=this.history.get(t.entity)??[],i=function(t){const e=Se.get(t);if(e)return e;const i=[];for(let e=1;e<t.length;e++){const n=Math.abs(t[e].value-t[e-1].value);n>0&&i.push(n)}i.sort((t,e)=>t-e);const n=i[Math.floor(.1*i.length)],s={quantum:void 0===n?0:Ae(n),staleAfter:Me(t)};return Se.set(t,s),s}(e),n=function(t,e,i){if(0===t.length)return null;let n=0,s=t.length-1,o=-1;for(;n<=s;){const i=n+s>>1;t[i].at<=e?(o=i,n=i+1):s=i-1}if(-1===o)return null;const a=t[o];return{value:a.value,at:a.at,stale:e-a.at>i}}(e,s,i.staleAfter),o=t.name??this.hass?.states[t.entity]?.attributes.friendly_name??t.entity,a=t.unit??this.hass?.states[t.entity]?.attributes.unit_of_measurement??"",r=t.color??"var(--wtl-accent)",h=null===n?"—":`${n.value.toFixed(t.decimals??1)}${a?` ${a}`:""}`,l=t.graph_hours??this.config?.graph_hours??24,c=!0===t.graph&&!1!==this.config?.show_graph,d=c?function(t,e,i){const n=36e5*i/2,s=e-n,o=e+n,a=t.filter(t=>t.at>=s&&t.at<=o);if(a[0]?.at===s)return a;let r;for(const e of t){if(e.at>=s)break;r=e}return r?[{at:s,value:r.value},...a]:a}(e,s,l):[],u=c&&!0===this.config?.show_sun?this.nightsAround(s,l):[],p=c?Ce({points:d,at:s,hours:l,color:r,label:`${o} history`,quantum:i.quantum,nights:u}):null,g=null===p?0:function(t){if(0===t.length)return 0;let e=1/0,i=-1/0;for(const n of t)n.value<e&&(e=n.value),n.value>i&&(i=n.value);return i-e}(d),f=null===p?G:j`<div class="spark-scale">
+    `}renderReadouts(e){const t=lt(this.config);return 0===t.length?q:W`<div class="readouts ${t.length>1?"pair":""}">
+      ${t.map(t=>this.renderReadout(e,t))}
+    </div>`}renderReadout(e,t){const i="readout "+("left"===t.side?"left":"");if(this.folded.has(t.side))return W`<div class="${i} folded">
+        ${this.renderFoldToggle(t.side,!0)}
+      </div>`;const n=t.entities,s=1e3*e,o=n.map(e=>{const t=this.history.get(e.entity)??[],i=function(e){const t=Dt.get(e);if(t)return t;const i=[];for(let t=1;t<e.length;t++){const n=Math.abs(e[t].value-e[t-1].value);n>0&&i.push(n)}i.sort((e,t)=>e-t);const n=i[Math.floor(.1*i.length)],s={quantum:void 0===n?0:Ot(n),staleAfter:Ft(e)};return Dt.set(e,s),s}(t),n=function(e,t,i){if(0===e.length)return null;let n=0,s=e.length-1,o=-1;for(;n<=s;){const i=n+s>>1;e[i].at<=t?(o=i,n=i+1):s=i-1}if(-1===o)return null;const r=e[o];return{value:r.value,at:r.at,stale:t-r.at>i}}(t,s,i.staleAfter),o=e.name??this.hass?.states[e.entity]?.attributes.friendly_name??e.entity,r=e.unit??this.hass?.states[e.entity]?.attributes.unit_of_measurement??"",a=e.color??"var(--wtl-accent)",h=null===n?"—":`${n.value.toFixed(e.decimals??1)}${r?` ${r}`:""}`,l=e.graph_hours??this.config?.graph_hours??24,d=!0===e.graph&&!1!==this.config?.show_graph,c=d?function(e,t,i){const n=36e5*i/2,s=t-n,o=t+n,r=e.filter(e=>e.at>=s&&e.at<=o);if(r[0]?.at===s)return r;let a;for(const t of e){if(t.at>=s)break;a=t}return a?[{at:s,value:a.value},...r]:r}(t,s,l):[],p=d&&!0===this.config?.show_sun?this.nightsAround(s,l):[],u=d?Ut({points:c,at:s,hours:l,color:a,label:`${o} history`,quantum:i.quantum,nights:p}):null,m=null===u?0:function(e){if(0===e.length)return 0;let t=1/0,i=-1/0;for(const n of e)n.value<t&&(t=n.value),n.value>i&&(i=n.value);return i-t}(c),g=null===u?q:W`<div class="spark-scale">
             <span
-              >${0===g?this.t("spark.flat"):this.t("spark.range",`${function(t){if(!Number.isFinite(t)||t<=0)return"0";if(t>=100)return Math.round(t).toString();const e=t.toPrecision(2);return e.includes(".")?e.replace(/0+$/,"").replace(/\.$/,""):e}(g)}${a?` ${a}`:""}`)}</span
+              >${0===m?this.t("spark.flat"):this.t("spark.range",`${function(e){if(!Number.isFinite(e)||e<=0)return"0";if(e>=100)return Math.round(e).toString();const t=e.toPrecision(2);return t.includes(".")?t.replace(/0+$/,"").replace(/\.$/,""):t}(m)}${r?` ${r}`:""}`)}</span
             >
-            <span>${m=l,!Number.isFinite(m)||m<=0?"":m<1?`${Math.round(60*m)} min`:m<48?`${Math.round(m)} h`:`${Math.round(m/24)} d`}</span>
-          </div>`;var m;const b=this.hass?.states[t.entity],y=t.show_icon&&b?j`<ha-state-icon
+            <span>${f=l,!Number.isFinite(f)||f<=0?"":f<1?`${Math.round(60*f)} min`:f<48?`${Math.round(f)} h`:`${Math.round(f/24)} d`}</span>
+          </div>`;var f;const b=this.hass?.states[e.entity],x=e.show_icon&&b?W`<ha-state-icon
               class="readout-icon"
-              style="color:${r}"
+              style="color:${a}"
               .hass=${this.hass}
               .stateObj=${b}
-            ></ha-state-icon>`:G;return j`
+            ></ha-state-icon>`:q;return W`
         <div
           class="readout-row ${n?.stale?"stale":""}"
           role="button"
           tabindex="0"
           aria-label=${this.t("actions.show_entity",o)}
-          @click=${()=>this.fireMoreInfo(t.entity)}
-          @keydown=${e=>this.onActivateKey(e,t.entity)}
+          @click=${()=>this.fireMoreInfo(e.entity)}
+          @keydown=${t=>this.onActivateKey(t,e.entity)}
         >
-          ${y}
-          <span class="readout-name" style="color:${r}">${o}</span>
+          ${x}
+          <span class="readout-name" style="color:${a}">${o}</span>
           <span class="readout-value">${h}</span>
-          ${null!==n?j`<span class="readout-at"
-                >${we(Math.round(n.at/1e3),this.timeZone,this.language)}</span
-              >`:G}
+          ${null!==n?W`<span class="readout-at"
+                >${Mt(Math.round(n.at/1e3),this.timeZone,this.language)}</span
+              >`:q}
         </div>
-        ${p?j`<div class="spark-wrap">${p}${f}</div>`:G}
-      `});return j`<div class=${i}>
+        ${u?W`<div class="spark-wrap">${u}${g}</div>`:q}
+      `});return W`<div class=${i}>
       <div class="readout-head">
-        ${e.title?j`<div class="readout-title">${e.title}</div>`:G}
-        ${this.renderFoldToggle(e.side,!1)}
+        ${t.title?W`<div class="readout-title">${t.title}</div>`:q}
+        ${this.renderFoldToggle(t.side,!1)}
       </div>
       ${o}
-    </div>`}nightsAround(t,e){const i=36e5*e/2;return this.nightsBetween(t-i,t+i)}nightsBetween(t,e){const i=this.hass?.config?.latitude,n=this.hass?.config?.longitude;if(void 0===i||void 0===n)return[];const s=`${t}|${e}|${i}|${n}`;return this.nightCache?.key!==s&&(this.nightCache={key:s,bands:Ie(t,e,i,n)}),this.nightCache.bands}renderFoldToggle(t,e){const i=this.t(e?"actions.show_readings":"actions.hide_readings");return j`<ha-icon-button
+    </div>`}nightsAround(e,t){const i=36e5*t/2;return this.nightsBetween(e-i,e+i)}nightsBetween(e,t){const i=this.hass?.config?.latitude,n=this.hass?.config?.longitude;if(void 0===i||void 0===n)return[];const s=`${e}|${t}|${i}|${n}`;return this.nightCache?.key!==s&&(this.nightCache={key:s,bands:Kt(e,t,i,n)}),this.nightCache.bands}renderFoldToggle(e,t){const i=this.t(t?"actions.show_readings":"actions.hide_readings");return W`<ha-icon-button
       class="readout-fold"
       .label=${i}
-      aria-expanded=${e?"false":"true"}
-      @click=${()=>this.toggleFold(t)}
+      aria-expanded=${t?"false":"true"}
+      @click=${()=>this.toggleFold(e)}
     >
-      <ha-icon icon=${e?"mdi:eye-outline":"mdi:eye-off-outline"}></ha-icon>
-    </ha-icon-button>`}toggleFold(t){const e=new Set(this.folded);e.delete(t)||e.add(t),this.folded=e}fireMoreInfo(t){t&&this.dispatchEvent(new CustomEvent("hass-more-info",{detail:{entityId:t},bubbles:!0,composed:!0}))}onActivateKey(t,e){"Enter"!==t.key&&" "!==t.key||(t.preventDefault(),this.fireMoreInfo(e))}onStageClick(t){const e=t.composedPath(),i=e.indexOf(t.currentTarget);(-1===i?e:e.slice(0,i)).some(t=>t instanceof HTMLElement&&(t.classList.contains("controls")||t.classList.contains("readout-row")||t.classList.contains("readout-fold")))||this.config&&this.fireMoreInfo(this.config.camera_entity)}renderControls(){return j`
+      <ha-icon icon=${t?"mdi:eye-outline":"mdi:eye-off-outline"}></ha-icon>
+    </ha-icon-button>`}toggleFold(e){const t=new Set(this.folded);t.delete(e)||t.add(e),this.folded=t}fireMoreInfo(e){e&&this.dispatchEvent(new CustomEvent("hass-more-info",{detail:{entityId:e},bubbles:!0,composed:!0}))}onActivateKey(e,t){"Enter"!==e.key&&" "!==e.key||(e.preventDefault(),this.fireMoreInfo(t))}onStageClick(e){const t=e.composedPath(),i=t.indexOf(e.currentTarget);(-1===i?t:t.slice(0,i)).some(e=>e instanceof HTMLElement&&(e.classList.contains("controls")||e.classList.contains("readout-row")||e.classList.contains("readout-fold")))||this.config&&this.fireMoreInfo(this.config.camera_entity)}renderControls(){return W`
       <div class="controls">
         <ha-icon-button .label=${this.t("controls.previous")} @click=${()=>this.stepBy(-1)}>
           <ha-icon icon="mdi:skip-previous"></ha-icon>
@@ -1087,51 +1301,202 @@ function t(t,e,i,n){var s,o=arguments.length,a=o<3?e:null===n?n=Object.getOwnPro
           <ha-icon icon="mdi:update"></ha-icon>
         </ha-icon-button>
       </div>
-    `}renderTimeline(t){const e=Math.max(1,this.index.count-1),i=this.position/e*100,n=!1!==this.config?.show_dayticks,{days:s,times:o}=n?this.rulerFor():{days:[],times:[]},a=!0===this.config?.show_sun&&null!==this.index.t0?this.nightsBetween(1e3*this.index.t0,1e3*(this.index.t0+e*this.index.step)):[];return j`
+    `}renderTimeline(e){const t=Math.max(1,this.index.count-1),i=this.position/t*100,n=!1!==this.config?.show_dayticks,{days:s,times:o}=n?this.rulerFor():{days:[],times:[]},r=!0===this.config?.show_sun&&null!==this.index.t0?this.nightsBetween(1e3*this.index.t0,1e3*(this.index.t0+t*this.index.step)):[];return W`
       <div class="timeline">
-        ${n?j`<div class="band dates" aria-hidden="true">
-              ${s.map(t=>t.label?j`<span class="lab date" style="left:${t.left}%"
-                      >${t.label}</span
-                    >`:G)}
-            </div>`:G}
+        ${n?W`<div class="band dates" aria-hidden="true">
+              ${s.map(e=>e.label?W`<span class="lab date" style="left:${e.left}%"
+                      >${e.label}</span
+                    >`:q)}
+            </div>`:q}
 
         <div class="track">
-          ${a.length>0?j`<div class="nights" aria-hidden="true">
-                ${a.map(t=>j`<span
+          ${r.length>0?W`<div class="nights" aria-hidden="true">
+                ${r.map(e=>W`<span
                       class="night"
-                      style="left:${(100*t.left).toFixed(3)}%;width:${(100*t.width).toFixed(3)}%"
+                      style="left:${(100*e.left).toFixed(3)}%;width:${(100*e.width).toFixed(3)}%"
                     ></span>`)}
-              </div>`:G}
-          ${n?j`<div class="marks" aria-hidden="true">
-                ${o.map(t=>j`<span class="mark" style="left:${t.left}%"></span>`)}
-                ${s.map(t=>j`<span
-                      class="mark ${t.isMonthStart?"month":"day"}"
-                      style="left:${t.left}%"
+              </div>`:q}
+          ${this.renderExportBand()}
+          ${n?W`<div class="marks" aria-hidden="true">
+                ${o.map(e=>W`<span class="mark" style="left:${e.left}%"></span>`)}
+                ${s.map(e=>W`<span
+                      class="mark ${e.isMonthStart?"month":"day"}"
+                      style="left:${e.left}%"
                     ></span>`)}
-              </div>`:G}
+              </div>`:q}
           <div class="rail"></div>
         <div class="fill" style="width:${i}%"></div>
-        ${this.index.gaps.map(([t,i])=>j`<div
+        ${this.index.gaps.map(([e,i])=>W`<div
             class="gap-run"
-            style="left:${t/e*100}%;width:${i/e*100}%"
+            style="left:${e/t*100}%;width:${i/t*100}%"
           ></div>`)}
         <input
           type="range"
           min="0"
-          max=${e}
+          max=${t}
           step="1"
           .value=${String(this.position)}
           aria-label=${this.t("track.label")}
-          aria-valuetext=${null!==t?ye(t,this.timeZone,this.language):""}
+          aria-valuetext=${null!==e?At(e,this.timeZone,this.language):""}
           @input=${this.onScrub}
           @change=${this.onScrubCommit}
           />
         </div>
 
-        ${n?j`<div class="band times" aria-hidden="true">
-              ${o.map(t=>t.label?j`<span class="lab time" style="left:${t.left}%"
-                      >${t.label}</span
-                    >`:G)}
-            </div>`:G}
+        ${n?W`<div class="band times" aria-hidden="true">
+              ${o.map(e=>e.label?W`<span class="lab time" style="left:${e.left}%"
+                      >${e.label}</span
+                    >`:q)}
+            </div>`:q}
       </div>
-    `}rulerFor(){const t=[this.index.t0,this.index.count,this.index.step,Math.round(this.trackWidth),this.timeZone,this.language].join("|");return this.rulerCache?.key!==t&&(this.rulerCache={key:t,days:fe(this.index,this.timeZone,this.language,this.trackWidth),times:be(this.index,this.timeZone,this.language,this.trackWidth)}),this.rulerCache}};t([pt({attribute:!1})],Be.prototype,"hass",void 0),t([gt()],Be.prototype,"config",void 0),t([gt()],Be.prototype,"index",void 0),t([gt()],Be.prototype,"position",void 0),t([gt()],Be.prototype,"playing",void 0),t([gt()],Be.prototype,"speed",void 0),t([gt()],Be.prototype,"trackWidth",void 0),t([gt()],Be.prototype,"versionMismatch",void 0),t([gt()],Be.prototype,"indexError",void 0),t([gt()],Be.prototype,"frameError",void 0),t([gt()],Be.prototype,"history",void 0),t([gt()],Be.prototype,"folded",void 0),t([ft("img.layer.a")],Be.prototype,"layerA",void 0),t([ft("img.layer.b")],Be.prototype,"layerB",void 0),Be=t([ct(Kt)],Be);const qe=window;qe.customCards=qe.customCards??[],qe.customCards.push({type:Kt,name:"Webcam Timelapse",description:"Scrub and play back an archived still-image webcam.",preview:!0,documentationURL:"https://github.com/rolandzeiner/webcam-timelapse",getEntitySuggestion:(t,e)=>e.startsWith("camera.")?"webcam_timelapse"!==t.entities?.[e]?.platform?null:{config:{type:`custom:${Kt}`,camera_entity:e}}:null});export{Be as WebcamTimelapseCard};
+    `}renderExportBand(){const e=this.exportOpen?this.exportSelection:null;if(null===e)return q;const t=function(e,t){const i=Math.max(1,t-1);return{left:e.start/i*100,width:(e.end-e.start)/i*100}}(e,this.index.count);return W`<div
+      class="export-band"
+      role="img"
+      aria-label=${this.t("export.band")}
+      style="left:${t.left.toFixed(3)}%;width:${t.width.toFixed(3)}%"
+    ></div>`}renderExport(){return W`
+      <div class="export">
+        <button
+          class="export-toggle"
+          aria-expanded=${this.exportOpen?"true":"false"}
+          @click=${this.toggleExport}
+        >
+          <ha-icon icon="mdi:movie-open-outline"></ha-icon>
+          ${this.t(this.exportOpen?"export.close":"export.open")}
+        </button>
+        ${this.exportOpen?this.renderExportPanel():q}
+      </div>
+    `}renderExportPanel(){const e=this.exportSelection;if(null===e)return q;const t=e=>At(this.index.t0+e*this.index.step,this.timeZone,this.language),i=function(e,t){let i=0;const n=Math.min(t.end,e.length-1);for(let s=Math.max(0,t.start);s<=n;s++)e[s]&&i++;return i}(this.present,e),n=this.exportRunning,s=dt(this.config).length>0,o=pt.filter(e=>function(e,t){return e.count*e.step>3600*t}(this.index,e));return W`
+      <div class="export-panel">
+        <div class="export-ends">
+          <div class="export-end">
+            <span class="export-label">${this.t("export.from")}</span>
+            <span class="export-stamp">${t(e.start)}</span>
+            <button
+              class="export-chip"
+              ?disabled=${n}
+              @click=${this.markExportStart}
+            >
+              ${this.t("export.start_here")}
+            </button>
+          </div>
+          <div class="export-end">
+            <span class="export-label">${this.t("export.to")}</span>
+            <span class="export-stamp">${t(e.end)}</span>
+            <button
+              class="export-chip"
+              ?disabled=${n}
+              @click=${this.markExportEnd}
+            >
+              ${this.t("export.end_here")}
+            </button>
+          </div>
+        </div>
+
+        ${o.length>0?W`<div class="export-row">
+              ${o.map(e=>W`<button
+                    class="export-chip"
+                    ?disabled=${n}
+                    @click=${()=>this.presetExport(e)}
+                  >
+                    ${e<48?this.t("export.preset_hours",String(e)):this.t("export.preset_days",String(e/24))}
+                  </button>`)}
+              <button
+                class="export-chip"
+                ?disabled=${n}
+                @click=${()=>this.presetExport(null)}
+              >
+                ${this.t("export.preset_all")}
+              </button>
+            </div>`:q}
+
+        <div class="export-row" role="group" aria-label=${this.t("export.fps")}>
+          <span class="export-label">${this.t("export.fps")}</span>
+          ${ct.map(e=>W`<button
+                class="export-chip"
+                aria-pressed=${this.exportFps===e?"true":"false"}
+                ?disabled=${n}
+                @click=${()=>{this.exportFps=e}}
+              >
+                ${e}
+              </button>`)}
+        </div>
+
+        <div class="export-row">
+          <label class="export-check">
+            <input
+              type="checkbox"
+              .checked=${this.exportStamp}
+              ?disabled=${n}
+              @change=${e=>{this.exportStamp=e.target.checked}}
+            />
+            ${this.t("export.timestamp")}
+          </label>
+          ${s?W`<label class="export-check">
+                <input
+                  type="checkbox"
+                  .checked=${this.exportReadings}
+                  ?disabled=${n}
+                  @change=${e=>{this.exportReadings=e.target.checked}}
+                />
+                ${this.t("export.readings")}
+              </label>`:q}
+        </div>
+
+        <div class="export-summary">
+          ${0===i?this.t("export.summary_empty"):this.t("export.summary").replace("{frames}",String(i)).replace("{length}",gt(i/this.exportFps))}
+        </div>
+
+        ${n?q:W`<div class="export-row">
+              <button
+                class="export-go"
+                ?disabled=${0===i}
+                @click=${this.startExport}
+              >
+                <ha-icon icon="mdi:movie-open-outline"></ha-icon>
+                ${this.t("export.start")}
+              </button>
+            </div>`}
+        ${this.renderExportStatus()}
+      </div>
+    `}renderExportStatus(){if(this.exportError)return W`<div class="export-status" role="alert">
+        <span class="export-error">${this.exportErrorText(this.exportError)}</span>
+      </div>`;const e=this.exportStatus;if(!e||"idle"===e.state)return q;if("running"===e.state){const t=function(e){return!e||e.total<=0?0:Math.min(1,Math.max(0,e.done/e.total))}(e);return W`<div class="export-status" role="status">
+        <span>
+          ${e.total>0?this.t("export.running").replace("{done}",String(e.done)).replace("{total}",String(e.total)):this.t("export.preparing")}
+        </span>
+        <div
+          class="export-progress"
+          role="progressbar"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow=${Math.round(100*t)}
+        >
+          <span style="width:${(100*t).toFixed(1)}%"></span>
+        </div>
+        <button class="export-chip" @click=${this.cancelExport}>
+          ${this.t("export.cancel")}
+        </button>
+      </div>`}if("done"===e.state&&e.result){const t=e.result;return W`<div class="export-status" role="status">
+        <span>
+          ${this.t("export.done")} · ${gt(t.duration)} ·
+          ${function(e){if(!Number.isFinite(e)||e<=0)return"0 MB";const t=e/1e6;return t>=1e3?`${(t/1e3).toFixed(1)} GB`:t>=10?`${Math.round(t)} MB`:`${t.toFixed(1)} MB`}(t.size_bytes)}
+        </span>
+        <span class="detail">${this.t("export.saved",t.file_name)}</span>
+        ${this.exportUrl?W`<a
+              class="export-download"
+              href=${this.exportUrl}
+              download=${t.file_name}
+              target="_blank"
+              rel="noopener"
+            >
+              <ha-icon icon="mdi:download"></ha-icon>
+              ${this.t("export.download")}
+            </a>`:q}
+      </div>`}return"cancelled"===e.state?W`<div class="export-status" role="status">
+        <span class="detail">${this.t("export.cancelled")}</span>
+      </div>`:W`<div class="export-status" role="alert">
+      <span class="export-error"
+        >${this.exportErrorText(e.error??"unknown",e.message)}</span
+      >
+    </div>`}rulerFor(){const e=[this.index.t0,this.index.count,this.index.step,Math.round(this.trackWidth),this.timeZone,this.language].join("|");return this.rulerCache?.key!==e&&(this.rulerCache={key:e,days:kt(this.index,this.timeZone,this.language,this.trackWidth),times:Et(this.index,this.timeZone,this.language,this.trackWidth)}),this.rulerCache}};e([ue({attribute:!1})],Qt.prototype,"hass",void 0),e([me()],Qt.prototype,"config",void 0),e([me()],Qt.prototype,"index",void 0),e([me()],Qt.prototype,"position",void 0),e([me()],Qt.prototype,"playing",void 0),e([me()],Qt.prototype,"speed",void 0),e([me()],Qt.prototype,"trackWidth",void 0),e([me()],Qt.prototype,"versionMismatch",void 0),e([me()],Qt.prototype,"indexError",void 0),e([me()],Qt.prototype,"frameError",void 0),e([me()],Qt.prototype,"history",void 0),e([me()],Qt.prototype,"folded",void 0),e([me()],Qt.prototype,"exportOpen",void 0),e([me()],Qt.prototype,"exportRange",void 0),e([me()],Qt.prototype,"exportFps",void 0),e([me()],Qt.prototype,"exportStamp",void 0),e([me()],Qt.prototype,"exportReadings",void 0),e([me()],Qt.prototype,"exportStatus",void 0),e([me()],Qt.prototype,"exportError",void 0),e([me()],Qt.prototype,"exportUrl",void 0),e([ge("img.layer.a")],Qt.prototype,"layerA",void 0),e([ge("img.layer.b")],Qt.prototype,"layerB",void 0),Qt=e([de(Ke)],Qt);const ei=window;ei.customCards=ei.customCards??[],ei.customCards.push({type:Ke,name:"Webcam Timelapse",description:"Scrub and play back an archived still-image webcam.",preview:!0,documentationURL:"https://github.com/rolandzeiner/webcam-timelapse",getEntitySuggestion:(e,t)=>t.startsWith("camera.")?"webcam_timelapse"!==e.entities?.[t]?.platform?null:{config:{type:`custom:${Ke}`,camera_entity:t}}:null});export{Qt as WebcamTimelapseCard};

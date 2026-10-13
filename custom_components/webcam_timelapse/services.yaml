@@ -29,3 +29,47 @@ resume_capture:
       selector:
         config_entry:
           integration: webcam_timelapse
+
+export_video:
+  fields:
+    entry_id:
+      required: true
+      selector:
+        config_entry:
+          integration: webcam_timelapse
+    start:
+      selector:
+        datetime:
+    end:
+      selector:
+        datetime:
+    fps:
+      default: 24
+      selector:
+        number:
+          min: 1
+          max: 60
+          mode: box
+    max_width:
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 7680
+          mode: box
+          unit_of_measurement: px
+    deflicker:
+      default: 50
+      selector:
+        number:
+          min: 0
+          max: 100
+          step: 5
+          mode: slider
+    timestamp:
+      default: true
+      selector:
+        boolean:
+    overlay:
+      selector:
+        object:
