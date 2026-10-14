@@ -96,7 +96,7 @@
     "preparing": "Wird vorbereitet…",
     "running": "Bild {done} von {total} wird kodiert",
     "done": "Video fertig",
-    "saved": "In Medien gespeichert als {v}",
+    "saved": "Gespeichert als {v}",
     "download": "Herunterladen",
     "cancelled": "Export abgebrochen.",
     "band": "Für den Export gewählter Zeitraum",
@@ -111,6 +111,18 @@
       "export_failed": "Der Export ist fehlgeschlagen. Details stehen im Home-Assistant-Protokoll.",
       "entry_not_loaded": "Diese Kamera ist gerade nicht geladen. Versuche es erneut, sobald sie gestartet ist.",
       "unknown": "Der Export konnte nicht gestartet werden."
-    }
+    },
+    "size": "Größe",
+    "size_value": "{v} % der Breite",
+    "position": "Position",
+    "block_left": "Linker Block",
+    "block_right": "Rechter Block",
+    "positions": {
+      "left": "Links",
+      "right": "Rechts",
+      "top": "Oben",
+      "bottom": "Unten"
+    },
+    "folder": "Videos werden gespeichert in {v}"
   }
 }

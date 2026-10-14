@@ -189,6 +189,14 @@
         "1600": "1600 px",
         "1920": "1920 px"
       }
+    },
+    "readings_position": {
+      "options": {
+        "left": "Links",
+        "right": "Rechts",
+        "top": "Oben",
+        "bottom": "Unten"
+      }
     }
   },
   "entity": {
@@ -287,9 +295,25 @@
           "name": "Datum und Uhrzeit anzeigen",
           "description": "Stempelt jedes Bild mit dem Zeitpunkt seiner Aufnahme."
         },
+        "timestamp_size": {
+          "name": "Größe von Datum und Uhrzeit",
+          "description": "Breite von Datum und Uhrzeit in Prozent der Videobreite."
+        },
         "overlay": {
           "name": "Sensorwerte",
           "description": "Werte, die ins Video gezeichnet werden, in derselben Form wie die Konfiguration der Karte: entities, entities_left, overlay_title, overlay_title_left, graph_hours, show_graph und show_sun."
+        },
+        "readings_size": {
+          "name": "Größe der Sensorwerte",
+          "description": "Breite des Werteblocks in Prozent der Videobreite. Bei zwei Blöcken gilt sie für den breiteren."
+        },
+        "readings_position": {
+          "name": "Position der Sensorwerte",
+          "description": "Wo der Werteblock der Karte (ihre entities) im Video sitzt. Links und rechts sind die unteren Ecken wie auf der Karte; oben und unten zentrieren ihn an diesem Rand. Leer lassen, um die Position der Karte zu übernehmen."
+        },
+        "readings_position_left": {
+          "name": "Position der linken Sensorwerte",
+          "description": "Dasselbe für den zweiten Block der Karte (entities_left)."
         }
       }
     }

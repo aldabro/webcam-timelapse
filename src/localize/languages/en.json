@@ -96,7 +96,7 @@
     "preparing": "Preparing…",
     "running": "Encoding frame {done} of {total}",
     "done": "Video ready",
-    "saved": "Saved in Media as {v}",
+    "saved": "Saved as {v}",
     "download": "Download",
     "cancelled": "Export cancelled.",
     "band": "Range selected for export",
@@ -111,6 +111,18 @@
       "export_failed": "The export failed. The Home Assistant log has the details.",
       "entry_not_loaded": "This camera is not loaded right now. Try again once it has started.",
       "unknown": "The export could not be started."
-    }
+    },
+    "size": "Size",
+    "size_value": "{v} % of the width",
+    "position": "Position",
+    "block_left": "Left block",
+    "block_right": "Right block",
+    "positions": {
+      "left": "Left",
+      "right": "Right",
+      "top": "Top",
+      "bottom": "Bottom"
+    },
+    "folder": "Videos are saved in {v}"
   }
 }

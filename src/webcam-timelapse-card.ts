@@ -30,7 +30,9 @@ import {
   clampRange,
   DEFAULT_EXPORT_FPS,
   EXPORT_FPS,
+  EXPORT_POSITIONS,
   EXPORT_PRESETS,
+  type ExportPosition,
   type ExportRange,
   exportRequest,
   type ExportStatus,
@@ -42,6 +44,8 @@ import {
   presetFits,
   progress,
   rangeBand,
+  READINGS_SIZE,
+  TIMESTAMP_SIZE,
   withEnd,
   withStart,
 } from "./export";
@@ -173,6 +177,11 @@ export class WebcamTimelapseCard extends LitElement {
   @state() private exportFps: number = DEFAULT_EXPORT_FPS;
   @state() private exportStamp = true;
   @state() private exportReadings = true;
+  @state() private exportStampSize: number = TIMESTAMP_SIZE.default;
+  @state() private exportReadingsSize: number = READINGS_SIZE.default;
+  /** Positions the viewer picked; a block not in here keeps its card side. */
+  @state() private exportPositions: Partial<Record<ReadoutSide, ExportPosition>> =
+    {};
   @state() private exportStatus: ExportStatus | null = null;
   /** Why the last attempt to start or cancel was refused, as a string key. */
   @state() private exportError: string | undefined;
@@ -1090,7 +1099,10 @@ export class WebcamTimelapseCard extends LitElement {
       {
         fps: this.exportFps,
         timestamp: this.exportStamp,
+        timestampSize: this.exportStampSize,
         readings: this.exportReadings,
+        readingsSize: this.exportReadingsSize,
+        positions: this.exportPositions,
       },
       this.language,
       this.resolveColor,
@@ -1884,20 +1896,43 @@ export class WebcamTimelapseCard extends LitElement {
             />
             ${this.t("export.timestamp")}
           </label>
-          ${hasReadings
-            ? html`<label class="export-check">
-                <input
-                  type="checkbox"
-                  .checked=${this.exportReadings}
-                  ?disabled=${running}
-                  @change=${(event: Event) => {
-                    this.exportReadings = (event.target as HTMLInputElement).checked;
-                  }}
-                />
-                ${this.t("export.readings")}
-              </label>`
+          ${this.exportStamp
+            ? this.renderExportSize(
+                TIMESTAMP_SIZE,
+                this.exportStampSize,
+                running,
+                (size) => {
+                  this.exportStampSize = size;
+                },
+              )
             : nothing}
         </div>
+        ${hasReadings
+          ? html`<div class="export-row">
+                <label class="export-check">
+                  <input
+                    type="checkbox"
+                    .checked=${this.exportReadings}
+                    ?disabled=${running}
+                    @change=${(event: Event) => {
+                      this.exportReadings = (event.target as HTMLInputElement).checked;
+                    }}
+                  />
+                  ${this.t("export.readings")}
+                </label>
+                ${this.exportReadings
+                  ? this.renderExportSize(
+                      READINGS_SIZE,
+                      this.exportReadingsSize,
+                      running,
+                      (size) => {
+                        this.exportReadingsSize = size;
+                      },
+                    )
+                  : nothing}
+              </div>
+              ${this.exportReadings ? this.renderExportPositions(running) : nothing}`
+          : nothing}
 
         <div class="export-summary">
           ${frames === 0
@@ -1920,8 +1955,79 @@ export class WebcamTimelapseCard extends LitElement {
               </button>
             </div>`}
         ${this.renderExportStatus()}
+        ${this.exportStatus?.folder
+          ? html`<div class="export-folder">
+              ${this.t("export.folder", this.exportStatus.folder)}
+            </div>`
+          : nothing}
       </div>
     `;
+  }
+
+  /**
+   * A size as a share of the video's width.
+   *
+   * A share rather than a pixel count, because the card does not know
+   * the size of the frames and the share is how an overlay is judged
+   * anyway: "the readings cover a third of the picture".
+   */
+  private renderExportSize(
+    bounds: { min: number; max: number; step: number },
+    value: number,
+    disabled: boolean,
+    onChange: (size: number) => void,
+  ): TemplateResult {
+    const label = this.t("export.size_value", String(value));
+    return html`<label class="export-size">
+      <span class="export-label">${this.t("export.size")}</span>
+      <input
+        type="range"
+        min=${bounds.min}
+        max=${bounds.max}
+        step=${bounds.step}
+        .value=${String(value)}
+        aria-valuetext=${label}
+        ?disabled=${disabled}
+        @input=${(event: Event) =>
+          onChange(Number((event.target as HTMLInputElement).value))}
+      />
+      <span class="export-size-value">${label}</span>
+    </label>`;
+  }
+
+  /**
+   * Where each readings block goes in the video — one row per block the
+   * card shows. Unchosen, a block sits where the card draws it.
+   */
+  private renderExportPositions(disabled: boolean): TemplateResult[] {
+    const groups = overlayGroups(this.config);
+    return groups.map((group) => {
+      const current = this.exportPositions[group.side] ?? group.side;
+      const label =
+        groups.length === 1
+          ? this.t("export.position")
+          : (group.title ??
+            this.t(group.side === "left" ? "export.block_left" : "export.block_right"));
+      return html`<div class="export-row" role="group" aria-label=${label}>
+        <span class="export-label">${label}</span>
+        ${EXPORT_POSITIONS.map(
+          (position) =>
+            html`<button
+              class="export-chip"
+              aria-pressed=${current === position ? "true" : "false"}
+              ?disabled=${disabled}
+              @click=${() => {
+                this.exportPositions = {
+                  ...this.exportPositions,
+                  [group.side]: position,
+                };
+              }}
+            >
+              ${this.t(`export.positions.${position}`)}
+            </button>`,
+        )}
+      </div>`;
+    });
   }
 
   /** Progress, the finished video, or what went wrong. */
@@ -1969,7 +2075,7 @@ export class WebcamTimelapseCard extends LitElement {
           ${this.t("export.done")} · ${formatLength(result.duration)} ·
           ${formatSize(result.size_bytes)}
         </span>
-        <span class="detail">${this.t("export.saved", result.file_name)}</span>
+        <span class="detail">${this.t("export.saved", result.path)}</span>
         ${this.exportUrl
           ? html`<a
               class="export-download"

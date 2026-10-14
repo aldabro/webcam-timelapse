@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import Any
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, patch
 
 import pytest
 import voluptuous as vol
@@ -154,6 +154,12 @@ async def test_service_accepts_the_cards_overlay_config(
         {"overlay": {"entities": [{"name": "no entity"}]}},
         {"overlay": {"entities": [{"entity": "not an entity id"}]}},
         {"start": "last Tuesday"},
+        {"readings_size": 9},
+        {"readings_size": 81},
+        {"timestamp_size": 4},
+        {"timestamp_size": 51},
+        {"readings_position": "middle"},
+        {"readings_position_left": "centre"},
     ],
 )
 async def test_service_rejects_malformed_input(
@@ -326,6 +332,53 @@ async def test_ws_subscribing_late_shows_the_finished_export(
 
     assert status["state"] == "done"
     assert status["result"]["file_name"] == result["file_name"]
+
+
+async def test_ws_reports_where_videos_go_before_there_are_any(
+    hass: HomeAssistant, hass_ws_client, entry_with_frames: Any, media_dir: Path
+) -> None:
+    """So people can find, and tidy up, what earlier exports left behind."""
+    client = await hass_ws_client(hass)
+
+    await client.send_json_auto_id(
+        {"type": WS_TYPE_EXPORT_SUBSCRIBE, "entry_id": entry_with_frames.entry_id}
+    )
+    assert (await client.receive_json())["success"]
+    status = (await client.receive_json())["event"]
+
+    assert status["state"] == "idle"
+    assert status["folder"] == str(media_dir / "webcam_timelapse" / "test_cam")
+
+
+async def test_service_passes_sizes_and_positions_through(
+    hass: HomeAssistant, entry_with_frames: Any
+) -> None:
+    hass.states.async_set("sensor.co2", "640")
+    seen: list[ExportOptions] = []
+    real_build = export.async_build_overlay
+
+    async def _spy(hass: HomeAssistant, options: ExportOptions, *args: Any) -> Any:
+        seen.append(options)
+        return await real_build(hass, options, *args)
+
+    with patch.object(export, "async_build_overlay", _spy):
+        await hass.services.async_call(
+            DOMAIN,
+            SERVICE_EXPORT_VIDEO,
+            {
+                "entry_id": entry_with_frames.entry_id,
+                "overlay": {"entities": [{"entity": "sensor.co2"}]},
+                "readings_size": 25,
+                "timestamp_size": 10,
+                "readings_position": "bottom",
+            },
+            blocking=True,
+        )
+
+    (options,) = seen
+    assert (options.readings_size, options.timestamp_size) == (25, 10)
+    assert options.readings_position == "bottom"
+    assert options.readings_position_left is None
 
 
 async def test_ws_unsubscribing_stops_the_events(

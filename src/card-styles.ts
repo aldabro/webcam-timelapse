@@ -791,6 +791,42 @@ export const cardStyles = css`
     font-variant-numeric: tabular-nums;
   }
 
+  /* Indented under its checkbox, so the size reads as belonging to it. */
+  .export-size {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 8px;
+  }
+
+  /* Undoes the scrubber's rules, which style every range input in the
+     card: that one is stretched invisibly over the timeline track and
+     draws its own thumb. This one is an ordinary slider in a row. */
+  .export-size input[type="range"] {
+    position: static;
+    inset: auto;
+    width: 140px;
+    height: auto;
+    margin: 0;
+    background: none;
+    appearance: auto;
+    accent-color: var(--wtl-accent);
+  }
+
+  /* Fixed width, so the slider does not jump as the number grows a digit. */
+  .export-size-value {
+    min-width: 11ch;
+    color: var(--wtl-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* The folder is for finding and tidying up old exports, so it is always
+     there — but quiet, and free to break anywhere in a long path. */
+  .export-folder {
+    color: var(--wtl-muted);
+    overflow-wrap: anywhere;
+  }
+
   .export-go,
   .export-download {
     display: inline-flex;

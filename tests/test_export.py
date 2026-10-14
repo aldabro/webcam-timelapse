@@ -633,6 +633,7 @@ async def test_subscribers_see_progress_through_to_done(
         "error": None,
         "message": None,
         "result": result,
+        "folder": str(Path(result["path"]).parent),
     }
 
     unsubscribe()
@@ -867,6 +868,42 @@ async def test_show_sun_supplies_the_nights_around_the_export(
     for sunset, sunrise in spec.nights:
         assert 6 * 3600 < sunrise - sunset < 18 * 3600
     assert spec.nights == sorted(spec.nights)
+
+
+async def test_overlay_carries_the_sizes_and_positions_asked_for(
+    hass: HomeAssistant, mock_history: AsyncMock
+) -> None:
+    overlay = export.OVERLAY_SCHEMA(
+        {
+            "entities": [{"entity": "sensor.co2"}],
+            "entities_left": [{"entity": "sensor.temp"}],
+        }
+    )
+
+    default = await export.async_build_overlay(
+        hass, ExportOptions(overlay=overlay), T0, T0
+    )
+    assert default is not None
+    assert (default.readings_width, default.stamp_width) == (0.30, 0.15)
+    # Each block where the card has it.
+    assert [group.position for group in default.groups] == [None, None]
+
+    custom = await export.async_build_overlay(
+        hass,
+        ExportOptions(
+            overlay=overlay,
+            readings_size=45,
+            timestamp_size=8,
+            readings_position="top",
+            readings_position_left="bottom",
+        ),
+        T0,
+        T0,
+    )
+    assert custom is not None
+    assert (custom.readings_width, custom.stamp_width) == (0.45, 0.08)
+    positions = {group.side: group.position for group in custom.groups}
+    assert positions == {"right": "top", "left": "bottom"}
 
 
 async def test_no_readings_and_no_stamp_means_no_overlay_at_all(

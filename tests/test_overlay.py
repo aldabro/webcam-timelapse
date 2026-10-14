@@ -504,10 +504,164 @@ def test_two_blocks_stack_when_they_would_collide() -> None:
         OverlayGroup("left", [steady_row(name="A fairly long reading name")]),
         OverlayGroup("right", [steady_row(name="Another fairly long name")]),
     )
-    wide = OverlayRenderer(spec(*groups), 1600, 1200)
-    left, right = wide._blocks
-    assert left.top == right.top  # side by side
+    side_by_side = OverlayRenderer(spec(*groups), 1600, 1200)
+    left, right = side_by_side._blocks
+    assert left.top == right.top
 
-    narrow = OverlayRenderer(spec(*groups), 400, 300)
-    left, right = narrow._blocks
+    crowded = OverlayRenderer(spec(*groups, readings_width=0.6), 1600, 1200)
+    left, right = crowded._blocks
+    assert right.left + right.width == 1600 - crowded._margin  # kept its corner
     assert left.top + left.height <= right.top
+
+
+# --- size -----------------------------------------------------------------
+
+
+def graphed_group(side: str = "right", **kwargs: object) -> OverlayGroup:
+    return OverlayGroup(
+        side,  # type: ignore[arg-type]
+        [
+            steady_row(name="Garden ESP32-S3-CAM-1 SCD40 CO2", graph=True),
+            steady_row(name="Temperature", unit="°C", decimals=1, graph=True),
+        ],
+        **kwargs,  # type: ignore[arg-type]
+    )
+
+
+@pytest.mark.parametrize("share", [0.2, 0.3, 0.5])
+def test_the_readings_take_the_share_of_the_width_asked_for(share: float) -> None:
+    renderer = OverlayRenderer(spec(graphed_group(), readings_width=share), 1600, 1200)
+
+    assert renderer._blocks[0].width == pytest.approx(1600 * share, rel=0.03)
+
+
+def test_the_default_is_under_a_third_of_the_picture() -> None:
+    renderer = OverlayRenderer(spec(graphed_group()), 1600, 1200)
+
+    assert renderer._blocks[0].width == pytest.approx(480, rel=0.03)
+
+
+def test_both_blocks_share_one_text_size() -> None:
+    """The narrower block comes out narrower, not with bigger text."""
+    renderer = OverlayRenderer(
+        spec(
+            OverlayGroup("left", [steady_row(name="CO2")]),
+            graphed_group(),
+        ),
+        1600,
+        1200,
+    )
+    left, right = renderer._blocks
+
+    assert right.width == pytest.approx(480, rel=0.03)
+    assert left.width < right.width
+    assert left.rows[0].top == right.rows[0].top  # same line height
+
+
+@pytest.mark.parametrize("share", [0.1, 0.15, 0.3])
+def test_the_stamp_takes_the_share_of_the_width_asked_for(share: float) -> None:
+    renderer = OverlayRenderer(spec(stamp_width=share), 1600, 1200)
+
+    assert renderer._stamp is not None
+    assert renderer._stamp.mask.width == pytest.approx(1600 * share, rel=0.05)
+
+
+def test_text_never_shrinks_below_legibility() -> None:
+    """A size that would need sub-8px text is overruled."""
+    renderer = OverlayRenderer(
+        spec(graphed_group(), readings_width=0.05, stamp_width=0.02), 640, 480
+    )
+
+    assert renderer._font.size >= 8
+    assert renderer._stamp is not None
+    assert renderer._stamp.font.size >= 8
+
+
+def test_the_frame_overrules_a_size_too_large_for_it() -> None:
+    rows = [steady_row(name=f"Reading {index}", graph=True) for index in range(8)]
+    renderer = OverlayRenderer(
+        spec(OverlayGroup("right", rows), readings_width=0.8), 640, 480
+    )
+    block = renderer._blocks[0]
+
+    assert block.top >= 0
+    assert block.top + block.height <= 480
+    assert block.left >= 0
+
+
+# --- position -------------------------------------------------------------
+
+
+def place(
+    position: str | None, side: str = "right", **kwargs: object
+) -> OverlayRenderer:
+    return OverlayRenderer(
+        spec(graphed_group(side, position=position), **kwargs), 1600, 1200
+    )
+
+
+def test_by_default_a_block_goes_where_the_card_has_it() -> None:
+    right = place(None)._blocks[0]
+    left = place(None, side="left")._blocks[0]
+
+    assert right.left + right.width == 1600 - place(None)._margin
+    assert left.left == place(None)._margin
+    assert right.top + right.height == left.top + left.height == 1200 - 18
+
+
+@pytest.mark.parametrize(
+    ("position", "horizontal", "vertical"),
+    [
+        ("left", "left", "bottom"),
+        ("right", "right", "bottom"),
+        ("bottom", "centre", "bottom"),
+        ("top", "centre", "top"),
+    ],
+)
+def test_each_position(position: str, horizontal: str, vertical: str) -> None:
+    renderer = place(position, show_stamp=False)
+    block, margin = renderer._blocks[0], renderer._margin
+
+    centre = block.left + block.width / 2
+    assert {
+        "left": block.left == margin,
+        "right": block.left + block.width == 1600 - margin,
+        "centre": abs(centre - 800) <= 1,
+    }[horizontal]
+    assert {
+        "top": block.top == margin,
+        "bottom": block.top + block.height == 1200 - margin,
+    }[vertical]
+
+
+def test_a_block_at_the_top_clears_the_timestamp() -> None:
+    renderer = place("top", readings_width=0.8)
+    stamp, block = renderer._stamp, renderer._blocks[0]
+
+    assert stamp is not None
+    assert block.top >= renderer._margin + stamp.mask.height
+
+
+def test_two_blocks_asked_for_the_same_place_stack() -> None:
+    renderer = OverlayRenderer(
+        spec(
+            graphed_group("left", position="bottom"),
+            graphed_group("right", position="bottom"),
+        ),
+        1600,
+        1200,
+    )
+    left, right = renderer._blocks
+
+    assert right.top + right.height == 1200 - renderer._margin  # right keeps it
+    assert left.top + left.height <= right.top
+
+
+def test_moving_a_block_moves_its_pixels() -> None:
+    image = frame(1600, 1200)
+    OverlayRenderer(
+        spec(graphed_group(position="top"), show_stamp=False), 1600, 1200
+    ).draw(image, T0)
+
+    assert darker_than_background(image, (800, 40))
+    assert image.getpixel((1590, 1190)) == GREY

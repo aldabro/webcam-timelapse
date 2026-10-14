@@ -38,6 +38,14 @@ from PIL import Image, ImageColor, ImageDraw, ImageFont
 
 type Color = tuple[int, int, int]
 type Side = Literal["left", "right"]
+#: Where a readings block goes. Left and right are the card's own bottom
+#: corners; top and bottom centre the block on that edge.
+type Position = Literal["left", "right", "top", "bottom"]
+POSITIONS: Final[tuple[Position, ...]] = ("left", "right", "top", "bottom")
+
+#: Default widths, as shares of the frame's width.
+DEFAULT_READINGS_WIDTH: Final = 0.30
+DEFAULT_STAMP_WIDTH: Final = 0.15
 
 #: Home Assistant's default primary colour — what the card's rows use when
 #: neither the row nor the theme says otherwise.
@@ -68,6 +76,13 @@ _ROW_GAP: Final = 8
 _SPARK_HEIGHT: Final = 34
 _SPARK_MARGIN: Final = (2, 4)  # above, below
 _SPARK_MIN_WIDTH: Final = 180
+# Longest a label may run before it is cut short with an ellipsis. Kept in
+# the stylesheet's units, so one long friendly name costs that row its
+# tail rather than shrinking every reading to make room for it.
+_NAME_LIMIT: Final = 160
+# Text smaller than this does not survive video compression. A size that
+# would need it is overruled — and the frame's edges overrule that.
+_MIN_FONT_PX: Final = 8
 
 # sparkline.ts draws in a 240x44 viewBox with 3 units of padding.
 _VIEW_WIDTH: Final = 240
@@ -264,11 +279,14 @@ class OverlayRow:
 
 @dataclass(slots=True)
 class OverlayGroup:
-    """One readings block, pinned to a bottom corner of the frame."""
+    """One readings block."""
 
+    #: Which of the card's blocks this is: `entities` or `entities_left`.
     side: Side
     rows: list[OverlayRow]
     title: str | None = None
+    #: Where it goes in the video. None puts it where the card has it.
+    position: Position | None = None
 
 
 @dataclass(slots=True)
@@ -282,6 +300,10 @@ class OverlaySpec:
     nights: list[tuple[float, float]] = field(default_factory=list)
     language: str = "en"
     show_stamp: bool = True
+    #: How wide the widest readings block is, as a share of the frame.
+    readings_width: float = DEFAULT_READINGS_WIDTH
+    #: How wide the date-and-time stamp is, as a share of the frame.
+    stamp_width: float = DEFAULT_STAMP_WIDTH
 
 
 def parse_color(raw: str | None, fallback: Color = DEFAULT_ACCENT) -> Color:
@@ -347,7 +369,7 @@ def night_bands(
 # --- drawing --------------------------------------------------------------
 
 
-@lru_cache(maxsize=8)
+@lru_cache(maxsize=16)
 def _load_font(size: int) -> ImageFont.FreeTypeFont:
     """The bundled face at ``size`` pixels."""
     try:
@@ -407,6 +429,15 @@ class _RowLayout:
 
 
 @dataclass(slots=True)
+class _StampLayout:
+    font: ImageFont.FreeTypeFont
+    line: int
+    pad_x: int
+    pad_y: int
+    mask: Image.Image
+
+
+@dataclass(slots=True)
 class _BlockLayout:
     group: OverlayGroup
     left: int
@@ -425,6 +456,11 @@ class OverlayRenderer:
     Everything that does not depend on the moment — fonts, the size and
     position of each block, the scrims behind them — is worked out once
     here, so the per-frame cost is a handful of text and line calls.
+
+    Sizes are asked for as a share of the frame's width, because that is
+    how an overlay is judged — "the readings take a third of the picture"
+    — and it holds at any resolution. The card's stylesheet still sets
+    every proportion inside a block; only the overall scale is chosen here.
     """
 
     def __init__(self, spec: OverlaySpec, width: int, height: int) -> None:
@@ -433,36 +469,81 @@ class OverlayRenderer:
         self._width = width
         self._height = height
         self._lock = threading.Lock()
-        self._scale = max(1.0, width / _REFERENCE_WIDTH)
         self._strings = _STRINGS.get(
             spec.language.lower().replace("_", "-").split("-")[0], _STRINGS["en"]
         )
+        # The gap to the frame's edge follows the frame, not the overlay:
+        # a smaller overlay sits in the same place, just smaller.
+        self._margin = max(1, round(_MARGIN * max(1.0, width / _REFERENCE_WIDTH)))
 
+        self._stamp = self._layout_stamp() if spec.show_stamp else None
+
+        # Laid out once at the stylesheet's own size to measure, then again
+        # at the scale that makes the widest block the share asked for.
+        self._set_scale(1.0)
+        if spec.groups:
+            natural = [self._layout_block(group) for group in spec.groups]
+            self._set_scale(self._readings_scale(natural))
+        self._blocks = [self._layout_block(group) for group in spec.groups]
+        self._place_blocks()
+
+    def _set_scale(self, scale: float) -> None:
+        """Size every readings measurement for ``scale`` x the stylesheet."""
+        self._scale = scale
         self._font = _load_font(self._px(_FONT))
         self._small = _load_font(self._px(_FONT_SMALL))
         self._line = self._px(_FONT * _LINE_HEIGHT)
         self._small_line = self._px(_FONT_SMALL * 1.2)
-        self._stroke = max(1, round(1.5 * self._scale))
+        self._stroke = max(1, round(1.5 * scale))
         self._dot = _dot_mask(max(3, self._px(5)))
 
-        self._stamp_mask: Image.Image | None = None
-        if spec.show_stamp:
-            pad_x, pad_y = self._px(_STAMP_PAD[0]), self._px(_STAMP_PAD[1])
-            # Every stamp has this shape and the face has tabular digits,
-            # so one measurement sizes the box for the whole export.
-            text_width = math.ceil(self._font.getlength("0000-00-00 00:00"))
-            self._stamp_mask = _rounded_mask(
-                text_width + 2 * pad_x,
-                self._line + 2 * pad_y,
-                self._px(_STAMP_RADIUS),
-                _SCRIM_ALPHA,
-            )
+    def _readings_scale(self, natural: list[_BlockLayout]) -> float:
+        """The scale that gives the widest block its share of the frame.
 
-        self._blocks = [self._layout_block(group) for group in spec.groups]
-        self._place_blocks()
+        One scale for every block, so text is the same size in both; the
+        narrower block simply comes out narrower than the share.
+        """
+        widest = max(block.width for block in natural)
+        tallest = max(block.height for block in natural)
+        scale = self._spec.readings_width * self._width / widest
+        scale = max(scale, _MIN_FONT_PX / _FONT)
+        room = min(
+            (self._width - 2 * self._margin) / widest,
+            (self._height - 2 * self._margin) / tallest,
+        )
+        return min(scale, room)
+
+    def _layout_stamp(self) -> _StampLayout:
+        """Size the date-and-time box to its share of the frame's width."""
+        # Every stamp has this shape and the face has tabular digits, so
+        # one measurement sizes the box for the whole export.
+        sample = "0000-00-00 00:00"
+        natural = _load_font(_FONT).getlength(sample) + 2 * _STAMP_PAD[0]
+        scale = self._spec.stamp_width * self._width / natural
+        scale = max(scale, _MIN_FONT_PX / _FONT)
+        scale = min(scale, (self._width - 2 * self._margin) / natural)
+
+        def px(css_pixels: float) -> int:
+            return max(1, round(css_pixels * scale))
+
+        font = _load_font(px(_FONT))
+        line = px(_FONT * _LINE_HEIGHT)
+        pad_x, pad_y = px(_STAMP_PAD[0]), px(_STAMP_PAD[1])
+        return _StampLayout(
+            font=font,
+            line=line,
+            pad_x=pad_x,
+            pad_y=pad_y,
+            mask=_rounded_mask(
+                math.ceil(font.getlength(sample)) + 2 * pad_x,
+                line + 2 * pad_y,
+                px(_STAMP_RADIUS),
+                _SCRIM_ALPHA,
+            ),
+        )
 
     def _px(self, css_pixels: float) -> int:
-        """CSS pixels at this frame's scale, never below one."""
+        """Stylesheet pixels at the readings' scale, never below one."""
         return max(1, round(css_pixels * self._scale))
 
     # --- layout -----------------------------------------------------------
@@ -480,9 +561,7 @@ class OverlayRenderer:
         gap = self._px(_BLOCK_GAP)
         row_gap = self._px(_ROW_GAP)
 
-        # A long friendly name must not push the block across the picture.
-        name_limit = round(self._width * 0.3)
-        names = [self._fit(row.name, name_limit) for row in group.rows]
+        names = [self._fit(row.name, self._px(_NAME_LIMIT)) for row in group.rows]
         name_width = max(
             (math.ceil(self._font.getlength(name)) for name in names), default=0
         )
@@ -504,7 +583,7 @@ class OverlayRenderer:
         if any(row.graph for row in group.rows):
             inner_width = max(inner_width, self._px(_SPARK_MIN_WIDTH))
         # Never wider than the frame it is drawn on.
-        inner_width = min(inner_width, self._width - 2 * self._px(_MARGIN) - 2 * pad_x)
+        inner_width = min(inner_width, self._width - 2 * self._margin - 2 * pad_x)
 
         cursor = pad_y
         if group.title:
@@ -555,22 +634,73 @@ class OverlayRenderer:
         )
 
     def _place_blocks(self) -> None:
-        """Pin each block to its bottom corner; stack them if they collide."""
-        margin = self._px(_MARGIN)
-        for block in self._blocks:
-            block.top = max(0, self._height - margin - block.height)
-            block.left = (
-                margin
-                if block.group.side == "left"
-                else max(0, self._width - margin - block.width)
+        """Put each block where it was asked for, and never two on top of each other.
+
+        Left and right are the card's corners, bottom-left and bottom-right,
+        so a block left at its default lands where the card draws it. Top
+        and bottom centre the block on that edge.
+
+        The right-hand block goes first and keeps its spot, which is the
+        card's narrow layout too. A block that would overlap one already
+        placed moves away from its edge until it clears; one at the top
+        also clears the timestamp.
+        """
+        margin = self._margin
+        placed: list[tuple[int, int, int, int]] = []
+        stamp: list[tuple[int, int, int, int]] = []
+        if self._stamp is not None:
+            stamp.append(
+                (
+                    margin,
+                    margin,
+                    margin + self._stamp.mask.width,
+                    margin + self._stamp.mask.height,
+                )
             )
 
-        by_side = {block.group.side: block for block in self._blocks}
-        left, right = by_side.get("left"), by_side.get("right")
-        if left and right and left.left + left.width + margin > right.left:
-            # Same answer as the card's narrow layout: the right-hand block
-            # keeps the corner and the left-hand one sits above it.
-            left.top = max(0, right.top - margin - left.height)
+        def clash(
+            block: _BlockLayout, others: list[tuple[int, int, int, int]]
+        ) -> tuple[int, int, int, int] | None:
+            right, bottom = block.left + block.width, block.top + block.height
+            for other in others:
+                if (
+                    block.left < other[2] + margin
+                    and other[0] < right + margin
+                    and block.top < other[3] + margin
+                    and other[1] < bottom + margin
+                ):
+                    return other
+            return None
+
+        for block in sorted(self._blocks, key=lambda item: item.group.side != "right"):
+            position = block.group.position or block.group.side
+            if position == "left":
+                block.left = margin
+            elif position == "right":
+                block.left = self._width - margin - block.width
+            else:
+                block.left = (self._width - block.width) // 2
+            block.left = max(0, block.left)
+
+            downward = position == "top"
+            block.top = margin if downward else self._height - margin - block.height
+            obstacles = [*placed, *(stamp if downward else [])]
+            for _attempt in range(len(obstacles)):
+                other = clash(block, obstacles)
+                if other is None:
+                    break
+                block.top = (
+                    other[3] + margin if downward else other[1] - margin - block.height
+                )
+            block.top = min(max(0, block.top), max(0, self._height - block.height))
+            placed.append(
+                (
+                    block.left,
+                    block.top,
+                    block.left + block.width,
+                    block.top + block.height,
+                )
+            )
 
     # --- per frame --------------------------------------------------------
 
@@ -584,8 +714,8 @@ class OverlayRenderer:
         # them — which FreeType does not allow to be used concurrently.
         with self._lock:
             draw = ImageDraw.Draw(frame, "RGBA")
-            if self._stamp_mask is not None:
-                self._draw_stamp(frame, draw, slot)
+            if self._stamp is not None:
+                self._draw_stamp(frame, draw, self._stamp, slot)
             for block in self._blocks:
                 self._draw_block(frame, draw, block, float(slot))
 
@@ -595,11 +725,14 @@ class OverlayRenderer:
         return round(top + (line - (ascent + descent)) / 2 + ascent)
 
     def _draw_stamp(
-        self, frame: Image.Image, draw: ImageDraw.ImageDraw, slot: int
+        self,
+        frame: Image.Image,
+        draw: ImageDraw.ImageDraw,
+        stamp: _StampLayout,
+        slot: int,
     ) -> None:
-        assert self._stamp_mask is not None
-        margin = self._px(_MARGIN)
-        frame.paste((0, 0, 0), (margin, margin), self._stamp_mask)
+        margin = self._margin
+        frame.paste((0, 0, 0), (margin, margin), stamp.mask)
         # ISO order with the year, not the card's weekday-and-day form: a
         # video outlives the dashboard it came from, and "Tue 13.10." means
         # nothing a year on.
@@ -608,13 +741,11 @@ class OverlayRenderer:
         )
         draw.text(
             (
-                margin + self._px(_STAMP_PAD[0]),
-                self._baseline(
-                    margin + self._px(_STAMP_PAD[1]), self._line, self._font
-                ),
+                margin + stamp.pad_x,
+                self._baseline(margin + stamp.pad_y, stamp.line, stamp.font),
             ),
             text,
-            font=self._font,
+            font=stamp.font,
             fill=_WHITE,
             anchor="ls",
         )

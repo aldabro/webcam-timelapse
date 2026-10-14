@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   clampRange,
+  clampSize,
   type ExportStatus,
   exportRequest,
   formatLength,
@@ -14,6 +15,8 @@ import {
   progress,
   rangeBand,
   rangeSlots,
+  READINGS_SIZE,
+  TIMESTAMP_SIZE,
   toHex,
   withEnd,
   withStart,
@@ -165,6 +168,21 @@ describe("formatting", () => {
   });
 });
 
+describe("sizes", () => {
+  it("defaults the readings to under a third of the picture", () => {
+    expect(READINGS_SIZE.default).toBe(30);
+    expect(TIMESTAMP_SIZE.default).toBe(15);
+  });
+
+  it("clamps and rounds a size", () => {
+    expect(clampSize(30, READINGS_SIZE)).toBe(30);
+    expect(clampSize(42.4, READINGS_SIZE)).toBe(42);
+    expect(clampSize(1, READINGS_SIZE)).toBe(10);
+    expect(clampSize(500, TIMESTAMP_SIZE)).toBe(50);
+    expect(clampSize(Number.NaN, TIMESTAMP_SIZE)).toBe(15);
+  });
+});
+
 describe("progress", () => {
   const status = (done: number, total: number): ExportStatus => ({
     state: "running",
@@ -188,7 +206,14 @@ describe("progress", () => {
 });
 
 describe("request", () => {
-  const choices = { fps: 24, timestamp: true, readings: true };
+  const choices = {
+    fps: 24,
+    timestamp: true,
+    timestampSize: 15,
+    readings: true,
+    readingsSize: 30,
+    positions: {},
+  };
 
   it("sends no overlay for a card with no readings", () => {
     expect(overlayRequest(config(), resolve)).toBeNull();
@@ -261,7 +286,7 @@ describe("request", () => {
       config({ entities: [{ entity: "sensor.co2" }] }),
       index(100),
       { start: 0, end: 99 },
-      { fps: 30, timestamp: false, readings: false },
+      { ...choices, fps: 30, timestamp: false, readings: false },
       "en",
       resolve,
     );
@@ -286,6 +311,53 @@ describe("request", () => {
     expect(at(250)).toBe(100);
     expect(at(-5)).toBe(0);
     expect(at(42.6)).toBe(43);
+  });
+
+  it("asks for the sizes chosen, and the card's own sides by default", () => {
+    const request = exportRequest(
+      config({ entities: [{ entity: "sensor.co2" }] }),
+      index(10),
+      { start: 0, end: 9 },
+      choices,
+      "en",
+      resolve,
+    );
+
+    expect(request).toMatchObject({
+      timestamp_size: 15,
+      readings_size: 30,
+      // null, not a side: the integration then uses the card's placement.
+      readings_position: null,
+      readings_position_left: null,
+    });
+  });
+
+  it("sends a position per block", () => {
+    const request = exportRequest(
+      config({ entities: [{ entity: "sensor.co2" }] }),
+      index(10),
+      { start: 0, end: 9 },
+      { ...choices, positions: { right: "top", left: "bottom" } },
+      "en",
+      resolve,
+    );
+
+    expect(request?.readings_position).toBe("top");
+    expect(request?.readings_position_left).toBe("bottom");
+  });
+
+  it("keeps the sizes inside what the integration accepts", () => {
+    const request = exportRequest(
+      config(),
+      index(10),
+      { start: 0, end: 9 },
+      { ...choices, timestampSize: 2, readingsSize: 99.6 },
+      "en",
+      resolve,
+    );
+
+    expect(request?.timestamp_size).toBe(TIMESTAMP_SIZE.min);
+    expect(request?.readings_size).toBe(READINGS_SIZE.max);
   });
 
   it("has nothing to send for a range outside the archive", () => {

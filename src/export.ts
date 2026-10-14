@@ -45,6 +45,12 @@ export interface ExportStatus {
   /** The integration's own wording, for a code this card does not know. */
   message: string | null;
   result: ExportResult | null;
+  /**
+   * Where this camera's videos are written, on the Home Assistant host.
+   * Sent with every status, so the panel can say where exports go before
+   * the first one exists.
+   */
+  folder?: string;
 }
 
 /** Inclusive grid positions. `start <= end` always. */
@@ -56,6 +62,26 @@ export interface ExportRange {
 /** Offered frame rates. 24 is cinema's and the default. */
 export const EXPORT_FPS = [12, 24, 30, 60] as const;
 export const DEFAULT_EXPORT_FPS = 24;
+
+/**
+ * Where a readings block goes in the video. Left and right are the card's
+ * own bottom corners; top and bottom centre the block on that edge.
+ */
+export type ExportPosition = "left" | "right" | "top" | "bottom";
+export const EXPORT_POSITIONS: readonly ExportPosition[] = [
+  "left",
+  "right",
+  "top",
+  "bottom",
+];
+
+/**
+ * Overlay sizes, as a percentage of the video's width — the same bounds
+ * the integration enforces. A third of the picture for the readings keeps
+ * the frame the subject; the stamp only has to be legible.
+ */
+export const READINGS_SIZE = { min: 10, max: 80, step: 5, default: 30 } as const;
+export const TIMESTAMP_SIZE = { min: 5, max: 50, step: 5, default: 15 } as const;
 
 /** Quick ranges, in hours back from the newest frame. */
 export const EXPORT_PRESETS = [24, 72, 168] as const;
@@ -212,8 +238,23 @@ export interface ExportChoices {
   fps: number;
   /** Stamp each frame with its date and time. */
   timestamp: boolean;
+  /** Width of the stamp, in percent of the video's width. */
+  timestampSize: number;
   /** Draw the card's readings blocks on the video. */
   readings: boolean;
+  /** Width of the widest readings block, in percent of the video's width. */
+  readingsSize: number;
+  /** Where each of the card's blocks goes; absent keeps the card's side. */
+  positions: Partial<Record<"left" | "right", ExportPosition>>;
+}
+
+/** A size inside its bounds, as a whole percentage. */
+export function clampSize(
+  value: number,
+  bounds: { min: number; max: number; default: number },
+): number {
+  if (!Number.isFinite(value)) return bounds.default;
+  return Math.min(bounds.max, Math.max(bounds.min, Math.round(value)));
 }
 
 /**
@@ -270,7 +311,11 @@ export function exportRequest(
     // exactly as much as the playback it was started from.
     deflicker: Math.min(100, Math.max(0, Math.round(config.deflicker ?? 0))),
     timestamp: choices.timestamp,
+    timestamp_size: clampSize(choices.timestampSize, TIMESTAMP_SIZE),
     overlay: choices.readings ? overlayRequest(config, resolveColor) : null,
+    readings_size: clampSize(choices.readingsSize, READINGS_SIZE),
+    readings_position: choices.positions.right ?? null,
+    readings_position_left: choices.positions.left ?? null,
     language,
   };
 }

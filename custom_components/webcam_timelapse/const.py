@@ -159,3 +159,13 @@ EXPORT_MIN_FREE_BYTES: Final = 500 * 1024 * 1024
 # x264's own default and visually clean on stills played back as video.
 EXPORT_X264_PRESET: Final = "veryfast"
 EXPORT_X264_CRF: Final = 23
+
+# Overlay sizes, as a percentage of the video's width. The readings default
+# keeps a three-sensor block under a third of the picture; the stamp's
+# keeps the date and time readable without competing with it.
+DEFAULT_EXPORT_READINGS_SIZE: Final = 30
+MIN_EXPORT_READINGS_SIZE: Final = 10
+MAX_EXPORT_READINGS_SIZE: Final = 80
+DEFAULT_EXPORT_TIMESTAMP_SIZE: Final = 15
+MIN_EXPORT_TIMESTAMP_SIZE: Final = 5
+MAX_EXPORT_TIMESTAMP_SIZE: Final = 50

@@ -254,7 +254,7 @@ def websocket_export_start(
     except ExportError as err:
         connection.send_error(msg["id"], err.translation_key or "unknown", str(err))
         return
-    connection.send_result(msg["id"], exporter.status.as_dict())
+    connection.send_result(msg["id"], exporter.status_payload())
 
 
 @websocket_command(
@@ -288,7 +288,7 @@ def websocket_export_subscribe(
 
     connection.subscriptions[msg["id"]] = exporter.async_subscribe(_forward)
     connection.send_result(msg["id"])
-    _forward(exporter.status.as_dict())
+    _forward(exporter.status_payload())
 
 
 @websocket_command(

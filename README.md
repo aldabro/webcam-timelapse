@@ -421,13 +421,30 @@ plays in 12 seconds.
 
 **Home Assistant makes the video, not your browser.** You can close the
 dashboard or lock your phone while it encodes; open the panel again later and
-the finished video is there to download. It is also saved as an MP4 under
-**Media → My media → webcam_timelapse**, in a folder named after the camera.
+the finished video is there to download.
+
+**Videos are saved in your media folder**, in one folder per camera named
+after it — `/media/webcam_timelapse/<camera>/` on Home Assistant OS. The panel
+shows the folder, and the full path of each video once it is written. In Home
+Assistant they are under **Media → My media → webcam_timelapse**, which is
+also the easiest place to delete old ones.
 
 **Sensor readings** draws the card's overlay blocks on every frame — the same
 readings, labels, colours and graphs, each showing the value from the moment
-that frame was captured. **Date and time** stamps each frame in the corner.
-Both can be switched off for a clean picture.
+that frame was captured. **Date and time** stamps each frame in the top-left
+corner. Both can be switched off for a clean picture.
+
+**Each has a size**, set as a share of the video's width: the readings take
+30 % by default and the date and time 15 %. A long sensor name is shortened
+rather than shrinking every reading to make room for it, and text never gets
+too small to survive video compression — at a very small size the block ends
+up a little wider than asked instead.
+
+**The readings can sit left, right, top or bottom.** Left and right are the
+bottom corners, as on the card, and each block starts where the card has it.
+Top and bottom centre the block on that edge. Two blocks put in the same place
+are stacked rather than drawn over each other, and a block at the top keeps
+clear of the date and time.
 
 **Gaps are skipped**, as they are during playback, so a night without captures
 does not become seconds of frozen picture.
@@ -509,7 +526,9 @@ actions:
 **`export_video` finishes when the video is written**, which can take
 minutes, and returns where it is — so the next step of an automation can send
 it somewhere. `start` and `end` are optional and default to the whole archive.
-`overlay` takes the readings in the same form as the card's configuration.
+`overlay` takes the readings in the same form as the card's configuration;
+`readings_size`, `timestamp_size`, `readings_position` and
+`readings_position_left` work as in the card's export panel.
 
 ```yaml
 # Every Sunday night, keep the week as a video

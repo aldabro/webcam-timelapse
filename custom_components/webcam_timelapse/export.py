@@ -51,6 +51,8 @@ from . import frame_store
 from .const import (
     DEFAULT_EXPORT_DEFLICKER,
     DEFAULT_EXPORT_FPS,
+    DEFAULT_EXPORT_READINGS_SIZE,
+    DEFAULT_EXPORT_TIMESTAMP_SIZE,
     DOMAIN,
     EXPORT_EXTENSION,
     EXPORT_MIN_FREE_BYTES,
@@ -58,16 +60,22 @@ from .const import (
     EXPORT_X264_CRF,
     EXPORT_X264_PRESET,
     MAX_EXPORT_FPS,
+    MAX_EXPORT_READINGS_SIZE,
+    MAX_EXPORT_TIMESTAMP_SIZE,
     MIN_EXPORT_FPS,
+    MIN_EXPORT_READINGS_SIZE,
+    MIN_EXPORT_TIMESTAMP_SIZE,
 )
 from .deflicker import deflicker_gains, radius_for_strength
 from .encode import ImageDecodeError, decode_frame, frame_size
 from .overlay import (
     DEFAULT_ACCENT,
+    POSITIONS,
     OverlayGroup,
     OverlayRenderer,
     OverlayRow,
     OverlaySpec,
+    Position,
     Reading,
     Series,
     Side,
@@ -154,7 +162,19 @@ EXPORT_FIELDS: Final[dict[vol.Marker, Any]] = {
         vol.Coerce(int), vol.Range(min=0, max=100)
     ),
     vol.Optional("timestamp", default=True): cv.boolean,
+    vol.Optional("timestamp_size", default=DEFAULT_EXPORT_TIMESTAMP_SIZE): vol.All(
+        vol.Coerce(int),
+        vol.Range(min=MIN_EXPORT_TIMESTAMP_SIZE, max=MAX_EXPORT_TIMESTAMP_SIZE),
+    ),
     vol.Optional("overlay"): vol.Any(None, OVERLAY_SCHEMA),
+    vol.Optional("readings_size", default=DEFAULT_EXPORT_READINGS_SIZE): vol.All(
+        vol.Coerce(int),
+        vol.Range(min=MIN_EXPORT_READINGS_SIZE, max=MAX_EXPORT_READINGS_SIZE),
+    ),
+    # Where each of the card's two blocks goes in the video. Absent, a
+    # block goes where the card draws it.
+    vol.Optional("readings_position"): vol.Any(None, vol.In(POSITIONS)),
+    vol.Optional("readings_position_left"): vol.Any(None, vol.In(POSITIONS)),
     vol.Optional("language"): cv.string,
 }
 
@@ -173,8 +193,16 @@ class ExportOptions:
     #: 0-100, the card's "Smooth brightness" dial. 0 is off.
     deflicker: int = DEFAULT_EXPORT_DEFLICKER
     timestamp: bool = True
+    #: Width of the date-and-time stamp, as a percentage of the video's.
+    timestamp_size: int = DEFAULT_EXPORT_TIMESTAMP_SIZE
     #: The card's overlay config (see OVERLAY_SCHEMA), or None for none.
     overlay: Mapping[str, Any] | None = None
+    #: Width of the widest readings block, as a percentage of the video's.
+    readings_size: int = DEFAULT_EXPORT_READINGS_SIZE
+    #: Where the card's right-hand (`entities`) and left-hand
+    #: (`entities_left`) blocks go. None keeps the card's own side.
+    readings_position: Position | None = None
+    readings_position_left: Position | None = None
     language: str | None = None
 
     @classmethod
@@ -189,7 +217,11 @@ class ExportOptions:
             max_width=data["max_width"],
             deflicker=data["deflicker"],
             timestamp=data["timestamp"],
+            timestamp_size=data["timestamp_size"],
             overlay=data.get("overlay"),
+            readings_size=data["readings_size"],
+            readings_position=data.get("readings_position"),
+            readings_position_left=data.get("readings_position_left"),
             language=data.get("language"),
         )
 
@@ -626,7 +658,18 @@ async def async_build_overlay(
                     graph_hours=row.get("graph_hours", card_hours),
                 )
             )
-        groups.append(OverlayGroup(side=side, rows=built, title=title))
+        groups.append(
+            OverlayGroup(
+                side=side,
+                rows=built,
+                title=title,
+                position=(
+                    options.readings_position
+                    if side == "right"
+                    else options.readings_position_left
+                ),
+            )
+        )
 
     return OverlaySpec(
         time_zone=dt_util.get_default_time_zone(),
@@ -638,6 +681,8 @@ async def async_build_overlay(
         ),
         language=options.language or hass.config.language,
         show_stamp=options.timestamp,
+        readings_width=options.readings_size / 100,
+        stamp_width=options.timestamp_size / 100,
     )
 
 
@@ -771,10 +816,25 @@ class VideoExporter:
 
         return _unsubscribe
 
+    @property
+    def folder(self) -> Path:
+        """Where this camera's videos are written.
+
+        Reported with every status, not only with a finished video, so the
+        card can say where exports go before the first one exists — which
+        is what anyone looking to tidy them up needs to know.
+        """
+        return media_root(self._hass)[1] / EXPORT_SUBDIR / slugify(self._entry.title)
+
+    @callback
+    def status_payload(self) -> dict[str, Any]:
+        """The status as sent to the card, with the folder alongside it."""
+        return {**self._status.as_dict(), "folder": str(self.folder)}
+
     @callback
     def _notify(self) -> None:
         self._last_notified = time.monotonic()
-        status = self._status.as_dict()
+        status = self.status_payload()
         for listener in list(self._listeners):
             listener(status)
 
@@ -878,8 +938,8 @@ class VideoExporter:
             raise ExportError("export_bad_range")
 
         media_key, root = media_root(hass)
-        name = slugify(self._entry.title)
-        output_dir = root / EXPORT_SUBDIR / name
+        output_dir = self.folder
+        name = output_dir.name
 
         plan = await hass.async_add_executor_job(
             _plan, frames_dir, coordinator.step, options, output_dir, name
