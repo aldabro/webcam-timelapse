@@ -15,8 +15,10 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Mapping
 from contextlib import asynccontextmanager
+from datetime import time
+from typing import Any
 
 from homeassistant.const import (
     ATTR_ENTITY_ID,
@@ -36,6 +38,20 @@ from homeassistant.core import (
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.event import async_track_state_change_event
 from homeassistant.helpers.sun import is_up
+from homeassistant.util import dt as dt_util
+
+from .const import (
+    CONF_LIGHTS_MODE,
+    CONF_LIGHTS_NIGHT_ONLY,
+    CONF_LIGHTS_WINDOW_END,
+    CONF_LIGHTS_WINDOW_START,
+    DEFAULT_LIGHTS_MODE,
+    DEFAULT_LIGHTS_WINDOW_END,
+    DEFAULT_LIGHTS_WINDOW_START,
+    LIGHTS_MODE_NIGHT,
+    LIGHTS_MODE_WINDOW,
+    LIGHTS_MODES,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -44,6 +60,49 @@ _LOGGER = logging.getLogger(__name__)
 # budget; the capture lock is held throughout, so an unbounded wait here
 # would stall every later capture behind one unreachable bulb.
 _SWITCH_TIMEOUT_SECONDS = 10
+
+
+def lights_mode(config: Mapping[str, Any]) -> str:
+    """When an entry's lights are used, from its stored settings.
+
+    Entries saved before the mode existed carry a night-only switch
+    instead, and are read as the mode that switch meant.
+    """
+    mode = config.get(CONF_LIGHTS_MODE)
+    if mode in LIGHTS_MODES:
+        return str(mode)
+    return (
+        LIGHTS_MODE_NIGHT if config.get(CONF_LIGHTS_NIGHT_ONLY) else DEFAULT_LIGHTS_MODE
+    )
+
+
+def lights_window(config: Mapping[str, Any]) -> tuple[time, time]:
+    """An entry's time window as clock times, local to the home."""
+
+    def _read(key: str, fallback: str) -> time:
+        parsed = dt_util.parse_time(str(config.get(key) or ""))
+        return parsed or time.fromisoformat(fallback)
+
+    return (
+        _read(CONF_LIGHTS_WINDOW_START, DEFAULT_LIGHTS_WINDOW_START),
+        _read(CONF_LIGHTS_WINDOW_END, DEFAULT_LIGHTS_WINDOW_END),
+    )
+
+
+def in_window(moment: time, start: time, end: time) -> bool:
+    """Whether a clock time falls in ``[start, end)``.
+
+    A window that ends before it starts runs across midnight: 20:00 to
+    06:00 is the evening and the early morning, not an empty set. A window
+    that starts and ends at the same time is refused when it is entered;
+    should one arrive anyway, the whole day is the reading that loses no
+    frames.
+    """
+    if start == end:
+        return True
+    if start < end:
+        return start <= moment < end
+    return moment >= start or moment < end
 
 
 class CaptureLights:
@@ -56,20 +115,26 @@ class CaptureLights:
         entity_ids: list[str],
         *,
         settle_seconds: float,
-        night_only: bool,
+        mode: str = DEFAULT_LIGHTS_MODE,
+        window: tuple[time, time] | None = None,
     ) -> None:
         """Initialise from the entry's settings."""
         self._hass = hass
         self._name = name
         self.entity_ids = entity_ids
         self.settle_seconds = settle_seconds
-        self.night_only = night_only
+        self.mode = mode
+        self.window = window
 
     def _wanted_now(self) -> bool:
         """Whether this capture should be lit at all."""
         if not self.entity_ids:
             return False
-        if not self.night_only:
+        if self.mode == LIGHTS_MODE_WINDOW and self.window is not None:
+            # Home Assistant's own time zone, not the host's: the window
+            # was entered against the clock the user sees in the UI.
+            return in_window(dt_util.now().time(), *self.window)
+        if self.mode != LIGHTS_MODE_NIGHT:
             return True
         try:
             # Computed from the home's coordinates rather than read off

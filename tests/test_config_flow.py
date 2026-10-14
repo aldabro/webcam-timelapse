@@ -31,7 +31,10 @@ from custom_components.webcam_timelapse.const import (
     CONF_CAPTURE_LIGHTS,
     CONF_FRAMES_PATH,
     CONF_LIGHT_SETTLE,
+    CONF_LIGHTS_MODE,
     CONF_LIGHTS_NIGHT_ONLY,
+    CONF_LIGHTS_WINDOW_END,
+    CONF_LIGHTS_WINDOW_START,
     CONF_LIVE_REFRESH,
     CONF_MAX_WIDTH,
     CONF_QUALITY,
@@ -92,7 +95,12 @@ def user_input(**overrides: Any) -> dict[str, Any]:
     advanced.update(overrides.pop("advanced", {}))
     # No CONF_CAPTURE_LIGHTS by default: that is what the frontend sends
     # for an empty picker, so it is the shape most submissions have.
-    lighting = {CONF_LIGHT_SETTLE: 3, CONF_LIGHTS_NIGHT_ONLY: False}
+    lighting: dict[str, Any] = {
+        CONF_LIGHT_SETTLE: 3,
+        CONF_LIGHTS_MODE: "always",
+        CONF_LIGHTS_WINDOW_START: "20:00:00",
+        CONF_LIGHTS_WINDOW_END: "06:00:00",
+    }
     lighting.update(overrides.pop("lighting", {}))
     return {
         CONF_NAME: "Kleine Erlauf",
@@ -279,7 +287,9 @@ async def test_user_flow_stores_the_capture_lights(
             lighting={
                 CONF_CAPTURE_LIGHTS: ["light.grow", "switch.lamp_plug"],
                 CONF_LIGHT_SETTLE: 4.5,
-                CONF_LIGHTS_NIGHT_ONLY: True,
+                CONF_LIGHTS_MODE: "window",
+                CONF_LIGHTS_WINDOW_START: "21:30:00",
+                CONF_LIGHTS_WINDOW_END: "05:00:00",
             }
         ),
     )
@@ -287,7 +297,11 @@ async def test_user_flow_stores_the_capture_lights(
     assert result["type"] is FlowResultType.CREATE_ENTRY
     assert result["data"][CONF_CAPTURE_LIGHTS] == ["light.grow", "switch.lamp_plug"]
     assert result["data"][CONF_LIGHT_SETTLE] == 4.5
-    assert result["data"][CONF_LIGHTS_NIGHT_ONLY] is True
+    assert result["data"][CONF_LIGHTS_MODE] == "window"
+    assert result["data"][CONF_LIGHTS_WINDOW_START] == "21:30:00"
+    assert result["data"][CONF_LIGHTS_WINDOW_END] == "05:00:00"
+    # The switch the mode replaced is not written any more.
+    assert CONF_LIGHTS_NIGHT_ONLY not in result["data"]
 
 
 async def test_user_flow_without_lights_stores_the_defaults(
@@ -302,7 +316,72 @@ async def test_user_flow_without_lights_stores_the_defaults(
 
     assert result["data"][CONF_CAPTURE_LIGHTS] == []
     assert result["data"][CONF_LIGHT_SETTLE] == 3
-    assert result["data"][CONF_LIGHTS_NIGHT_ONLY] is False
+    assert result["data"][CONF_LIGHTS_MODE] == "always"
+    assert result["data"][CONF_LIGHTS_WINDOW_START] == "20:00:00"
+    assert result["data"][CONF_LIGHTS_WINDOW_END] == "06:00:00"
+
+
+async def test_a_window_that_starts_when_it_ends_is_refused(
+    hass: HomeAssistant, mock_probe: AsyncMock
+) -> None:
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN, context={"source": SOURCE_USER}
+    )
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        user_input(
+            lighting={
+                CONF_LIGHTS_MODE: "window",
+                CONF_LIGHTS_WINDOW_START: "22:00:00",
+                CONF_LIGHTS_WINDOW_END: "22:00",
+            }
+        ),
+    )
+
+    assert result["type"] is FlowResultType.FORM
+    assert result["errors"] == {"base": "invalid_light_window"}
+
+
+async def test_an_empty_window_only_matters_when_it_is_used(
+    hass: HomeAssistant, mock_probe: AsyncMock
+) -> None:
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN, context={"source": SOURCE_USER}
+    )
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        user_input(
+            lighting={
+                CONF_LIGHTS_MODE: "night",
+                CONF_LIGHTS_WINDOW_START: "22:00:00",
+                CONF_LIGHTS_WINDOW_END: "22:00:00",
+            }
+        ),
+    )
+
+    assert result["type"] is FlowResultType.CREATE_ENTRY
+
+
+async def test_options_form_shows_an_old_night_only_entry_as_night(
+    hass: HomeAssistant, mock_probe: AsyncMock
+) -> None:
+    """Saved before the mode existed; the form must not reset it to "always"."""
+    entry = make_entry(**{CONF_URL: URL, CONF_LIGHTS_NIGHT_ONLY: True})
+    entry.add_to_hass(hass)
+
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+    lighting = next(
+        value
+        for key, value in result["data_schema"].schema.items()
+        if key == "lighting"
+    )
+    defaults = {
+        str(key): key.default()
+        for key in lighting.schema.schema
+        if callable(getattr(key, "default", None))
+    }
+
+    assert defaults[CONF_LIGHTS_MODE] == "night"
 
 
 @pytest.mark.parametrize("domain", ["sensor", "camera", "fan"])

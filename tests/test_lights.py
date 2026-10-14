@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import datetime as dt
 from collections.abc import Callable
 from typing import Any
 from unittest.mock import AsyncMock, patch
@@ -21,9 +22,17 @@ from homeassistant.helpers.update_coordinator import UpdateFailed
 from custom_components.webcam_timelapse.const import (
     CONF_CAPTURE_LIGHTS,
     CONF_LIGHT_SETTLE,
+    CONF_LIGHTS_MODE,
     CONF_LIGHTS_NIGHT_ONLY,
+    CONF_LIGHTS_WINDOW_END,
+    CONF_LIGHTS_WINDOW_START,
 )
 from custom_components.webcam_timelapse.coordinator import WebcamTimelapseCoordinator
+from custom_components.webcam_timelapse.lights import (
+    in_window,
+    lights_mode,
+    lights_window,
+)
 
 from .conftest import fresh_result, make_entry, setup_entry
 
@@ -189,14 +198,14 @@ async def test_the_live_view_refresh_never_switches_a_light(
         (False, [("light", "turn_on", [GROW]), ("light", "turn_off", [GROW])]),
     ],
 )
-async def test_night_only_follows_the_sun(
+async def test_night_mode_follows_the_sun(
     hass: HomeAssistant,
     mock_fetch: AsyncMock,
     sun_is_up: bool,
     expected_calls: list[tuple[str, str, list[str]]],
 ) -> None:
     log = install_lights(hass, {GROW: STATE_OFF})
-    coordinator = await lit_coordinator(hass, **{CONF_LIGHTS_NIGHT_ONLY: True})
+    coordinator = await lit_coordinator(hass, **{CONF_LIGHTS_MODE: "night"})
 
     with patch(
         "custom_components.webcam_timelapse.lights.is_up", return_value=sun_is_up
@@ -208,7 +217,7 @@ async def test_night_only_follows_the_sun(
     assert coordinator.data["frame_count"] == 1
 
 
-async def test_without_night_only_the_sun_is_never_consulted(
+async def test_at_every_capture_the_sun_is_never_consulted(
     hass: HomeAssistant, mock_fetch: AsyncMock
 ) -> None:
     log = install_lights(hass, {GROW: STATE_OFF})
@@ -221,11 +230,11 @@ async def test_without_night_only_the_sun_is_never_consulted(
     assert len(log) == 2
 
 
-async def test_night_only_lights_the_frame_when_the_sun_cannot_be_placed(
+async def test_night_mode_lights_the_frame_when_the_sun_cannot_be_placed(
     hass: HomeAssistant, mock_fetch: AsyncMock
 ) -> None:
     log = install_lights(hass, {GROW: STATE_OFF})
-    coordinator = await lit_coordinator(hass, **{CONF_LIGHTS_NIGHT_ONLY: True})
+    coordinator = await lit_coordinator(hass, **{CONF_LIGHTS_MODE: "night"})
 
     with patch(
         "custom_components.webcam_timelapse.lights.is_up",
@@ -236,14 +245,14 @@ async def test_night_only_lights_the_frame_when_the_sun_cannot_be_placed(
     assert [call[1] for call in log] == ["turn_on", "turn_off"]
 
 
-async def test_night_only_uses_the_real_sun_for_the_home_location(
+async def test_night_mode_uses_the_real_sun_for_the_home_location(
     hass: HomeAssistant, mock_fetch: AsyncMock, freezer: Any
 ) -> None:
     """Unpatched: local noon is day and local midnight is night."""
     hass.config.latitude = 48.2
     hass.config.longitude = 16.4
     log = install_lights(hass, {GROW: STATE_OFF})
-    coordinator = await lit_coordinator(hass, **{CONF_LIGHTS_NIGHT_ONLY: True})
+    coordinator = await lit_coordinator(hass, **{CONF_LIGHTS_MODE: "night"})
 
     freezer.move_to("2026-06-21 11:00:00+00:00")  # early afternoon in Vienna
     await coordinator.async_capture_now()
@@ -252,6 +261,94 @@ async def test_night_only_uses_the_real_sun_for_the_home_location(
     freezer.move_to("2026-06-21 23:00:00+00:00")  # 01:00 local
     await coordinator.async_capture_now()
     assert [call[1] for call in log] == ["turn_on", "turn_off"]
+
+
+async def test_an_entry_from_before_the_mode_keeps_its_night_setting(
+    hass: HomeAssistant, mock_fetch: AsyncMock
+) -> None:
+    """Saved with the old night-only switch: still night, not every capture."""
+    install_lights(hass, {GROW: STATE_OFF})
+    coordinator = await lit_coordinator(hass, **{CONF_LIGHTS_NIGHT_ONLY: True})
+
+    assert coordinator.capture_lights.mode == "night"
+
+
+@pytest.mark.parametrize(
+    ("raw", "expected"),
+    [
+        ({}, "always"),
+        ({CONF_LIGHTS_NIGHT_ONLY: False}, "always"),
+        ({CONF_LIGHTS_NIGHT_ONLY: True}, "night"),
+        ({CONF_LIGHTS_MODE: "window", CONF_LIGHTS_NIGHT_ONLY: True}, "window"),
+        ({CONF_LIGHTS_MODE: "bogus"}, "always"),
+    ],
+)
+def test_lights_mode_from_stored_settings(raw: dict[str, Any], expected: str) -> None:
+    assert lights_mode(raw) == expected
+
+
+def test_lights_window_from_stored_settings() -> None:
+    assert lights_window(
+        {CONF_LIGHTS_WINDOW_START: "21:30:00", CONF_LIGHTS_WINDOW_END: "05:15"}
+    ) == (dt.time(21, 30), dt.time(5, 15))
+    # Missing or unreadable falls back to the defaults, not to an error.
+    assert lights_window({CONF_LIGHTS_WINDOW_START: "late"}) == (
+        dt.time(20, 0),
+        dt.time(6, 0),
+    )
+
+
+@pytest.mark.parametrize(
+    ("moment", "start", "end", "inside"),
+    [
+        # Across midnight.
+        ("23:00", "20:00", "06:00", True),
+        ("20:00", "20:00", "06:00", True),
+        ("05:59", "20:00", "06:00", True),
+        ("06:00", "20:00", "06:00", False),
+        ("12:00", "20:00", "06:00", False),
+        ("19:59", "20:00", "06:00", False),
+        # Within one day.
+        ("08:00", "08:00", "10:00", True),
+        ("09:30", "08:00", "10:00", True),
+        ("10:00", "08:00", "10:00", False),
+        ("07:59", "08:00", "10:00", False),
+        # Start equals end: refused in the form; read as the whole day.
+        ("03:00", "08:00", "08:00", True),
+    ],
+)
+def test_in_window(moment: str, start: str, end: str, inside: bool) -> None:
+    clock = dt.time.fromisoformat
+    assert in_window(clock(moment), clock(start), clock(end)) is inside
+
+
+@pytest.mark.parametrize(
+    ("local_time", "lit"),
+    [("23:30", True), ("05:00", True), ("12:00", False), ("19:00", False)],
+)
+async def test_window_mode_follows_the_home_clock(
+    hass: HomeAssistant, mock_fetch: AsyncMock, freezer: Any, local_time: str, lit: bool
+) -> None:
+    await hass.config.async_set_time_zone("Europe/Vienna")
+    log = install_lights(hass, {GROW: STATE_OFF})
+    coordinator = await lit_coordinator(
+        hass,
+        **{
+            CONF_LIGHTS_MODE: "window",
+            CONF_LIGHTS_WINDOW_START: "20:00:00",
+            CONF_LIGHTS_WINDOW_END: "06:00:00",
+        },
+    )
+
+    # In Home Assistant's time zone, not UTC: the window was typed against
+    # the clock the user sees.
+    freezer.move_to(f"2026-10-14 {local_time}:00+02:00")
+    with patch("custom_components.webcam_timelapse.lights.is_up") as sun:
+        await coordinator.async_capture_now()
+
+    sun.assert_not_called()
+    assert bool(log) is lit
+    assert coordinator.data["frame_count"] == 1
 
 
 # --- failures -------------------------------------------------------------

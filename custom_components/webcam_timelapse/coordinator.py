@@ -35,13 +35,11 @@ from .const import (
     CONF_FRAMES_PATH,
     CONF_HEADERS,
     CONF_LIGHT_SETTLE,
-    CONF_LIGHTS_NIGHT_ONLY,
     CONF_MAX_WIDTH,
     CONF_QUALITY,
     CONF_RETENTION_DAYS,
     DEFAULT_CAPTURE_INTERVAL,
     DEFAULT_LIGHT_SETTLE,
-    DEFAULT_LIGHTS_NIGHT_ONLY,
     DEFAULT_MAX_WIDTH,
     DEFAULT_QUALITY,
     DEFAULT_RETENTION_DAYS,
@@ -49,7 +47,7 @@ from .const import (
     STORAGE_SUBDIR,
 )
 from .encode import ImageDecodeError, encode_webp, measure_luma
-from .lights import CaptureLights
+from .lights import CaptureLights, lights_mode, lights_window
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -113,9 +111,8 @@ class WebcamTimelapseCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             entry.title,
             list(config.get(CONF_CAPTURE_LIGHTS) or []),
             settle_seconds=float(config.get(CONF_LIGHT_SETTLE, DEFAULT_LIGHT_SETTLE)),
-            night_only=bool(
-                config.get(CONF_LIGHTS_NIGHT_ONLY, DEFAULT_LIGHTS_NIGHT_ONLY)
-            ),
+            mode=lights_mode(config),
+            window=lights_window(config),
         )
 
         # Live-capture state

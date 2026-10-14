@@ -55,7 +55,23 @@ CONF_FRAMES_PATH: Final = "frames_path"
 CONF_HEADERS: Final = "headers"
 CONF_CAPTURE_LIGHTS: Final = "capture_lights"
 CONF_LIGHT_SETTLE: Final = "light_settle"
+CONF_LIGHTS_MODE: Final = "lights_mode"
+CONF_LIGHTS_WINDOW_START: Final = "lights_window_start"
+CONF_LIGHTS_WINDOW_END: Final = "lights_window_end"
+# Read, never written: the on/off switch that `lights_mode` replaced. An
+# entry saved before the mode existed still carries it, and "night" is what
+# it meant.
 CONF_LIGHTS_NIGHT_ONLY: Final = "lights_night_only"
+
+# When the capture lights are used.
+LIGHTS_MODE_ALWAYS: Final = "always"
+LIGHTS_MODE_NIGHT: Final = "night"  # sunset to sunrise
+LIGHTS_MODE_WINDOW: Final = "window"  # between two clock times
+LIGHTS_MODES: Final[tuple[str, ...]] = (
+    LIGHTS_MODE_ALWAYS,
+    LIGHTS_MODE_NIGHT,
+    LIGHTS_MODE_WINDOW,
+)
 
 # --- Defaults -------------------------------------------------------------
 
@@ -70,7 +86,9 @@ DEFAULT_LIVE_REFRESH: Final = 30  # seconds; 0 == archive-only
 # and a cheap one may hand back a frame it buffered while it was still
 # dark; three seconds covers both on the ESP32 class of hardware.
 DEFAULT_LIGHT_SETTLE: Final = 3
-DEFAULT_LIGHTS_NIGHT_ONLY: Final = False
+DEFAULT_LIGHTS_MODE: Final = LIGHTS_MODE_ALWAYS
+DEFAULT_LIGHTS_WINDOW_START: Final = "20:00:00"
+DEFAULT_LIGHTS_WINDOW_END: Final = "06:00:00"
 
 # --- Bounds ---------------------------------------------------------------
 

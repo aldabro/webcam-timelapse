@@ -39,6 +39,7 @@ from homeassistant.helpers.selector import (
     TextSelector,
     TextSelectorConfig,
     TextSelectorType,
+    TimeSelector,
 )
 
 from .capture import request_headers
@@ -50,14 +51,17 @@ from .const import (
     CONF_CAPTURE_LIGHTS,
     CONF_FRAMES_PATH,
     CONF_LIGHT_SETTLE,
-    CONF_LIGHTS_NIGHT_ONLY,
+    CONF_LIGHTS_MODE,
+    CONF_LIGHTS_WINDOW_END,
+    CONF_LIGHTS_WINDOW_START,
     CONF_LIVE_REFRESH,
     CONF_MAX_WIDTH,
     CONF_QUALITY,
     CONF_RETENTION_DAYS,
     DEFAULT_CAPTURE_INTERVAL,
     DEFAULT_LIGHT_SETTLE,
-    DEFAULT_LIGHTS_NIGHT_ONLY,
+    DEFAULT_LIGHTS_WINDOW_END,
+    DEFAULT_LIGHTS_WINDOW_START,
     DEFAULT_LIVE_REFRESH,
     DEFAULT_MAX_WIDTH,
     DEFAULT_NAME,
@@ -65,6 +69,8 @@ from .const import (
     DEFAULT_RETENTION_DAYS,
     DOMAIN,
     FETCH_TIMEOUT_SECONDS,
+    LIGHTS_MODE_WINDOW,
+    LIGHTS_MODES,
     MAX_LIGHT_SETTLE,
     MAX_LIVE_REFRESH,
     MAX_QUALITY,
@@ -75,6 +81,7 @@ from .const import (
     MIN_RETENTION_DAYS,
     USER_AGENT,
 )
+from .lights import lights_mode, lights_window
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -308,10 +315,28 @@ def _build_schema(defaults: dict[str, Any], *, include_url: bool = True) -> vol.
                     mode=NumberSelectorMode.BOX,
                 )
             ),
+            # A list of three rather than a switch per case, because they
+            # exclude each other: a time window and "at night" cannot both
+            # decide.
             vol.Required(
-                CONF_LIGHTS_NIGHT_ONLY,
-                default=defaults.get(CONF_LIGHTS_NIGHT_ONLY, DEFAULT_LIGHTS_NIGHT_ONLY),
-            ): BooleanSelector(),
+                CONF_LIGHTS_MODE, default=lights_mode(defaults)
+            ): SelectSelector(
+                SelectSelectorConfig(
+                    options=list(LIGHTS_MODES),
+                    mode=SelectSelectorMode.LIST,
+                    translation_key=CONF_LIGHTS_MODE,
+                )
+            ),
+            vol.Required(
+                CONF_LIGHTS_WINDOW_START,
+                default=defaults.get(
+                    CONF_LIGHTS_WINDOW_START, DEFAULT_LIGHTS_WINDOW_START
+                ),
+            ): TimeSelector(),
+            vol.Required(
+                CONF_LIGHTS_WINDOW_END,
+                default=defaults.get(CONF_LIGHTS_WINDOW_END, DEFAULT_LIGHTS_WINDOW_END),
+            ): TimeSelector(),
         }
     )
     # Open when the feature is in use, so the lights a camera is switching
@@ -336,8 +361,12 @@ def _build_entry_data(flat: dict[str, Any]) -> dict[str, Any]:
         CONF_VERIFY_SSL: bool(flat.get(CONF_VERIFY_SSL, True)),
         CONF_CAPTURE_LIGHTS: list(flat.get(CONF_CAPTURE_LIGHTS) or []),
         CONF_LIGHT_SETTLE: float(flat.get(CONF_LIGHT_SETTLE, DEFAULT_LIGHT_SETTLE)),
-        CONF_LIGHTS_NIGHT_ONLY: bool(
-            flat.get(CONF_LIGHTS_NIGHT_ONLY, DEFAULT_LIGHTS_NIGHT_ONLY)
+        CONF_LIGHTS_MODE: lights_mode(flat),
+        CONF_LIGHTS_WINDOW_START: str(
+            flat.get(CONF_LIGHTS_WINDOW_START) or DEFAULT_LIGHTS_WINDOW_START
+        ),
+        CONF_LIGHTS_WINDOW_END: str(
+            flat.get(CONF_LIGHTS_WINDOW_END) or DEFAULT_LIGHTS_WINDOW_END
         ),
     }
     # Optional strings are omitted entirely when blank rather than stored
@@ -373,6 +402,12 @@ async def _validate(
     ):
         errors["base"] = "invalid_light"
         return {}, errors
+
+    if lights_mode(flat) == LIGHTS_MODE_WINDOW:
+        start, end = lights_window(flat)
+        if start == end:
+            errors["base"] = "invalid_light_window"
+            return {}, errors
 
     probe_error = await async_probe_url(
         hass,

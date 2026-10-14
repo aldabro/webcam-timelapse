@@ -113,7 +113,8 @@ Every setting can be changed later without losing captured frames.
 | Username / password | — | For a camera behind HTTP basic authentication |
 | Lights to switch on | — | Lights and switches to turn on for each capture. See [Lights for capture](#lights-for-capture) |
 | Wait before capturing | 3 s | How long the lights are on before the frame is fetched |
-| Only at night | off | Use the lights only between sunset and sunrise |
+| When to use them | At every capture | Every capture, only at night (sunset to sunrise), or only within a time window |
+| Time window from / to | 20:00 / 06:00 | The window for *Only within a time window*. It may cross midnight |
 
 **Changing the capture interval to a longer one hides older frames.** Frames
 taken every minute have no place on a five-minute timeline. They stay on disk
@@ -139,8 +140,11 @@ under you.
 its exposure, and a cheap one may hand back a picture it took before the light
 came on. Three seconds suits most; up to thirty is allowed.
 
-**Only at night** limits this to the hours between sunset and sunrise, worked
-out from your home's location. Frames are still captured during the day, just
+**Choose when the lights are used.** *At every capture* is the default.
+*Only at night* uses them between sunset and sunrise, worked out from your
+home's location, so the hours follow the seasons. *Only within a time window*
+uses two clock times you set instead — a window that crosses midnight, such as
+20:00 to 06:00, works. Outside those hours frames are still captured, just
 without the lights.
 
 **The live view never switches a light.** Only the scheduled captures and the
